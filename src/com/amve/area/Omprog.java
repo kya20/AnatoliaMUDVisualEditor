@@ -1,5 +1,5 @@
 package com.amve.area;
 
-public class Omprog extends Area {
+public class Omprog {
 	
 }

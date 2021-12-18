@@ -3,7 +3,7 @@ package com.amve.area;
 import java.util.*;
 import com.amve.globals.GlobalVariables;
 
-public class Room extends Area {
+public class Room {
 	
 	public String vNum = null;
 	public String header = null;
