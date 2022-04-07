@@ -114,7 +114,7 @@ public class Room {
 	
 	//function that returns a string output in normal area file format for the room
 	public String toString() {
-		//TODO: implement the goddamn function
+		//TODO: implement the function
 		return("");
 	}
 	
