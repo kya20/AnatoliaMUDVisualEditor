@@ -39,7 +39,9 @@ public class Mobile {
 	public int hourOpen = 0;
 	public int hourClose = 23;
 	
-	//TODO: implement practicer here or in its own class
+	//DONE: implement practicer here or in its own class
+	public boolean practicer = false;
+	public String practicerGroup = "";
 	
 	//TODO: implement toString function or something similar for writing to .are files
 }
