@@ -1,7 +1,7 @@
 package com.amve.globals;
 
 public abstract class GlobalVariables {
-	
+	//TODO: some variables might be in either integer or string format, fix if necessary later
 	public static final Integer NORTH_DIR = 0;
 	public static final Integer EAST_DIR = 1;
 	public static final Integer SOUTH_DIR = 2;
