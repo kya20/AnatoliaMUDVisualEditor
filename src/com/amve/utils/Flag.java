@@ -19,10 +19,13 @@ public class Flag {
 	}
 	
 	public Integer getNumericalCode() {
-		int val = -1;
-		for (int i = 0; i < GlobalVariables.LETTER_TRANSLATIONS.size(); i++) {
-			if (GlobalVariables.LETTER_TRANSLATIONS.get(i).getValue() == code) {
-				val = GlobalVariables.LETTER_TRANSLATIONS.get(i).getKey();
+		int val = 0;
+		for (int i = 0; i < this.code.length() ; i++) {
+			if (Character.isUpperCase(code.charAt(i))) {
+				val += GlobalVariables.LETTER_TRANSLATIONS.get(code.charAt(i));
+			}
+			else {
+				val += GlobalVariables.LETTER_TRANSLATIONS.get(code.substring(i, i+2));
 			}
 		}
 		return val;

@@ -7,6 +7,11 @@ import java.util.regex.Pattern;
 import com.amve.area.Area;
 import com.amve.area.Mobile;
 import com.amve.area.Room;
+import com.amve.globals.GlobalVariables.Position;
+import com.amve.globals.GlobalVariables.Sex;
+import com.amve.globals.GlobalVariables.Size;
+import com.amve.utils.Dice;
+import com.amve.utils.Flag;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -36,8 +41,8 @@ public class AreaFileParser {
 			if(sbFile.charAt(0) != '#')
 				throw new IllegalArgumentException("Could not find # character.");
 			sbFile.deleteCharAt(0);
-			String word = sbFile.substring(0, sbFile.indexOf(" "));
-			sbFile.delete(0, sbFile.indexOf(" "));
+			String word = sbFile.substring(0, sbFile.indexOf("\n")).strip();
+			sbFile.delete(0, sbFile.indexOf("\n"));
 			switch(word) {
 			case "AREA":
 				loadArea(sbFile);
@@ -52,6 +57,7 @@ public class AreaFileParser {
 			case "OBJOLD":
 				break;
 			case "OBJECTS":
+				loadObjects(sbFile);
 				break;
 			case "RESETS":
 				break;
@@ -128,6 +134,114 @@ public class AreaFileParser {
 	}
 	
 	private void loadMobiles(StringBuilder file) {
+		while(true) {
+			Mobile mobile = new Mobile();
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			if(file.charAt(0) != '#')
+				throw new IllegalArgumentException("Could not find # character for mobile vNum.");
+			file.deleteCharAt(0);
+			int index = file.indexOf("\n");
+			mobile.vNum = file.substring(0, index);
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			mobile.nameList.addAll(Arrays.asList(file.substring(0, index).split(" ")));
+			file.delete(0, index + 1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			mobile.shortDescription = file.substring(0, index);
+			file.delete(0, index + 1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			mobile.longDescription = file.substring(0, index);
+			file.delete(0, index + 1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			mobile.lookDescription = file.substring(0, index);
+			file.delete(0, index + 1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			mobile.race = mobile.new Race(file.substring(0, index));
+			file.delete(0, index + 1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			String [] tmp = file.substring(0, index).split(" ");
+			mobile.flags.add(new Flag("action", tmp[0]));
+			mobile.flags.add(new Flag("affect", tmp[1]));
+			mobile.alignment = Integer.parseInt(tmp[2]);
+			mobile.mobileGroup = Integer.parseInt(tmp[3]);
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			tmp = file.substring(0, index).split(" ");
+			mobile.level = Integer.parseInt(tmp[0]);
+			mobile.hitBonus = Integer.parseInt(tmp[1]);
+			mobile.hitDice = new Dice(tmp[2]);
+			mobile.manaDice = new Dice(tmp[3]);
+			mobile.damageDice = new Dice(tmp[4]); // It is actually damage attribute, but shares the same format, the int damage is not used.
+			mobile.damageType = tmp[5];
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			tmp = file.substring(0, index).split(" ");
+			mobile.armorClasses.put("pierce", Integer.parseInt(tmp[0]));
+			mobile.armorClasses.put("bash", Integer.parseInt(tmp[1]));
+			mobile.armorClasses.put("slash", Integer.parseInt(tmp[2]));
+			mobile.armorClasses.put("magic", Integer.parseInt(tmp[3]));
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			tmp = file.substring(0, index).split(" ");
+			mobile.flags.add(new Flag("offensive", tmp[0]));
+			mobile.flags.add(new Flag("immunity", tmp[1]));
+			mobile.flags.add(new Flag("resistance", tmp[2]));
+			mobile.flags.add(new Flag("vulnerability", tmp[3]));
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			tmp = file.substring(0, index).split(" ");
+			mobile.startPos = Position.valueOfName(tmp[0]);
+			mobile.defaultPos = Position.valueOfName(tmp[1]);
+			mobile.gender = Sex.valueOfName(tmp[2]);
+			mobile.treasure = Integer.parseInt(tmp[3]);
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			tmp = file.substring(0, index).split(" ");
+			mobile.flags.add(new Flag("form", tmp[0]));
+			mobile.flags.add(new Flag("part", tmp[1]));
+			mobile.size = Size.valueOfName(tmp[2]);
+			mobile.material = tmp[3];
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			
+			this.area.mobiles.add(mobile);
+			
+			if ("#0".equals(file.substring(0, index))) {
+				file.delete(0, index);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				return;
+			}
+				
+		}	
+	}
+	
+	private void loadObjects(StringBuilder file) {
 		
 	}
 }

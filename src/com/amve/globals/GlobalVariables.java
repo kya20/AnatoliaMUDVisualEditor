@@ -1,7 +1,9 @@
 package com.amve.globals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.amve.utils.Pair;
 import com.amve.utils.Spell;
@@ -51,41 +53,73 @@ public abstract class GlobalVariables {
 	public static final Integer LEVEL_MIN = 0;
 	public static final Integer LEVEL_MAX = 100;
 	
-	public static final List<Pair> LETTER_TRANSLATIONS;
+	public static final Map<String, Integer> LETTER_TRANSLATIONS;
 	static {
-		LETTER_TRANSLATIONS = new ArrayList<>();
+		LETTER_TRANSLATIONS = new HashMap<String, Integer>();
 		
-		LETTER_TRANSLATIONS.add(new Pair("A", 1));
-		LETTER_TRANSLATIONS.add(new Pair("B", 2));
-		LETTER_TRANSLATIONS.add(new Pair("C", 4));
-		LETTER_TRANSLATIONS.add(new Pair("D", 8));
-		LETTER_TRANSLATIONS.add(new Pair("E", 16));
-		LETTER_TRANSLATIONS.add(new Pair("F", 32));
-		LETTER_TRANSLATIONS.add(new Pair("G", 64));
-		LETTER_TRANSLATIONS.add(new Pair("H", 128));
-		LETTER_TRANSLATIONS.add(new Pair("I", 256));
-		LETTER_TRANSLATIONS.add(new Pair("J", 512));
-		LETTER_TRANSLATIONS.add(new Pair("K", 1024));
-		LETTER_TRANSLATIONS.add(new Pair("L", 2048));
-		LETTER_TRANSLATIONS.add(new Pair("M", 4096));
-		LETTER_TRANSLATIONS.add(new Pair("N", 8192));
-		LETTER_TRANSLATIONS.add(new Pair("O", 16384));
-		LETTER_TRANSLATIONS.add(new Pair("P", 32768));
-		LETTER_TRANSLATIONS.add(new Pair("Q", 65536));
-		LETTER_TRANSLATIONS.add(new Pair("R", 131072));
-		LETTER_TRANSLATIONS.add(new Pair("S", 262144));
-		LETTER_TRANSLATIONS.add(new Pair("T", 524288));
-		LETTER_TRANSLATIONS.add(new Pair("U", 1048576));
-		LETTER_TRANSLATIONS.add(new Pair("V", 2097152));
-		LETTER_TRANSLATIONS.add(new Pair("W", 4194304));
-		LETTER_TRANSLATIONS.add(new Pair("X", 8388608));
-		LETTER_TRANSLATIONS.add(new Pair("Y", 16777216));
-		LETTER_TRANSLATIONS.add(new Pair("Z", 33554432));
-		LETTER_TRANSLATIONS.add(new Pair("aa", 67108864));
-		LETTER_TRANSLATIONS.add(new Pair("bb", 134217728));
-		LETTER_TRANSLATIONS.add(new Pair("cc", 268435456));
-		LETTER_TRANSLATIONS.add(new Pair("dd", 536870912));
-		LETTER_TRANSLATIONS.add(new Pair("ee", 1073741824));
+		LETTER_TRANSLATIONS.put("A", 1);
+		LETTER_TRANSLATIONS.put("B", 2);
+		LETTER_TRANSLATIONS.put("C", 4);
+		LETTER_TRANSLATIONS.put("D", 8);
+		LETTER_TRANSLATIONS.put("E", 16);
+		LETTER_TRANSLATIONS.put("F", 32);
+		LETTER_TRANSLATIONS.put("G", 64);
+		LETTER_TRANSLATIONS.put("H", 128);
+		LETTER_TRANSLATIONS.put("I", 256);
+		LETTER_TRANSLATIONS.put("J", 512);
+		LETTER_TRANSLATIONS.put("K", 1024);
+		LETTER_TRANSLATIONS.put("L", 2048);
+		LETTER_TRANSLATIONS.put("M", 4096);
+		LETTER_TRANSLATIONS.put("N", 8192);
+		LETTER_TRANSLATIONS.put("O", 16384);
+		LETTER_TRANSLATIONS.put("P", 32768);
+		LETTER_TRANSLATIONS.put("Q", 65536);
+		LETTER_TRANSLATIONS.put("R", 131072);
+		LETTER_TRANSLATIONS.put("S", 262144);
+		LETTER_TRANSLATIONS.put("T", 524288);
+		LETTER_TRANSLATIONS.put("U", 1048576);
+		LETTER_TRANSLATIONS.put("V", 2097152);
+		LETTER_TRANSLATIONS.put("W", 4194304);
+		LETTER_TRANSLATIONS.put("X", 8388608);
+		LETTER_TRANSLATIONS.put("Y", 16777216);
+		LETTER_TRANSLATIONS.put("Z", 33554432);
+		LETTER_TRANSLATIONS.put("aa", 67108864);
+		LETTER_TRANSLATIONS.put("bb", 134217728);
+		LETTER_TRANSLATIONS.put("cc", 268435456);
+		LETTER_TRANSLATIONS.put("dd", 536870912);
+		LETTER_TRANSLATIONS.put("ee", 1073741824);
+	}
+	
+	// Abi bu globallerin hemen hepsini ilerde bu hale getirebiliriz bence
+	public enum Position {
+		STAND(0, "stand"),
+		SIT(1, "sit"),
+	    REST(2, "rest"),
+	    SLEEP(3, "sleep");
+		
+		private static final Map<Integer, Position> BY_NUM = new HashMap<>();
+		private static final Map<String, Position> BY_NAME = new HashMap<>();
+		
+		static {
+			for (Position e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private Position(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static Position valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static Position valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
 	}
 	
 	public static final Integer OBJECT_CONDITION_EXCELLENT = 0;
@@ -96,10 +130,41 @@ public abstract class GlobalVariables {
 	public static final Integer OBJECT_CONDITION_FRAGILE = 5;
 	public static final Integer OBJECT_CONDITION_BROKEN = 6;
 	
-	public static final String SEX_NONE = "none";
-	public static final String SEX_MALE = "male";
-	public static final String SEX_FEMALE = "female";
-	public static final String SEX_EITHER = "either";
+//	public static final String SEX_NONE = "none";
+//	public static final String SEX_MALE = "male";
+//	public static final String SEX_FEMALE = "female";
+//	public static final String SEX_EITHER = "either";
+	
+	public enum Sex {
+		NONE(0, "none"),
+		MALE(1, "male"),
+	    FEMALE(2, "female"),
+	    EITHER(3, "either");
+		
+		private static final Map<Integer, Sex> BY_NUM = new HashMap<>();
+		private static final Map<String, Sex> BY_NAME = new HashMap<>();
+		
+		static {
+			for (Sex e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private Sex(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static Sex valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static Sex valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
 	
 	public static final String POS_DEAD = "dead";
 	public static final String POS_MORTAL = "mortal";
@@ -379,13 +444,47 @@ public abstract class GlobalVariables {
 	}
 
 	
-	public static final Integer SIZE_TINY = 0;
-	public static final Integer SIZE_SMALL = 1;
-	public static final Integer SIZE_MEDIUM = 2;
-	public static final Integer SIZE_LARGE = 3;
-	public static final Integer SIZE_HUGE = 4;
-	public static final Integer SIZE_GIANT = 5;
-	public static final Integer SIZE_GARGANTUAN = 6;
+//	public static final Integer SIZE_TINY = 0;
+//	public static final Integer SIZE_SMALL = 1;
+//	public static final Integer SIZE_MEDIUM = 2;
+//	public static final Integer SIZE_LARGE = 3;
+//	public static final Integer SIZE_HUGE = 4;
+//	public static final Integer SIZE_GIANT = 5;
+//	public static final Integer SIZE_GARGANTUAN = 6;
+	
+	public enum Size {
+		TINY(0, "tiny"),
+		SMALL(1, "small"),
+		MEDIUM(2, "medium"),
+		LARGE(3, "large"),
+		HUGE(4, "huge"),
+		GIANT(5, "giant"),
+		GARGANTUAN(6, "gargantuan");
+		
+		private static final Map<Integer, Size> BY_NUM = new HashMap<>();
+		private static final Map<String, Size> BY_NAME = new HashMap<>();
+		
+		static {
+			for (Size e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private Size(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static Size valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static Size valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
 	
 	//redundant?
 	public static final Integer RACE_TYPE_AARAKOCRA = 0;
