@@ -22,10 +22,11 @@ public class Flag {
 		int val = 0;
 		for (int i = 0; i < this.code.length() ; i++) {
 			if (Character.isUpperCase(code.charAt(i))) {
-				val += GlobalVariables.LETTER_TRANSLATIONS.get(code.charAt(i));
+				val += GlobalVariables.LETTER_TRANSLATIONS.get(code.substring(i, i+1));
 			}
 			else {
 				val += GlobalVariables.LETTER_TRANSLATIONS.get(code.substring(i, i+2));
+				i++;
 			}
 		}
 		return val;

@@ -18,6 +18,12 @@ public class Dice {
 		this.diceBonus = diceBonus;
 	}
 	
+	public Dice(int diceNo, int diceFaces) {
+		this.diceNo = diceNo;
+		this.diceFaces = diceFaces;
+		this.diceBonus = 0;
+	}
+	
 	public Dice(String input) {
 		this.diceNo = 0;
 		this.diceFaces = 0;

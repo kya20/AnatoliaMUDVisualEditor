@@ -486,6 +486,238 @@ public abstract class GlobalVariables {
 		}
 	}
 	
+	public enum ItemType {
+		LIGHT(1, "light"),
+		SCROLL(2, "scroll"),
+		WAND(3, "wand"),
+		STAFF(4, "staff"),
+		WEAPON(5, "weapon"),
+		TREASURE(8, "treasure"),
+		ARMOR(9, "armor"),
+		POTION(10, "potion"),
+		CLOTHING(11, "clothing"),
+		FURNITURE(12, "furniture"),
+		TRASH(13, "trash"),
+		CONTAINER(15, "container"),
+		DRINK_CON(17, "drink_con"),
+		KEY(18, "key"),
+		FOOD(19, "food"),
+		MONEY(20, "money"),
+		BOAT(22, "boat"),
+		CORPSE_NPC(23, "corpse_npc"),
+		CORPSE_PC(24, "corpse_pc"),
+		FOUNTAIN(25, "fountain"),
+		PILL(26, "pill"),
+		PROTECT(27, "protect"),
+		MAP(28, "map"),
+		PORTAL(29, "portal"),
+		WARP_STONE(30, "warp_stone"),
+		ROOM_KEY(31, "room_key"),
+		GEM(32, "gem"),
+		JEWELRY(33, "jewelry"),
+		JUKEBOX(34, "jukebox"),
+		TATTOO(35, "tattoo");
+		
+		private static final Map<Integer, ItemType> BY_NUM = new HashMap<>();
+		private static final Map<String, ItemType> BY_NAME = new HashMap<>();
+		
+		static {
+			for (ItemType e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private ItemType(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static ItemType valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static ItemType valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+	public enum ItemExtra {
+		GLOW(LETTER_TRANSLATIONS.get("A"), "glow"),
+		HUM(LETTER_TRANSLATIONS.get("B"), "hum"),
+		DARK(LETTER_TRANSLATIONS.get("C"), "dark"),
+		LOCK(LETTER_TRANSLATIONS.get("D"), "lock"),
+		EVIL(LETTER_TRANSLATIONS.get("E"), "evil"),
+		INVIS(LETTER_TRANSLATIONS.get("F"), "invis"),
+		MAGIC(LETTER_TRANSLATIONS.get("G"), "magic"),
+		NODROP(LETTER_TRANSLATIONS.get("H"), "nodrop"),
+		BLESS(LETTER_TRANSLATIONS.get("I"), "bless"),
+		ANTI_GOOD(LETTER_TRANSLATIONS.get("J"), "anti_good"),
+		ANTI_EVIL(LETTER_TRANSLATIONS.get("K"), "anti_evil"),
+		ANTI_NEUTRAL(LETTER_TRANSLATIONS.get("L"), "anti_neutral"),
+		NOREMOVE(LETTER_TRANSLATIONS.get("M"), "noremove"),
+		INVENTORY(LETTER_TRANSLATIONS.get("N"), "inventory"),
+		NOPURGE(LETTER_TRANSLATIONS.get("O"), "nopurge"),
+		ROT_DEATH(LETTER_TRANSLATIONS.get("P"), "rot_death"),
+		VIS_DEATH(LETTER_TRANSLATIONS.get("Q"), "vis_death"),
+		NOSAC(LETTER_TRANSLATIONS.get("R"), "nosac"),
+		NONMETAL(LETTER_TRANSLATIONS.get("S"), "nonmetal"),
+		NOLOCATE(LETTER_TRANSLATIONS.get("T"), "nolocate"),
+		MELT_DROP(LETTER_TRANSLATIONS.get("U"), "melt_drop"),
+		HAD_TIMER(LETTER_TRANSLATIONS.get("V"), "had_timer"),
+		SELL_EXTRACT(LETTER_TRANSLATIONS.get("W"), "sell_extract"),
+		BURN_PROOF(LETTER_TRANSLATIONS.get("Y"), "burn_proof"),
+		NOUNCURSE(LETTER_TRANSLATIONS.get("Z"), "nouncurse"),
+		NOSELL(LETTER_TRANSLATIONS.get("aa"), "nosell"),
+		BURIED(LETTER_TRANSLATIONS.get("bb"), "buried");
+		
+		private static final Map<Integer, ItemExtra> BY_NUM = new HashMap<>();
+		private static final Map<String, ItemExtra> BY_NAME = new HashMap<>();
+		
+		static {
+			for (ItemExtra e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private ItemExtra(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static ItemExtra valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static ItemExtra valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+	public enum ItemWear {
+		TAKE(LETTER_TRANSLATIONS.get("A"), "take"),
+		WEAR_FINGER(LETTER_TRANSLATIONS.get("B"), "wear_finger"),
+		WEAR_NECK(LETTER_TRANSLATIONS.get("C"), "wear_neck"),
+		WEAR_BODY(LETTER_TRANSLATIONS.get("D"), "wear_body"),
+		WEAR_HEAD(LETTER_TRANSLATIONS.get("E"), "wear_head"),
+		WEAR_LEGS(LETTER_TRANSLATIONS.get("F"), "wear_legs"),
+		WEAR_FEET(LETTER_TRANSLATIONS.get("G"), "wear_feet"),
+		WEAR_HANDS(LETTER_TRANSLATIONS.get("H"), "wear_hands"),
+		WEAR_ARMS(LETTER_TRANSLATIONS.get("I"), "wear_arms"),
+		WEAR_SHIELD(LETTER_TRANSLATIONS.get("J"), "wear_shield"),
+		WEAR_ABOUT(LETTER_TRANSLATIONS.get("K"), "wear_about"),
+		WEAR_WAIST(LETTER_TRANSLATIONS.get("L"), "wear_waist"),
+		WEAR_WRIST(LETTER_TRANSLATIONS.get("M"), "wear_wrist"),
+		WIELD(LETTER_TRANSLATIONS.get("N"), "wield"),
+		HOLD(LETTER_TRANSLATIONS.get("O"), "hold"),
+		NO_SAC(LETTER_TRANSLATIONS.get("P"), "no_sac"),
+		WEAR_FLOAT(LETTER_TRANSLATIONS.get("Q"), "wear_float"),
+		WEAR_TATTOO(LETTER_TRANSLATIONS.get("R"), "wear_tattoo");
+		
+		private static final Map<Integer, ItemWear> BY_NUM = new HashMap<>();
+		private static final Map<String, ItemWear> BY_NAME = new HashMap<>();
+		
+		static {
+			for (ItemWear e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private ItemWear(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static ItemWear valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static ItemWear valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+	public enum WeaponClass {
+		EXOTIC(0, "exotic"),
+		SWORD(1, "sword"),
+		DAGGER(2, "dagger"),
+		SPEAR(3, "spear"),
+		MACE(4, "mace"),
+		AXE(5, "axe"),
+		FLAIL(6, "flail"),
+		WHIP(7, "whip"),
+		POLEARM(8, "polearm"),
+		BOW(9, "bow"),
+		ARROW(10, "arrow"),
+		LANCE(11, "lance");
+		
+		private static final Map<Integer, WeaponClass> BY_NUM = new HashMap<>();
+		private static final Map<String, WeaponClass> BY_NAME = new HashMap<>();
+		
+		static {
+			for (WeaponClass e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private WeaponClass(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static WeaponClass valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static WeaponClass valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+	public enum WeaponFlag {
+		FLAMING(LETTER_TRANSLATIONS.get("A"), "flaming"),
+		FROST(LETTER_TRANSLATIONS.get("B"), "frost"),
+		VAMPIRIC(LETTER_TRANSLATIONS.get("C"), "vampiric"),
+		SHARP(LETTER_TRANSLATIONS.get("D"), "sharp"),
+		VORPAL(LETTER_TRANSLATIONS.get("E"), "vorpal"),
+		TWO_HANDS(LETTER_TRANSLATIONS.get("F"), "two_hands"),
+		SHOCKING(LETTER_TRANSLATIONS.get("G"), "shocking"),
+		POISON(LETTER_TRANSLATIONS.get("H"), "poison"),
+		HOLY(LETTER_TRANSLATIONS.get("I"), "holy"),
+		KATANA(LETTER_TRANSLATIONS.get("J"), "katana");
+		
+		private static final Map<Integer, WeaponFlag> BY_NUM = new HashMap<>();
+		private static final Map<String, WeaponFlag> BY_NAME = new HashMap<>();
+		
+		static {
+			for (WeaponFlag e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private WeaponFlag(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static WeaponFlag valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static WeaponFlag valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
 	//redundant?
 	public static final Integer RACE_TYPE_AARAKOCRA = 0;
 	public static final Integer RACE_TYPE_AIR_ELEMENTAL = 1;

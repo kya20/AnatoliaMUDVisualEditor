@@ -1,11 +1,13 @@
 package com.amve.parser;
 
-import java.util.*;
+
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.amve.area.Area;
 import com.amve.area.Mobile;
+import com.amve.area.Object;
 import com.amve.area.Room;
 import com.amve.globals.GlobalVariables.Position;
 import com.amve.globals.GlobalVariables.Sex;
@@ -242,6 +244,42 @@ public class AreaFileParser {
 	}
 	
 	private void loadObjects(StringBuilder file) {
-		
+		while(true) {
+			Object object = new Object();
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			if(file.charAt(0) != '#')
+				throw new IllegalArgumentException("Could not find # character for object vNum.");
+			file.deleteCharAt(0);
+			int index = file.indexOf("\n");
+			object.vNum = file.substring(0, index);
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			object.nameList.addAll(Arrays.asList(file.substring(0, index).split(" ")));
+			file.delete(0, index + 1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			object.shortDescription = file.substring(0, index);
+			file.delete(0, index + 1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			object.longDescription = file.substring(0, index);
+			file.delete(0, index + 1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			object.material = file.substring(0, index);
+			file.delete(0, index + 1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			String [] tmp = file.substring(0, index).split(" ");
+			
+//			object.flags.add(new Flag("extra", tmp[1]))
+		}
 	}
 }
