@@ -1,14 +1,13 @@
 package com.amve.utils;
 
-public class Armor extends Item {
+public class Drink extends Item {
 	
-	public int pierce;
-	public int bash;
-	public int slash;
-	public int exotic;
-	public int bulk;
+	public int containerSize;
+	public int currentAmount;
+	public int liquidType;
+	public Boolean isPoisoned;
 
-	public Armor(
+	public Drink(
 			String itemType, 
 			String extraFlags, 
 			String wearFlags, 
@@ -26,11 +25,7 @@ public class Armor extends Item {
 			String v4
 			) {
 		super(itemType, extraFlags, wearFlags, level, weight, cost, cond, apply, flags, extraDescriptions);
-		this.pierce = Integer.parseInt(v0);
-		this.bash = Integer.parseInt(v1);
-		this.slash = Integer.parseInt(v2);
-		this.exotic = Integer.parseInt(v3);
-		this.bulk = Integer.parseInt(v4);
+		// TODO continue from here
 	}
 
 }

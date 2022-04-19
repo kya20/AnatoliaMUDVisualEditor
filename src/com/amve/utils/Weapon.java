@@ -15,8 +15,24 @@ public class Weapon extends Item {
 	public List<WeaponFlag> weaponFlags = new ArrayList<>();
 	
 
-	public Weapon(String itemType, String extraFlags, String wearFlags, int level, int weight, int cost, String cond, String v0, String v1, String v2, String v3, String v4) {
-		super(itemType, extraFlags, wearFlags, level, weight, cost, cond);
+	public Weapon(
+			String itemType, 
+			String extraFlags, 
+			String wearFlags, 
+			int level, 
+			int weight, 
+			int cost,
+			String cond, 
+			String apply, 
+			String flags, 
+			String extraDescriptions,
+			String v0, 
+			String v1, 
+			String v2, 
+			String v3, 
+			String v4
+			) {
+		super(itemType, extraFlags, wearFlags, level, weight, cost, cond, apply, flags, extraDescriptions);
 		this.weaponClass = WeaponClass.valueOfName(v0);
 		this.dice = new Dice(Integer.parseInt(v1),Integer.parseInt(v2));
 		this.damageMessage = v3;

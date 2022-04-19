@@ -1,14 +1,10 @@
 package com.amve.utils;
 
-public class Armor extends Item {
+public class Light extends Item {
 	
-	public int pierce;
-	public int bash;
-	public int slash;
-	public int exotic;
-	public int bulk;
+	public int lightDuration;
 
-	public Armor(
+	public Light(
 			String itemType, 
 			String extraFlags, 
 			String wearFlags, 
@@ -26,11 +22,11 @@ public class Armor extends Item {
 			String v4
 			) {
 		super(itemType, extraFlags, wearFlags, level, weight, cost, cond, apply, flags, extraDescriptions);
-		this.pierce = Integer.parseInt(v0);
-		this.bash = Integer.parseInt(v1);
-		this.slash = Integer.parseInt(v2);
-		this.exotic = Integer.parseInt(v3);
-		this.bulk = Integer.parseInt(v4);
+		this.lightDuration = Integer.parseInt(v2);
 	}
 
+	public Boolean isPermanent() {
+		return this.lightDuration == -1;
+	}
+	
 }
