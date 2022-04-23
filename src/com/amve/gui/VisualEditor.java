@@ -34,12 +34,41 @@ import java.awt.Panel;
 import java.awt.BorderLayout;
 import javax.swing.JRootPane;
 import javax.swing.JPanel;
+import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 
 
 public class VisualEditor {
 
 	protected Shell shell;
 	private Text text;
+	private Text roomNameText;
+	private Text roomDescText;
+	private Table roomExtrasTable;
+	private Text northDescText;
+	private Text northDoorKeywordText;
+	private Text eastDescText;
+	private Text eastDoorKeywordText;
+	private Text southDescText;
+	private Text southDoorKeywordText;
+	private Text westDescText;
+	private Text westDoorKeywordText;
+	private Text upDescText;
+	private Text upDoorKeywordText;
+	private Text downDescText;
+	private Text downDoorKeywordText;
 
 	/**
 	 * Launch the application.
@@ -74,7 +103,7 @@ public class VisualEditor {
 	 */
 	protected void createContents() {
 		shell = new Shell();
-		shell.setSize(1201, 602);
+		shell.setSize(1366, 768);
 		shell.setText("SWT Application");
 		shell.setLayout(new GridLayout(2, false));
 		
@@ -95,8 +124,8 @@ public class VisualEditor {
 		
 		Composite composite = new Composite(shell, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
-		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_composite.widthHint = 149;
+		GridData gd_composite = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+		gd_composite.widthHint = 226;
 		composite.setLayoutData(gd_composite);
 		
 		Group grpWorldObjects = new Group(composite, SWT.NONE);
@@ -125,7 +154,694 @@ public class VisualEditor {
 		tabFolder.setLayoutData(gd_tabFolder);
 		
 		TabItem tbtmObjectEditor = new TabItem(tabFolder, SWT.NONE);
-		tbtmObjectEditor.setText("Object Editor");
+		tbtmObjectEditor.setText("Editor");
+		
+		TabFolder tabFolder_1 = new TabFolder(tabFolder, SWT.NONE);
+		tbtmObjectEditor.setControl(tabFolder_1);
+		
+		TabItem tbtmRoomEditor = new TabItem(tabFolder_1, SWT.NONE);
+		tbtmRoomEditor.setText("Room Editor");
+		
+		SashForm sashForm = new SashForm(tabFolder_1, SWT.NONE);
+		tbtmRoomEditor.setControl(sashForm);
+		
+		Group grpRoomData = new Group(sashForm, SWT.NONE);
+		grpRoomData.setText("Room Data");
+		grpRoomData.setLayout(new GridLayout(1, false));
+		
+		Group grpVnum = new Group(grpRoomData, SWT.NONE);
+		grpVnum.setLayout(new GridLayout(2, false));
+		GridData gd_grpVnum = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpVnum.heightHint = 35;
+		grpVnum.setLayoutData(gd_grpVnum);
+		grpVnum.setText("Vnum");
+		
+		Spinner vnumSpinner = new Spinner(grpVnum, SWT.BORDER);
+		GridData gd_vnumSpinner = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_vnumSpinner.widthHint = 70;
+		vnumSpinner.setLayoutData(gd_vnumSpinner);
+		vnumSpinner.setToolTipText("Vnum value");
+		
+		Button vnumAutoButton = new Button(grpVnum, SWT.RADIO);
+		vnumAutoButton.setText("Automatic");
+		
+		Group grpDescription = new Group(grpRoomData, SWT.NONE);
+		grpDescription.setLayout(new GridLayout(1, false));
+		GridData gd_grpDescription = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_grpDescription.heightHint = 355;
+		grpDescription.setLayoutData(gd_grpDescription);
+		grpDescription.setText("Description");
+		
+		Label lblRoomName = new Label(grpDescription, SWT.NONE);
+		lblRoomName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblRoomName.setText("Room Name");
+		
+		roomNameText = new Text(grpDescription, SWT.BORDER);
+		roomNameText.setToolTipText("Room name (a few words)");
+		roomNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblRoomDescription = new Label(grpDescription, SWT.NONE);
+		lblRoomDescription.setText("Room Description");
+		
+		roomDescText = new Text(grpDescription, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
+		roomDescText.setToolTipText("Room description (a few lines)");
+		GridData gd_roomDescText = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_roomDescText.heightHint = 68;
+		roomDescText.setLayoutData(gd_roomDescText);
+		
+		Label lblDetailsAndExtras = new Label(grpDescription, SWT.NONE);
+		lblDetailsAndExtras.setText("Details and Extras");
+		
+		TableViewer tableViewer = new TableViewer(grpDescription, SWT.BORDER | SWT.FULL_SELECTION);
+		roomExtrasTable = tableViewer.getTable();
+		roomExtrasTable.setLinesVisible(true);
+		roomExtrasTable.setHeaderVisible(true);
+		roomExtrasTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnKeywords = tableViewerColumn.getColumn();
+		tblclmnKeywords.setWidth(100);
+		tblclmnKeywords.setText("keywords");
+		
+		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableColumn tblclmnDescription = tableViewerColumn_1.getColumn();
+		tblclmnDescription.setWidth(223);
+		tblclmnDescription.setText("Description");
+		
+		Group grpRoomFlags = new Group(sashForm, SWT.NONE);
+		grpRoomFlags.setText("Room Flags");
+		grpRoomFlags.setLayout(new GridLayout(1, false));
+		
+		Group grpFlags = new Group(grpRoomFlags, SWT.NONE);
+		GridData gd_grpFlags = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpFlags.heightHint = 157;
+		grpFlags.setLayoutData(gd_grpFlags);
+		grpFlags.setText("Flags");
+		
+		Group grpSectorType = new Group(grpRoomFlags, SWT.NONE);
+		GridData gd_grpSectorType = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpSectorType.heightHint = 106;
+		grpSectorType.setLayoutData(gd_grpSectorType);
+		grpSectorType.setText("Sector Type");
+		
+		Group grpRecoveryRates = new Group(grpRoomFlags, SWT.NONE);
+		grpRecoveryRates.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		grpRecoveryRates.setText("Recovery Rates");
+		
+		Group grpDoors = new Group(sashForm, SWT.NONE);
+		grpDoors.setText("Doors");
+		grpDoors.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		TabFolder tabFolder_2 = new TabFolder(grpDoors, SWT.NONE);
+		
+		TabItem tbtmNorth = new TabItem(tabFolder_2, SWT.NONE);
+		tbtmNorth.setText("North");
+		
+		Composite northComposite = new Composite(tabFolder_2, SWT.NONE);
+		tbtmNorth.setControl(northComposite);
+		northComposite.setLayout(new GridLayout(1, false));
+		
+		Label lblDescriptionOfWhat = new Label(northComposite, SWT.NONE);
+		lblDescriptionOfWhat.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblDescriptionOfWhat.setText("Description of what is seen in that direction (optional)");
+		
+		northDescText = new Text(northComposite, SWT.BORDER);
+		northDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button northDoorCheckbox = new Button(northComposite, SWT.CHECK);
+		GridData gd_northDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_northDoorCheckbox.horizontalIndent = 1;
+		northDoorCheckbox.setLayoutData(gd_northDoorCheckbox);
+		northDoorCheckbox.setText("There's a door");
+		
+		Label lblDoorKeywordoptional = new Label(northComposite, SWT.NONE);
+		lblDoorKeywordoptional.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKeywordoptional.setText("Door keyword (optional)");
+		
+		northDoorKeywordText = new Text(northComposite, SWT.BORDER);
+		northDoorKeywordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorState = new Label(northComposite, SWT.NONE);
+		lblDoorState.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorState.setText("Door State");
+		
+		Combo northDoorStateCombo = new Combo(northComposite, SWT.READ_ONLY);
+		northDoorStateCombo.setVisibleItemCount(3);
+		northDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
+		northDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorKey = new Label(northComposite, SWT.NONE);
+		lblDoorKey.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKey.setText("Door Key");
+		
+		Combo northDoorKeyCombo = new Combo(northComposite, SWT.READ_ONLY);
+		northDoorKeyCombo.setItems(new String[] {"(None)"});
+		northDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorSize = new Label(northComposite, SWT.NONE);
+		lblDoorSize.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorSize.setText("Door Size");
+		
+		Combo northDoorSizeCombo = new Combo(northComposite, SWT.READ_ONLY);
+		northDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
+		northDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Group grpResets = new Group(northComposite, SWT.NONE);
+		grpResets.setLayout(new FillLayout(SWT.HORIZONTAL));
+		grpResets.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		grpResets.setText("Resets");
+		
+		ScrolledComposite scrolledComposite_1 = new ScrolledComposite(grpResets, SWT.V_SCROLL);
+		scrolledComposite_1.setExpandHorizontal(true);
+		scrolledComposite_1.setExpandVertical(true);
+		scrolledComposite_1.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		Composite composite_4 = new Composite(scrolledComposite_1, SWT.EMBEDDED);
+		composite_4.setLayout(new RowLayout(SWT.VERTICAL));
+		
+		Button northDoorFlagACheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
+		
+		Button northDoorFlagBCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagBCheck.setText("Door resets to closed");
+		
+		Button northDoorFlagCCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagCCheck.setText("Door resets to locked");
+		
+		Button northDoorFlagFCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
+		
+		Button northDoorFlagGCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
+		
+		Button northDoorFlagHCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagHCheck.setText("Lock easy to pick");
+		
+		Button northDoorFlagICheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagICheck.setText("Lock hard to pick");
+		
+		Button northDoorFlagJCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagJCheck.setText("Lock infuriating to pick");
+		
+		Button northDoorFlagKCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagKCheck.setText("Door cannot be closed");
+		
+		Button northDoorFlagLCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagLCheck.setText("Door cannot be locked");
+		scrolledComposite_1.setContent(composite_4);
+		scrolledComposite_1.setMinSize(composite_4.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
+		TabItem tbtmEast = new TabItem(tabFolder_2, SWT.NONE);
+		tbtmEast.setText("East");
+		
+		Composite eastComposite = new Composite(tabFolder_2, SWT.NONE);
+		tbtmEast.setControl(eastComposite);
+		eastComposite.setLayout(new GridLayout(1, false));
+		
+		Label lblDescriptionOfWhat_1 = new Label(eastComposite, SWT.NONE);
+		lblDescriptionOfWhat_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblDescriptionOfWhat_1.setText("Description of what is seen in that direction (optional)");
+		
+		eastDescText = new Text(eastComposite, SWT.BORDER);
+		eastDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button eastDoorCheckbox = new Button(eastComposite, SWT.CHECK);
+		GridData gd_eastDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_eastDoorCheckbox.horizontalIndent = 1;
+		eastDoorCheckbox.setLayoutData(gd_eastDoorCheckbox);
+		eastDoorCheckbox.setText("There's a door");
+		
+		Label lblDoorKeywordoptional_1 = new Label(eastComposite, SWT.NONE);
+		lblDoorKeywordoptional_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKeywordoptional_1.setText("Door keyword (optional)");
+		
+		eastDoorKeywordText = new Text(eastComposite, SWT.BORDER);
+		eastDoorKeywordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorState_1 = new Label(eastComposite, SWT.NONE);
+		lblDoorState_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorState_1.setText("Door State");
+		
+		Combo eastDoorStateCombo = new Combo(eastComposite, SWT.READ_ONLY);
+		eastDoorStateCombo.setVisibleItemCount(3);
+		eastDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
+		eastDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorKey_1 = new Label(eastComposite, SWT.NONE);
+		lblDoorKey_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKey_1.setText("Door Key");
+		
+		Combo eastDoorKeyCombo = new Combo(eastComposite, SWT.READ_ONLY);
+		eastDoorKeyCombo.setItems(new String[] {"(None)"});
+		eastDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorSize_1 = new Label(eastComposite, SWT.NONE);
+		lblDoorSize_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorSize_1.setText("Door Size");
+		
+		Combo eastDoorSizeCombo = new Combo(eastComposite, SWT.READ_ONLY);
+		eastDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
+		eastDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Group grpResets_1 = new Group(eastComposite, SWT.NONE);
+		grpResets_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		grpResets_1.setText("Resets");
+		grpResets_1.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		ScrolledComposite scrolledComposite_1_1 = new ScrolledComposite(grpResets_1, SWT.V_SCROLL);
+		scrolledComposite_1_1.setExpandVertical(true);
+		scrolledComposite_1_1.setExpandHorizontal(true);
+		
+		Composite composite_4_1 = new Composite(scrolledComposite_1_1, SWT.EMBEDDED);
+		composite_4_1.setLayout(new RowLayout(SWT.VERTICAL));
+		
+		Button eastDoorFlagACheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
+		
+		Button eastDoorFlagBCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagBCheck.setText("Door resets to closed");
+		
+		Button eastDoorFlagCCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagCCheck.setText("Door resets to locked");
+		
+		Button eastDoorFlagFCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
+		
+		Button eastDoorFlagGCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
+		
+		Button eastDoorFlagHCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagHCheck.setText("Lock easy to pick");
+		
+		Button eastDoorFlagICheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagICheck.setText("Lock hard to pick");
+		
+		Button eastDoorFlagJCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagJCheck.setText("Lock infuriating to pick");
+		
+		Button eastDoorFlagKCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagKCheck.setText("Door cannot be closed");
+		
+		Button eastDoorFlagLCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagLCheck.setText("Door cannot be locked");
+		scrolledComposite_1_1.setContent(composite_4_1);
+		scrolledComposite_1_1.setMinSize(composite_4_1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite_1_1.setMinSize(new Point(323, 193));
+		
+		TabItem tbtmSouth = new TabItem(tabFolder_2, SWT.NONE);
+		tbtmSouth.setText("South");
+		
+		Composite southComposite = new Composite(tabFolder_2, SWT.NONE);
+		tbtmSouth.setControl(southComposite);
+		southComposite.setLayout(new GridLayout(1, false));
+		
+		Label lblDescriptionOfWhat_2 = new Label(southComposite, SWT.NONE);
+		lblDescriptionOfWhat_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblDescriptionOfWhat_2.setText("Description of what is seen in that direction (optional)");
+		
+		southDescText = new Text(southComposite, SWT.BORDER);
+		southDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button southDoorCheckbox = new Button(southComposite, SWT.CHECK);
+		GridData gd_southDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_southDoorCheckbox.horizontalIndent = 1;
+		southDoorCheckbox.setLayoutData(gd_southDoorCheckbox);
+		southDoorCheckbox.setText("There's a door");
+		
+		Label lblDoorKeywordoptional_2 = new Label(southComposite, SWT.NONE);
+		lblDoorKeywordoptional_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKeywordoptional_2.setText("Door keyword (optional)");
+		
+		southDoorKeywordText = new Text(southComposite, SWT.BORDER);
+		southDoorKeywordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorState_2 = new Label(southComposite, SWT.NONE);
+		lblDoorState_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorState_2.setText("Door State");
+		
+		Combo southDoorStateCombo = new Combo(southComposite, SWT.READ_ONLY);
+		southDoorStateCombo.setVisibleItemCount(3);
+		southDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
+		southDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorKey_2 = new Label(southComposite, SWT.NONE);
+		lblDoorKey_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKey_2.setText("Door Key");
+		
+		Combo southDoorKeyCombo = new Combo(southComposite, SWT.READ_ONLY);
+		southDoorKeyCombo.setItems(new String[] {"(None)"});
+		southDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorSize_2 = new Label(southComposite, SWT.NONE);
+		lblDoorSize_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorSize_2.setText("Door Size");
+		
+		Combo southDoorSizeCombo = new Combo(southComposite, SWT.READ_ONLY);
+		southDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
+		southDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Group grpResets_2 = new Group(southComposite, SWT.NONE);
+		grpResets_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		grpResets_2.setText("Resets");
+		grpResets_2.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		ScrolledComposite scrolledComposite_1_2 = new ScrolledComposite(grpResets_2, SWT.V_SCROLL);
+		scrolledComposite_1_2.setExpandVertical(true);
+		scrolledComposite_1_2.setExpandHorizontal(true);
+		
+		Composite composite_4_2 = new Composite(scrolledComposite_1_2, SWT.EMBEDDED);
+		composite_4_2.setLayout(new RowLayout(SWT.VERTICAL));
+		
+		Button southDoorFlagACheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
+		
+		Button southDoorFlagBCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagBCheck.setText("Door resets to closed");
+		
+		Button southDoorFlagCCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagCCheck.setText("Door resets to locked");
+		
+		Button southDoorFlagFCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
+		
+		Button southDoorFlagGCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
+		
+		Button southDoorFlagHCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagHCheck.setText("Lock easy to pick");
+		
+		Button southDoorFlagICheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagICheck.setText("Lock hard to pick");
+		
+		Button southDoorFlagJCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagJCheck.setText("Lock infuriating to pick");
+		
+		Button southDoorFlagKCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagKCheck.setText("Door cannot be closed");
+		
+		Button southDoorFlagLCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagLCheck.setText("Door cannot be locked");
+		scrolledComposite_1_2.setContent(composite_4_2);
+		scrolledComposite_1_2.setMinSize(composite_4_2.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite_1_2.setMinSize(new Point(323, 193));
+		
+		TabItem tbtmWest = new TabItem(tabFolder_2, SWT.NONE);
+		tbtmWest.setText("West");
+		
+		Composite westComposite = new Composite(tabFolder_2, SWT.NONE);
+		tbtmWest.setControl(westComposite);
+		westComposite.setLayout(new GridLayout(1, false));
+		
+		Label lblDescriptionOfWhat_3 = new Label(westComposite, SWT.NONE);
+		lblDescriptionOfWhat_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblDescriptionOfWhat_3.setText("Description of what is seen in that direction (optional)");
+		
+		westDescText = new Text(westComposite, SWT.BORDER);
+		westDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button westDoorCheckbox = new Button(westComposite, SWT.CHECK);
+		GridData gd_westDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_westDoorCheckbox.horizontalIndent = 1;
+		westDoorCheckbox.setLayoutData(gd_westDoorCheckbox);
+		westDoorCheckbox.setText("There's a door");
+		
+		Label lblDoorKeywordoptional_3 = new Label(westComposite, SWT.NONE);
+		lblDoorKeywordoptional_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKeywordoptional_3.setText("Door keyword (optional)");
+		
+		westDoorKeywordText = new Text(westComposite, SWT.BORDER);
+		westDoorKeywordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorState_3 = new Label(westComposite, SWT.NONE);
+		lblDoorState_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorState_3.setText("Door State");
+		
+		Combo westDoorStateCombo = new Combo(westComposite, SWT.READ_ONLY);
+		westDoorStateCombo.setVisibleItemCount(3);
+		westDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
+		westDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorKey_3 = new Label(westComposite, SWT.NONE);
+		lblDoorKey_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKey_3.setText("Door Key");
+		
+		Combo westDoorKeyCombo = new Combo(westComposite, SWT.READ_ONLY);
+		westDoorKeyCombo.setItems(new String[] {"(None)"});
+		westDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorSize_3 = new Label(westComposite, SWT.NONE);
+		lblDoorSize_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorSize_3.setText("Door Size");
+		
+		Combo westDoorSizeCombo = new Combo(westComposite, SWT.READ_ONLY);
+		westDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
+		westDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Group grpResets_3 = new Group(westComposite, SWT.NONE);
+		grpResets_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		grpResets_3.setText("Resets");
+		grpResets_3.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		ScrolledComposite scrolledComposite_1_3 = new ScrolledComposite(grpResets_3, SWT.V_SCROLL);
+		scrolledComposite_1_3.setExpandVertical(true);
+		scrolledComposite_1_3.setExpandHorizontal(true);
+		
+		Composite composite_4_3 = new Composite(scrolledComposite_1_3, SWT.EMBEDDED);
+		composite_4_3.setLayout(new RowLayout(SWT.VERTICAL));
+		
+		Button westDoorFlagACheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
+		
+		Button westDoorFlagBCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagBCheck.setText("Door resets to closed");
+		
+		Button westDoorFlagCCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagCCheck.setText("Door resets to locked");
+		
+		Button westDoorFlagFCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
+		
+		Button westDoorFlagGCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
+		
+		Button westDoorFlagHCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagHCheck.setText("Lock easy to pick");
+		
+		Button westDoorFlagICheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagICheck.setText("Lock hard to pick");
+		
+		Button westDoorFlagJCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagJCheck.setText("Lock infuriating to pick");
+		
+		Button westDoorFlagKCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagKCheck.setText("Door cannot be closed");
+		
+		Button westDoorFlagLCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagLCheck.setText("Door cannot be locked");
+		scrolledComposite_1_3.setContent(composite_4_3);
+		scrolledComposite_1_3.setMinSize(composite_4_3.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite_1_3.setMinSize(new Point(323, 193));
+		
+		TabItem tbtmUp = new TabItem(tabFolder_2, SWT.NONE);
+		tbtmUp.setText("Up");
+		
+		Composite upComposite = new Composite(tabFolder_2, SWT.NONE);
+		tbtmUp.setControl(upComposite);
+		upComposite.setLayout(new GridLayout(1, false));
+		
+		Label lblDescriptionOfWhat_4 = new Label(upComposite, SWT.NONE);
+		lblDescriptionOfWhat_4.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblDescriptionOfWhat_4.setText("Description of what is seen in that direction (optional)");
+		
+		upDescText = new Text(upComposite, SWT.BORDER);
+		upDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button upDoorCheckbox = new Button(upComposite, SWT.CHECK);
+		GridData gd_upDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_upDoorCheckbox.horizontalIndent = 1;
+		upDoorCheckbox.setLayoutData(gd_upDoorCheckbox);
+		upDoorCheckbox.setText("There's a door");
+		
+		Label lblDoorKeywordoptional_4 = new Label(upComposite, SWT.NONE);
+		lblDoorKeywordoptional_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKeywordoptional_4.setText("Door keyword (optional)");
+		
+		upDoorKeywordText = new Text(upComposite, SWT.BORDER);
+		upDoorKeywordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorState_4 = new Label(upComposite, SWT.NONE);
+		lblDoorState_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorState_4.setText("Door State");
+		
+		Combo upDoorStateCombo = new Combo(upComposite, SWT.READ_ONLY);
+		upDoorStateCombo.setVisibleItemCount(3);
+		upDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
+		upDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorKey_4 = new Label(upComposite, SWT.NONE);
+		lblDoorKey_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKey_4.setText("Door Key");
+		
+		Combo upDoorKeyCombo = new Combo(upComposite, SWT.READ_ONLY);
+		upDoorKeyCombo.setItems(new String[] {"(None)"});
+		upDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorSize_4 = new Label(upComposite, SWT.NONE);
+		lblDoorSize_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorSize_4.setText("Door Size");
+		
+		Combo upDoorSizeCombo = new Combo(upComposite, SWT.READ_ONLY);
+		upDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
+		upDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Group grpResets_4 = new Group(upComposite, SWT.NONE);
+		grpResets_4.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		grpResets_4.setText("Resets");
+		grpResets_4.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		ScrolledComposite scrolledComposite_1_4 = new ScrolledComposite(grpResets_4, SWT.V_SCROLL);
+		scrolledComposite_1_4.setExpandVertical(true);
+		scrolledComposite_1_4.setExpandHorizontal(true);
+		
+		Composite composite_4_4 = new Composite(scrolledComposite_1_4, SWT.EMBEDDED);
+		composite_4_4.setLayout(new RowLayout(SWT.VERTICAL));
+		
+		Button upDoorFlagACheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
+		
+		Button upDoorFlagBCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagBCheck.setText("Door resets to closed");
+		
+		Button upDoorFlagCCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagCCheck.setText("Door resets to locked");
+		
+		Button upDoorFlagFCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
+		
+		Button upDoorFlagGCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
+		
+		Button upDoorFlagHCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagHCheck.setText("Lock easy to pick");
+		
+		Button upDoorFlagICheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagICheck.setText("Lock hard to pick");
+		
+		Button upDoorFlagJCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagJCheck.setText("Lock infuriating to pick");
+		
+		Button upDoorFlagKCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagKCheck.setText("Door cannot be closed");
+		
+		Button upDoorFlagLCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagLCheck.setText("Door cannot be locked");
+		scrolledComposite_1_4.setContent(composite_4_4);
+		scrolledComposite_1_4.setMinSize(composite_4_4.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite_1_4.setMinSize(new Point(323, 193));
+		
+		TabItem tbtmDown = new TabItem(tabFolder_2, SWT.NONE);
+		tbtmDown.setText("Down");
+		
+		Composite downComposite = new Composite(tabFolder_2, SWT.NONE);
+		tbtmDown.setControl(downComposite);
+		downComposite.setLayout(new GridLayout(1, false));
+		
+		Label lblDescriptionOfWhat_5 = new Label(downComposite, SWT.NONE);
+		lblDescriptionOfWhat_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblDescriptionOfWhat_5.setText("Description of what is seen in that direction (optional)");
+		
+		downDescText = new Text(downComposite, SWT.BORDER);
+		downDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button downDoorCheckbox = new Button(downComposite, SWT.CHECK);
+		GridData gd_downDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_downDoorCheckbox.horizontalIndent = 1;
+		downDoorCheckbox.setLayoutData(gd_downDoorCheckbox);
+		downDoorCheckbox.setText("There's a door");
+		
+		Label lblDoorKeywordoptional_5 = new Label(downComposite, SWT.NONE);
+		lblDoorKeywordoptional_5.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKeywordoptional_5.setText("Door keyword (optional)");
+		
+		downDoorKeywordText = new Text(downComposite, SWT.BORDER);
+		downDoorKeywordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorState_5 = new Label(downComposite, SWT.NONE);
+		lblDoorState_5.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorState_5.setText("Door State");
+		
+		Combo downDoorStateCombo = new Combo(downComposite, SWT.READ_ONLY);
+		downDoorStateCombo.setVisibleItemCount(3);
+		downDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
+		downDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorKey_5 = new Label(downComposite, SWT.NONE);
+		lblDoorKey_5.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorKey_5.setText("Door Key");
+		
+		Combo downDoorKeyCombo = new Combo(downComposite, SWT.READ_ONLY);
+		downDoorKeyCombo.setItems(new String[] {"(None)"});
+		downDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDoorSize_5 = new Label(downComposite, SWT.NONE);
+		lblDoorSize_5.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblDoorSize_5.setText("Door Size");
+		
+		Combo downDoorSizeCombo = new Combo(downComposite, SWT.READ_ONLY);
+		downDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
+		downDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Group grpResets_5 = new Group(downComposite, SWT.NONE);
+		grpResets_5.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		grpResets_5.setText("Resets");
+		grpResets_5.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		ScrolledComposite scrolledComposite_1_5 = new ScrolledComposite(grpResets_5, SWT.V_SCROLL);
+		scrolledComposite_1_5.setExpandVertical(true);
+		scrolledComposite_1_5.setExpandHorizontal(true);
+		
+		Composite composite_4_5 = new Composite(scrolledComposite_1_5, SWT.EMBEDDED);
+		composite_4_5.setLayout(new RowLayout(SWT.VERTICAL));
+		
+		Button downDoorFlagACheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
+		
+		Button downDoorFlagBCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagBCheck.setText("Door resets to closed");
+		
+		Button downDoorFlagCCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagCCheck.setText("Door resets to locked");
+		
+		Button downDoorFlagFCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
+		
+		Button downDoorFlagGCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
+		
+		Button downDoorFlagHCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagHCheck.setText("Lock easy to pick");
+		
+		Button downDoorFlagICheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagICheck.setText("Lock hard to pick");
+		
+		Button downDoorFlagJCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagJCheck.setText("Lock infuriating to pick");
+		
+		Button downDoorFlagKCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagKCheck.setText("Door cannot be closed");
+		
+		Button downDoorFlagLCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagLCheck.setText("Door cannot be locked");
+		scrolledComposite_1_5.setContent(composite_4_5);
+		scrolledComposite_1_5.setMinSize(composite_4_5.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite_1_5.setMinSize(new Point(323, 193));
+		sashForm.setWeights(new int[] {1, 1, 1});
+		
+		TabItem tbtmMobEditor = new TabItem(tabFolder_1, SWT.NONE);
+		tbtmMobEditor.setText("Mob Editor");
+		
+		TabItem tbtmObjectEditor_1 = new TabItem(tabFolder_1, SWT.NONE);
+		tbtmObjectEditor_1.setText("Object Editor");
 		
 		TabItem tbtmAreaOverview = new TabItem(tabFolder, SWT.NONE);
 		tbtmAreaOverview.setText("Area Overview");
@@ -150,7 +866,9 @@ public class VisualEditor {
 		lblLog.setText("Log");
 		
 		ScrolledComposite scrolledComposite = new ScrolledComposite(composite_1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_scrolledComposite.heightHint = 103;
+		scrolledComposite.setLayoutData(gd_scrolledComposite);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 		
