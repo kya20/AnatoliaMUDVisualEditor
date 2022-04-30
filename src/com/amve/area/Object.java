@@ -10,6 +10,5 @@ public class Object {
 	public String longDescription = "";
 	public String material = "";
 	public Item item;
-	// todo: continue from here.
 	
 }

@@ -12,13 +12,31 @@ import com.amve.area.Room;
 import com.amve.globals.GlobalVariables.Position;
 import com.amve.globals.GlobalVariables.Sex;
 import com.amve.globals.GlobalVariables.Size;
+import com.amve.utils.Armor;
+import com.amve.utils.Container;
 import com.amve.utils.Dice;
+import com.amve.utils.Drink;
 import com.amve.utils.Flag;
+import com.amve.utils.Food;
+import com.amve.utils.Fountain;
+import com.amve.utils.Furniture;
+import com.amve.utils.Item;
+import com.amve.utils.Light;
+import com.amve.utils.Money;
+import com.amve.utils.Pill;
+import com.amve.utils.Portal;
+import com.amve.utils.Potion;
+import com.amve.utils.Scroll;
+import com.amve.utils.Staff;
+import com.amve.utils.Treasure;
+import com.amve.utils.Wand;
+import com.amve.utils.Weapon;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.InvalidParameterException;
 
 public class AreaFileParser {
 	
@@ -64,6 +82,7 @@ public class AreaFileParser {
 			case "RESETS":
 				break;
 			case "ROOMS":
+				loadRooms(sbFile);
 				break;
 			case "SHOPS":
 				break;
@@ -252,6 +271,12 @@ public class AreaFileParser {
 				throw new IllegalArgumentException("Could not find # character for object vNum.");
 			file.deleteCharAt(0);
 			int index = file.indexOf("\n");
+			if ("0".equals(file.substring(0, index))) {
+				file.delete(0, index);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				return;
+			}
 			object.vNum = file.substring(0, index);
 			file.delete(0, index);
 			while(Character.isWhitespace(file.charAt(0)))
@@ -277,9 +302,181 @@ public class AreaFileParser {
 			while(Character.isWhitespace(file.charAt(0)))
 				file.deleteCharAt(0);
 			index = file.indexOf("\n");
-			String [] tmp = file.substring(0, index).split(" ");
+			String [] line6 = file.substring(0, index).split(" ");
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			String [] line7 =  {"", "", "", "", ""};
+			if (file.substring(0, index).contains("'")) {
+				int idx = 0;
+				Boolean isInWord = false;
+				for (char c : file.substring(0, index).toCharArray()) {
+					if (isInWord) {
+						if (c == '\'')
+							isInWord = Boolean.logicalXor(isInWord, true);
+						else
+							line7[idx] += c;
+					}
+					else if (c == ' ') idx++;
+					else if (c == '\'')
+						isInWord = Boolean.logicalXor(isInWord, true);
+					else 
+						line7[idx] += c;
+				}
+			}
+			else line7 = file.substring(0, index).split(" ");
 			
-//			object.flags.add(new Flag("extra", tmp[1]))
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			String [] line8 = file.substring(0, index).split(" ");
+			
+			String line9 = "";
+			String line11 = "";
+			String line12 = "";
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			while(true) {
+				index = file.indexOf("\n");
+				String l = file.substring(0, index+1);
+				l = removeWhiteSpace(l);
+				if (l.startsWith("A")) { // doc says "apply", under2 has "A"
+					file.delete(0, index+1);
+					while(Character.isWhitespace(file.charAt(0)))
+						file.deleteCharAt(0);
+					index = file.indexOf("\n");
+					l = file.substring(0, index+1);
+					line9 = line9.concat(l);
+					file.delete(0, index+1);
+				}
+				else if (l.startsWith("F")) {
+					line11.concat("\n" + l);
+				}
+				else if (l.startsWith("E")) {
+					line12.concat("\n" + l);
+					file.delete(0, index);
+					while(Character.isWhitespace(file.charAt(0)))
+						file.deleteCharAt(0);
+					index = file.indexOf("~");
+					line12.concat("\n" + file.substring(0, index+1));
+					file.delete(0, index+1);
+					while(Character.isWhitespace(file.charAt(0)))
+						file.deleteCharAt(0);
+					index = file.indexOf("~");
+					line12.concat(file.substring(0, index+1));
+					file.delete(0, index+1);
+				}
+				else
+					break;
+			}
+			
+			Item item = null;
+			switch(line6[0]) {
+			case "weapon":
+				item = new Weapon(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "armor":
+				item = new Armor(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "light":
+				item = new Light(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "money":
+				item = new Money(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "drink":
+				item = new Drink(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "fountain":
+				item = new Fountain(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "wand":
+				item = new Wand(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "staff":
+				item = new Staff(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "potion":
+				item = new Potion(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "scroll":
+				item = new Scroll(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "pill":
+				item = new Pill(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "container":
+				item = new Container(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "food":
+				item = new Food(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "portal":
+				item = new Portal(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "furniture":
+				item = new Furniture(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2], line8[3], line9, line11, line12, 
+						line7[0], line7[1], line7[2], line7[3], line7[4]);
+				break;
+			case "treasure":
+				item = new Treasure(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2],line8[3], line9, line11, line12);
+				break;
+				
+			}
+			if (item != null)
+				object.item = item;
+			else
+				throw new InvalidParameterException(line6[0] + " object type is invalid.");
+			
+			this.area.objects.add(object);
 		}
+	}
+	
+	private void loadRooms(StringBuilder sbFile) {
+		// TODO Auto-generated method stub
+		System.out.println("entered load rooms");
+	}
+	
+	private String removeWhiteSpace(String s) {
+		Pattern pattern = Pattern.compile("\\S*", Pattern.CASE_INSENSITIVE);
+		Matcher m = pattern.matcher(s);
+		if (m.find( )) {
+			return m.group(0);	
+		}
+		else
+			throw new InvalidParameterException("Could not find the pattern.");
 	}
 }

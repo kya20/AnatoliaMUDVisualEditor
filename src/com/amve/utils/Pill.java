@@ -1,14 +1,14 @@
 package com.amve.utils;
 
-public class Armor extends Item {
-	
-	public String pierce;
-	public String bash;
-	public String slash;
-	public String exotic;
-	public String bulk;
+import java.util.ArrayList;
+import java.util.List;
 
-	public Armor(
+public class Pill extends Item {
+	
+	public int spellLevel;
+	public List<String> spellList = new ArrayList<>();
+	
+	public Pill(
 			String itemType, 
 			String extraFlags, 
 			String wearFlags, 
@@ -26,11 +26,14 @@ public class Armor extends Item {
 			String v4
 			) {
 		super(itemType, extraFlags, wearFlags, level, weight, cost, cond, apply, flags, extraDescriptions);
-		this.pierce = v0;
-		this.bash = v1;
-		this.slash = v2;
-		this.exotic = v3;
-		this.bulk = v4;
+		this.spellLevel = Integer.parseInt(v0);
+		this.spellList.add(v1);
+		if (!"".equals(v2))
+			this.spellList.add(v2);
+		if (!"".equals(v3))
+			this.spellList.add(v3);
+		if (!"".equals(v4))
+			this.spellList.add(v4);
 	}
 
 }

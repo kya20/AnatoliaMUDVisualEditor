@@ -718,6 +718,81 @@ public abstract class GlobalVariables {
 		}
 	}
 	
+	public enum GateFlag {
+		NORMAL(LETTER_TRANSLATIONS.get("A"), "normal exit"),
+		NO_CURSE(LETTER_TRANSLATIONS.get("B"), "no curse"),
+		GO_WITH(LETTER_TRANSLATIONS.get("C"), "go with"),
+		GATE_BUGGY(LETTER_TRANSLATIONS.get("D"), "gate buggy"),
+		RANDOM(LETTER_TRANSLATIONS.get("E"), "random");
+		
+		private static final Map<Integer, GateFlag> BY_NUM = new HashMap<>();
+		private static final Map<String, GateFlag> BY_NAME = new HashMap<>();
+		
+		static {
+			for (GateFlag e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private GateFlag(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static GateFlag valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static GateFlag valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+	public enum FurnitureFlag {
+		STAND_AT(LETTER_TRANSLATIONS.get("A"), "stand at"),
+		STAND_ON(LETTER_TRANSLATIONS.get("B"), "stand on"),
+		STAND_IN(LETTER_TRANSLATIONS.get("C"), "stand in"),
+		SIT_AT(LETTER_TRANSLATIONS.get("D"), "sit at"),
+		SIT_ON(LETTER_TRANSLATIONS.get("E"), "sit on"),
+		SIT_IN(LETTER_TRANSLATIONS.get("F"), "sit in"),
+		REST_AT(LETTER_TRANSLATIONS.get("G"), "rest_at"),
+		REST_ON(LETTER_TRANSLATIONS.get("H"), "rest on"),
+		REST_IN(LETTER_TRANSLATIONS.get("I"), "rest in"),
+		SLEEP_AT(LETTER_TRANSLATIONS.get("J"), "sleep at"),
+		SLEEP_ON(LETTER_TRANSLATIONS.get("K"), "sleep on"),
+		SLEEP_IN(LETTER_TRANSLATIONS.get("L"), "sleep in"),
+		PUT_AT(LETTER_TRANSLATIONS.get("M"), "put at"),
+		PUT_ON(LETTER_TRANSLATIONS.get("N"), "put on"),
+		PUT_IN(LETTER_TRANSLATIONS.get("O"), "put in"),
+		PUT_INSIDE(LETTER_TRANSLATIONS.get("P"), "put inside");
+		
+		private static final Map<Integer, FurnitureFlag> BY_NUM = new HashMap<>();
+		private static final Map<String, FurnitureFlag> BY_NAME = new HashMap<>();
+		
+		static {
+			for (FurnitureFlag e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private FurnitureFlag(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static FurnitureFlag valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static FurnitureFlag valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
 	//redundant?
 	public static final Integer RACE_TYPE_AARAKOCRA = 0;
 	public static final Integer RACE_TYPE_AIR_ELEMENTAL = 1;

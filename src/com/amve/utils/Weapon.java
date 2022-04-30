@@ -19,9 +19,9 @@ public class Weapon extends Item {
 			String itemType, 
 			String extraFlags, 
 			String wearFlags, 
-			int level, 
-			int weight, 
-			int cost,
+			String level, 
+			String weight, 
+			String cost,
 			String cond, 
 			String apply, 
 			String flags, 
@@ -36,14 +36,17 @@ public class Weapon extends Item {
 		this.weaponClass = WeaponClass.valueOfName(v0);
 		this.dice = new Dice(Integer.parseInt(v1),Integer.parseInt(v2));
 		this.damageMessage = v3;
-		for (int i = 0; i < v4.length() ; i++) {
-			if (Character.isUpperCase(v4.charAt(i)))
-				this.weaponFlags.add(WeaponFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(v4.substring(i, i+1))));
-			else {
-				this.weaponFlags.add(WeaponFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(v4.substring(i, i+2))));
-				i++;
+		if (!"0".equals(v4)) {
+			for (int i = 0; i < v4.length() ; i++) {
+				if (Character.isUpperCase(v4.charAt(i)))
+					this.weaponFlags.add(WeaponFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(v4.substring(i, i+1))));
+				else {
+					this.weaponFlags.add(WeaponFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(v4.substring(i, i+2))));
+					i++;
+				}
 			}
 		}
+		
 		
 	}
 

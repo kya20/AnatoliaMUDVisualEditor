@@ -1,13 +1,12 @@
 package com.amve.utils;
 
-public class Drink extends Item {
+public class Food extends Item {
 	
-	public int containerSize;
-	public int currentAmount;
-	public String liquidType;
+	public int hoursFull; // holds the number of game hours the food will keep the person who eats it full
+	public int hoursNormal; // holds the number of hours it will keep the person from getting hungry
 	public Boolean isPoisoned;
 
-	public Drink(
+	public Food(
 			String itemType, 
 			String extraFlags, 
 			String wearFlags, 
@@ -25,14 +24,12 @@ public class Drink extends Item {
 			String v4
 			) {
 		super(itemType, extraFlags, wearFlags, level, weight, cost, cond, apply, flags, extraDescriptions);
-		this.containerSize = Integer.parseInt(v0);
-		this.currentAmount = Integer.parseInt(v1);
-		this.liquidType = v2;
+		this.hoursFull = Integer.parseInt(v0);
+		this.hoursNormal = Integer.parseInt(v1);
 		if ("1".equals(v3))
 			this.isPoisoned = true;
 		else
 			this.isPoisoned = false;
-		
 	}
 
 }

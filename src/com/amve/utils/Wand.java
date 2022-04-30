@@ -1,14 +1,12 @@
 package com.amve.utils;
 
-public class Armor extends Item {
+public class Wand extends Item {
+	public int spellLevel;
+	public int maxCharges;
+	public int curCharges;
+	public String spellName;
 	
-	public String pierce;
-	public String bash;
-	public String slash;
-	public String exotic;
-	public String bulk;
-
-	public Armor(
+	public Wand(
 			String itemType, 
 			String extraFlags, 
 			String wearFlags, 
@@ -26,11 +24,10 @@ public class Armor extends Item {
 			String v4
 			) {
 		super(itemType, extraFlags, wearFlags, level, weight, cost, cond, apply, flags, extraDescriptions);
-		this.pierce = v0;
-		this.bash = v1;
-		this.slash = v2;
-		this.exotic = v3;
-		this.bulk = v4;
+		this.spellLevel = Integer.parseInt(v0);
+		this.maxCharges = Integer.parseInt(v1);
+		this.curCharges = Integer.parseInt(v2);
+		this.spellName = v3;
 	}
 
 }
