@@ -2,13 +2,16 @@ package com.amve.area;
 
 import java.util.*;
 import com.amve.globals.GlobalVariables;
+import com.amve.globals.GlobalVariables.RoomFlag;
+import com.amve.globals.GlobalVariables.RoomSector;
 
 public class Room {
 	
-	public String vNum = null;
-	public String header = null;
-	public String description = null;
-	public HashMap<String, String> flags = new HashMap<>();
+	public String vNum = "";
+	public String header = "";
+	public String description = "";
+	public List<RoomFlag> roomFlags = new ArrayList<>(); 
+	public RoomSector roomSector;
 		
 	//public ResetMessage resetMessage = null;
 	
@@ -24,9 +27,6 @@ public class Room {
 		exitDirs.put("hasWestExit", 0);
 		exitDirs.put("hasUpExit", 0);
 		exitDirs.put("hasDownExit", 0);	
-		flags.put("first", "0");
-		flags.put("flag", "");
-		flags.put("sector", "");
 	}
 	
 	public boolean isEmpty() {
@@ -54,20 +54,6 @@ public class Room {
 	}
 	
 	//for reading from file
-	public void setFlags(String flagLine) {
-		String[] splitted = flagLine.split("\\s+");
-		flags.put("first", splitted[0]);
-		flags.put("flag", splitted[1]);
-		flags.put("sector", splitted[2]);
-	}
-	
-	public void changeFlag(String flag) {
-		flags.put("flag", flag);
-	}
-	
-	public void changeSector(String sector) {
-		flags.put("sector", sector);
-	}
 	
 	public void addExit(Integer direction, String description, String keyword, Integer state, String connectedVNum, String keyVNum) {
 		HashMap<String, String> exit = new HashMap<>();

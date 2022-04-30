@@ -876,37 +876,121 @@ public abstract class GlobalVariables {
 	public static final Integer RACE_TYPE_ZOMBIE = 79;
 
 	//TODO:fix room flags
-	public static final Integer ROOM_FLAG_NO_RECALL = 0;
-	public static final Integer ROOM_FLAG_NO_MAGIC = 1;
-	public static final Integer ROOM_FLAG_NOSUMMON = 2;
-	public static final Integer ROOM_FLAG_NOWHERE = 3;
-	public static final Integer ROOM_FLAG_DARK = 4;
-	public static final Integer ROOM_FLAG_INDOORS = 5;
-	public static final Integer ROOM_FLAG_BANK = 6;
-	public static final Integer ROOM_FLAG_PET_SHOP = 7;
-	public static final Integer ROOM_FLAG_NO_MOB = 8;
-	public static final Integer ROOM_FLAG_SAFE = 9;
-	public static final Integer ROOM_FLAG_PRIVATE = 10;
-	public static final Integer ROOM_FLAG_SOLITARY = 11;
-	public static final Integer ROOM_FLAG_NEWBIES_ONLY = 12;
-	public static final Integer ROOM_FLAG_HEROES_ONLY = 13;
-	public static final Integer ROOM_FLAG_GODS_ONLY = 14;
-	public static final Integer ROOM_FLAG_IMP_ONLY = 15;
-	public static final Integer ROOM_FLAG_LAW = 16;
-	public static final Integer ROOM_FLAG_REGISTRY = 17;
-	public static final Integer ROOM_FLAG_RANDOM = 18;
+//	public static final Integer ROOM_FLAG_NO_RECALL = 0;
+//	public static final Integer ROOM_FLAG_NO_MAGIC = 1;
+//	public static final Integer ROOM_FLAG_NOSUMMON = 2;
+//	public static final Integer ROOM_FLAG_NOWHERE = 3;
+//	public static final Integer ROOM_FLAG_DARK = 4;
+//	public static final Integer ROOM_FLAG_INDOORS = 5;
+//	public static final Integer ROOM_FLAG_BANK = 6;
+//	public static final Integer ROOM_FLAG_PET_SHOP = 7;
+//	public static final Integer ROOM_FLAG_NO_MOB = 8;
+//	public static final Integer ROOM_FLAG_SAFE = 9;
+//	public static final Integer ROOM_FLAG_PRIVATE = 10;
+//	public static final Integer ROOM_FLAG_SOLITARY = 11;
+//	public static final Integer ROOM_FLAG_NEWBIES_ONLY = 12;
+//	public static final Integer ROOM_FLAG_HEROES_ONLY = 13;
+//	public static final Integer ROOM_FLAG_GODS_ONLY = 14;
+//	public static final Integer ROOM_FLAG_IMP_ONLY = 15;
+//	public static final Integer ROOM_FLAG_LAW = 16;
+//	public static final Integer ROOM_FLAG_REGISTRY = 17;
+//	public static final Integer ROOM_FLAG_RANDOM = 18;
 	
-	public static final Integer ROOM_SECTOR_INSIDE = 0;
-	public static final Integer ROOM_SECTOR_CITY = 1;
-	public static final Integer ROOM_SECTOR_FIELD = 2;
-	public static final Integer ROOM_SECTOR_FOREST = 3;
-	public static final Integer ROOM_SECTOR_HILL = 4;
-	public static final Integer ROOM_SECTOR_MOUNTAIN = 5;
-	public static final Integer ROOM_SECTOR_WATER = 6;
-	public static final Integer ROOM_SECTOR_DEEPWATER = 7;
-	public static final Integer ROOM_SECTOR_UNUSED = 8;
-	public static final Integer ROOM_SECTOR_AIR = 9;
-	public static final Integer ROOM_SECTOR_DESERT = 10;
+	public enum RoomFlag {
+		DARK(LETTER_TRANSLATIONS.get("A"), "dark"),
+		NO_MOB(LETTER_TRANSLATIONS.get("C"), "no mob"),
+		INDOORS(LETTER_TRANSLATIONS.get("D"), "indoors"),
+		PRIVATE(LETTER_TRANSLATIONS.get("J"), "private"),
+		SAFE(LETTER_TRANSLATIONS.get("K"), "safe"),
+		SOLITARY(LETTER_TRANSLATIONS.get("L"), "solitary"),
+		PET_SHOP(LETTER_TRANSLATIONS.get("M"), "pet shop"),
+		NO_RECALL(LETTER_TRANSLATIONS.get("N"), "no recall"),
+		IMP_ONLY(LETTER_TRANSLATIONS.get("O"), "imp only"),
+		// These ones below do not exist in docs.
+		GODS_ONLY(LETTER_TRANSLATIONS.get("P"), "gods only"),
+		HEROES_ONLY(LETTER_TRANSLATIONS.get("Q"), "heroes only"),
+		NEWBIES_ONLY(LETTER_TRANSLATIONS.get("R"), "newbies only"),
+		LAW(LETTER_TRANSLATIONS.get("S"), "law"),
+		NOWHERE(LETTER_TRANSLATIONS.get("T"), "nowhere"),
+		BANK(LETTER_TRANSLATIONS.get("U"), "bank"),
+		NO_MAGIC(LETTER_TRANSLATIONS.get("W"), "no magic"),
+		NOSUMMON(LETTER_TRANSLATIONS.get("X"), "no summon"),
+		REGISTRY(LETTER_TRANSLATIONS.get("bb"), "registry");
+		
+		private static final Map<Integer, RoomFlag> BY_NUM = new HashMap<>();
+		private static final Map<String, RoomFlag> BY_NAME = new HashMap<>();
+		
+		static {
+			for (RoomFlag e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private RoomFlag(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static RoomFlag valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static RoomFlag valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+//	public static final Integer ROOM_SECTOR_INSIDE = 0;
+//	public static final Integer ROOM_SECTOR_CITY = 1;
+//	public static final Integer ROOM_SECTOR_FIELD = 2;
+//	public static final Integer ROOM_SECTOR_FOREST = 3;
+//	public static final Integer ROOM_SECTOR_HILL = 4;
+//	public static final Integer ROOM_SECTOR_MOUNTAIN = 5;
+//	public static final Integer ROOM_SECTOR_WATER = 6;
+//	public static final Integer ROOM_SECTOR_DEEPWATER = 7;
+//	public static final Integer ROOM_SECTOR_UNUSED = 8;
+//	public static final Integer ROOM_SECTOR_AIR = 9;
+//	public static final Integer ROOM_SECTOR_DESERT = 10;
+	
+	public enum RoomSector {
+		INSIDE(0, "inside"),
+		CITY(1, "city"),
+		FIELD(2, "field"),
+		FOREST(3, "forest"),
+		HILL(4, "hill"),
+		MOUNTAIN(5, "mountain"),
+		WATER(6, "water"),
+		DEEPWATER(7, "deep water"),
+		UNUSED(8, "unused"),
+		AIR(9, "air"),
+		DESERT(10, "desert");
+		
+		private static final Map<Integer, RoomSector> BY_NUM = new HashMap<>();
+		private static final Map<String, RoomSector> BY_NAME = new HashMap<>();
+		
+		static {
+			for (RoomSector e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private RoomSector(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static RoomSector valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static RoomSector valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
 	
 	public static final String WEAPON_TYPE_EXOTIC = "exotic";
 	public static final String WEAPON_TYPE_SWORD = "sword";

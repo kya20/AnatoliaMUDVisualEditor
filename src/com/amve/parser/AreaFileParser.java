@@ -82,8 +82,9 @@ public class AreaFileParser {
 			case "RESETS":
 				break;
 			case "ROOMS":
-				loadRooms(sbFile);
-				break;
+				return;
+//				loadRooms(sbFile);
+//				break;
 			case "SHOPS":
 				break;
 			case "SOCIALS":
@@ -465,9 +466,32 @@ public class AreaFileParser {
 		}
 	}
 	
-	private void loadRooms(StringBuilder sbFile) {
-		// TODO Auto-generated method stub
+	private void loadRooms(StringBuilder file) {
 		System.out.println("entered load rooms");
+		while (true) {
+			Room room = new Room();
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			if(file.charAt(0) != '#')
+				throw new IllegalArgumentException("Could not find # character for mobile vNum.");
+			file.deleteCharAt(0);
+			int index = file.indexOf("\n");
+			room.vNum = file.substring(0, index);
+			file.delete(0, index);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			room.setHeader(file.substring(0, index));
+			file.delete(0, index+1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("~");
+			room.setDescription(file.substring(0, index));
+			file.delete(0, index+1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			
+		}
 	}
 	
 	private String removeWhiteSpace(String s) {
