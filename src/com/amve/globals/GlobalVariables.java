@@ -10,12 +10,12 @@ import com.amve.utils.Spell;
 
 public abstract class GlobalVariables {
 	//TODO: some variables might be in either integer or string format, fix if necessary later
-	public static final Integer NORTH_DIR = 0;
-	public static final Integer EAST_DIR = 1;
-	public static final Integer SOUTH_DIR = 2;
-	public static final Integer WEST_DIR = 3;
-	public static final Integer UP_DIR = 4;
-	public static final Integer DOWN_DIR = 5;
+//	public static final Integer NORTH_DIR = 0;
+//	public static final Integer EAST_DIR = 1;
+//	public static final Integer SOUTH_DIR = 2;
+//	public static final Integer WEST_DIR = 3;
+//	public static final Integer UP_DIR = 4;
+//	public static final Integer DOWN_DIR = 5;
 
 	public static final Integer DOOR_OPEN = 0;
 	public static final Integer DOOR_CLOSED = 1;
@@ -988,6 +988,69 @@ public abstract class GlobalVariables {
 			return BY_NUM.get(num);
 		}
 		public static RoomSector valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+	public enum ExitDirection {
+		NORTH(0, "north"),
+		EAST(1, "east"),
+		SOUTH(2, "south"),
+		WEST(3, "west"),
+		UP(4, "up"),
+		DOWN(5, "down");
+		
+		private static final Map<Integer, ExitDirection> BY_NUM = new HashMap<>();
+		private static final Map<String, ExitDirection> BY_NAME = new HashMap<>();
+		
+		static {
+			for (ExitDirection e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private ExitDirection(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static ExitDirection valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static ExitDirection valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+	public enum DoorState {
+		OPEN(0, "open"),
+		CLOSED(1, "closed"),
+		LOCKED(2, "locked");
+		
+		private static final Map<Integer, DoorState> BY_NUM = new HashMap<>();
+		private static final Map<String, DoorState> BY_NAME = new HashMap<>();
+		
+		static {
+			for (DoorState e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private DoorState(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static DoorState valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static DoorState valueOfName(String name) {
 			return BY_NAME.get(name);
 		}
 	}

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.amve.globals.GlobalVariables;
 import com.amve.globals.GlobalVariables.FurnitureFlag;
-import com.amve.globals.GlobalVariables.GateFlag;
 
 public class Furniture extends Item {
 	

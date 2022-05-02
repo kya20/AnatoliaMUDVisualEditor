@@ -85,14 +85,16 @@ public abstract class Item {
 				if(extraDescriptions.charAt(index) != 'E')
 					System.out.println("format error");
 				index = extraDescriptions.indexOf("\n");
-				extraDescriptions = extraDescriptions.substring(index);
+				extraDescriptions = extraDescriptions.substring(index+1);
 				index = extraDescriptions.indexOf("~");
 				String[] extraKeywords = extraDescriptions.substring(0, index).split(" ");
-				extraDescriptions = extraDescriptions.substring(index);
+				extraDescriptions = extraDescriptions.substring(index+1);
+				while(Character.isWhitespace(extraDescriptions.charAt(index)))
+					index++;
 				index = extraDescriptions.indexOf("~");
-				String extraDescText = extraDescriptions.substring(0, index);
+				String extraDescText = extraDescriptions.substring(1, index);
 				extraDescriptions = extraDescriptions.substring(index);
-				this.extraDescriptions.add(new ExtraDescription(Arrays.asList(extraKeywords), extraDescriptions));
+				this.extraDescriptions.add(new ExtraDescription(Arrays.asList(extraKeywords), extraDescText));
 			}
 		}
 			

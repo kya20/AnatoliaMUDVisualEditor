@@ -2,6 +2,7 @@ package com.amve.parser;
 
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,13 +10,18 @@ import com.amve.area.Area;
 import com.amve.area.Mobile;
 import com.amve.area.Object;
 import com.amve.area.Room;
+import com.amve.globals.GlobalVariables;
+import com.amve.globals.GlobalVariables.DoorState;
+import com.amve.globals.GlobalVariables.ExitDirection;
 import com.amve.globals.GlobalVariables.Position;
+import com.amve.globals.GlobalVariables.RoomFlag;
 import com.amve.globals.GlobalVariables.Sex;
 import com.amve.globals.GlobalVariables.Size;
 import com.amve.utils.Armor;
 import com.amve.utils.Container;
 import com.amve.utils.Dice;
 import com.amve.utils.Drink;
+import com.amve.utils.Exit;
 import com.amve.utils.Flag;
 import com.amve.utils.Food;
 import com.amve.utils.Fountain;
@@ -80,11 +86,11 @@ public class AreaFileParser {
 				loadObjects(sbFile);
 				break;
 			case "RESETS":
+				loadResets(sbFile);
 				break;
 			case "ROOMS":
-				return;
-//				loadRooms(sbFile);
-//				break;
+				loadRooms(sbFile);
+				break;
 			case "SHOPS":
 				break;
 			case "SOCIALS":
@@ -467,7 +473,6 @@ public class AreaFileParser {
 	}
 	
 	private void loadRooms(StringBuilder file) {
-		System.out.println("entered load rooms");
 		while (true) {
 			Room room = new Room();
 			while(Character.isWhitespace(file.charAt(0)))
@@ -476,6 +481,12 @@ public class AreaFileParser {
 				throw new IllegalArgumentException("Could not find # character for mobile vNum.");
 			file.deleteCharAt(0);
 			int index = file.indexOf("\n");
+			if ("0".equals(file.substring(0, index))) {
+				file.delete(0, index);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				return;
+			}
 			room.vNum = file.substring(0, index);
 			file.delete(0, index);
 			while(Character.isWhitespace(file.charAt(0)))
@@ -490,8 +501,117 @@ public class AreaFileParser {
 			file.delete(0, index+1);
 			while(Character.isWhitespace(file.charAt(0)))
 				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			String [] line4 = file.substring(0, index).split(" ");
+			room.addFlags(line4[1]);
+			room.setRoomSector(line4[2]);
+			file.delete(0, index+1);
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			index = file.indexOf("\n");
+			if (file.substring(0, index).startsWith("H") || file.substring(0, index).startsWith("M")) {
+				// Mana recovery, healing recovery; in area files this may be here, 
+				// according to Anatolia3.1.txt however it should be at the end.
+				String [] splitted = file.substring(0, index).split(" ");
+				for (int i = 0 ; i < splitted.length ; i+=2) {
+					if ("H".equals(splitted[i]))
+						room.healingAdjust = splitted[i+1];
+					else if ("M".equals(splitted[i]))
+						room.manaAdjust = splitted[i+1];
+					else
+						throw new InvalidParameterException("Invalid Mana/Healing adjust line");
+				}
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("\n");
+			}
+			// exit
+			for (int i = 0 ; i < 6 ; i++) { // max number of exits, may be less
+				if (!file.substring(0, index).startsWith("D")) 
+					break;
+				ExitDirection direction = ExitDirection.valueOfNum(Integer.parseInt(file.substring(1, index)));
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("~");
+				String exitDescription = file.substring(0, index);
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("~");
+				List<String> doorKeywords = List.of(file.substring(0, index).split(" "));
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("\n");
+				String[] lineSplitted = file.substring(0, index).split(" ");
+				DoorState doorState = DoorState.valueOfNum(Integer.parseInt(lineSplitted[0]));
+				String roomVNum = lineSplitted[1];
+				String keyVNum = lineSplitted[2];
+				room.exits.add(new Exit(direction, exitDescription, doorKeywords, doorState, roomVNum, keyVNum));
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("\n");
+			}
+			// extra
+			while ("E".equals(file.substring(0, index))) {
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("~");
+				String extendedRoomKeywords = file.substring(0, index);
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("~");
+				String extendedRooomDesciptionText = file.substring(0, index);
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("\n");
+				
+				room.addExtra(extendedRoomKeywords, extendedRooomDesciptionText);
+			}
 			
+			// according to Anatolia3.1.txt, this is where mana/health adjust should be.
+			if (file.substring(0, index).startsWith("H") || file.substring(0, index).startsWith("M")) {
+				String [] splitted = file.substring(0, index).split(" ");
+				for (int i = 0 ; i < splitted.length ; i+=2) {
+					if ("H".equals(splitted[i]))
+						room.healingAdjust = splitted[i+1];
+					else if ("M".equals(splitted[i]))
+						room.manaAdjust = splitted[i+1];
+					else
+						throw new InvalidParameterException("Invalid Mana/Healing adjust line");
+				}
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("\n");
+			}
+			
+			// clan rooms
+			if (file.substring(0, index).startsWith("clan")) {
+				room.clan = file.substring(5, index-1); // excluding ~
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				index = file.indexOf("\n");
+			}
+			if ("S".equals(file.substring(0, index))) {
+				file.delete(0, index+1);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				this.area.rooms.add(room);	
+			}
+			else throw new InvalidParameterException("Reached end of the room, could not find stop 'S' line.");
 		}
+	}
+	
+	private void loadResets(StringBuilder file) {
+		System.out.println("entered load resets");
 	}
 	
 	private String removeWhiteSpace(String s) {

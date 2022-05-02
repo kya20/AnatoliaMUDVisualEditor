@@ -2,7 +2,6 @@ package com.amve.area;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import com.amve.globals.GlobalVariables;
 
 public class Area {
 	
@@ -14,8 +13,8 @@ public class Area {
 	private int[] vNumRange = new int[2];
 
 	public ArrayList<Mobile> mobiles = new ArrayList<>();
-	
 	public ArrayList<Object> objects = new ArrayList<>();
+	public ArrayList<Room> rooms = new ArrayList<>();
 	
 	public ArrayList<Shop> shops = new ArrayList<>();
 	public ArrayList<Special> specials = new ArrayList<>();

@@ -18,14 +18,14 @@ public class Main {
 		AreaFileParser parser = new AreaFileParser(areaFilePath);
 		
 		
-		try {
-			VisualEditor window = new VisualEditor();
+//		try {
+//			VisualEditor window = new VisualEditor();
 //			window.setBlockOnOpen(true);
-			window.open();
-			Display.getCurrent().dispose();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//			window.open();
+//			Display.getCurrent().dispose();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 }
