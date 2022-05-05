@@ -23,7 +23,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Tree;
+
+import com.amve.parser.AreaFileParser;
+
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.List;
@@ -47,12 +51,16 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 
 
 public class VisualEditor {
 
+	protected Display display;
 	protected Shell shell;
+	private String filePath;
+	private AreaFileParser parser;
 	private Text text;
 	private Text roomNameText;
 	private Text roomDescText;
@@ -87,7 +95,7 @@ public class VisualEditor {
 	 * Open the window.
 	 */
 	public void open() {
-		Display display = Display.getDefault();
+		display = Display.getDefault();
 		createContents();
 		shell.open();
 		shell.layout();
@@ -96,6 +104,13 @@ public class VisualEditor {
 				display.sleep();
 			}
 		}
+	}
+	
+	/*
+	 * Update contents of the window from parser.
+	 * */
+	private void updateContents() {
+		
 	}
 
 	/**
@@ -110,17 +125,34 @@ public class VisualEditor {
 		Menu menu = new Menu(shell, SWT.BAR);
 		shell.setMenuBar(menu);
 		
-		MenuItem mntmFile = new MenuItem(menu, SWT.NONE);
-		mntmFile.setText("File");
+		MenuItem fileMenuHeader = new MenuItem(menu, SWT.CASCADE);
+		fileMenuHeader.setText("&File");
 		
-		MenuItem mntmArea = new MenuItem(menu, SWT.NONE);
+		Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
+		fileMenuHeader.setMenu(fileMenu);
+		
+		MenuItem fileOpenItem = new MenuItem(fileMenu, SWT.PUSH);
+		fileOpenItem.setText("&Open");
+		
+		MenuItem fileSaveItem = new MenuItem(fileMenu, SWT.PUSH);
+		fileSaveItem.setText("&Save");
+		
+		MenuItem fileExitItem = new MenuItem(fileMenu, SWT.PUSH);
+		fileExitItem.setText("E&xit");
+		
+		MenuItem mntmArea = new MenuItem(menu, SWT.CASCADE);
 		mntmArea.setText("Area");
 		
-		MenuItem mntmEdit = new MenuItem(menu, SWT.NONE);
+		MenuItem mntmEdit = new MenuItem(menu, SWT.CASCADE);
 		mntmEdit.setText("Edit");
 		
-		MenuItem mntmWindow = new MenuItem(menu, SWT.NONE);
+		MenuItem mntmWindow = new MenuItem(menu, SWT.CASCADE);
 		mntmWindow.setText("Window");
+		
+		fileOpenItem.addSelectionListener(new fileOpenItemListener());
+		fileSaveItem.addSelectionListener(new fileSaveItemListener());
+		fileExitItem.addSelectionListener(new fileExitItemListener());
+		
 		
 		Composite composite = new Composite(shell, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
@@ -858,9 +890,6 @@ public class VisualEditor {
 		
 		Frame frame = SWT_AWT.new_Frame(composite_2);
 		
-		JPanel panel_1 = new JPanel();
-		frame.add(panel_1, BorderLayout.CENTER);
-		
 		CLabel lblLog = new CLabel(composite_1, SWT.NONE);
 		lblLog.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		lblLog.setText("Log");
@@ -876,5 +905,52 @@ public class VisualEditor {
 		scrolledComposite.setContent(text);
 		scrolledComposite.setMinSize(text.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
+	}
+	
+	class fileOpenItemListener implements SelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent event) {
+			System.out.println("Open clicked");
+			FileDialog fd = new FileDialog(shell, SWT.OPEN);
+			fd.setText("Open");
+			String[] filterExt = { "*.are", "*.*" };
+			fd.setFilterExtensions(filterExt);
+			filePath = fd.open();
+			System.out.println("Open selected: " + filePath);
+			parser = new AreaFileParser(filePath);
+		}
+		@Override
+		public void widgetDefaultSelected(SelectionEvent event) {
+			System.out.println("Open clicked");
+			FileDialog fd = new FileDialog(shell, SWT.OPEN);
+			fd.setText("Open");
+			String[] filterExt = { "*.are", "*.*" };
+			fd.setFilterExtensions(filterExt);
+			filePath = fd.open();
+			System.out.println("Open selected: " + filePath);
+			parser = new AreaFileParser(filePath);
+		}
+	}
+	
+	class fileSaveItemListener implements SelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent event) {
+			System.out.println("Save clicked");
+		}
+		@Override
+		public void widgetDefaultSelected(SelectionEvent event) {
+			System.out.println("Save clicked");
+		}
+	}
+	
+	class fileExitItemListener implements SelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent event) {
+			System.out.println("Exit clicked");
+		}
+		@Override
+		public void widgetDefaultSelected(SelectionEvent event) {
+			System.out.println("Exit clicked");
+		}
 	}
 }

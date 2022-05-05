@@ -597,7 +597,7 @@ public abstract class GlobalVariables {
 		}
 	}
 	
-	public enum ItemWear {
+	public enum ItemWear {  // Used in OBJECTS
 		TAKE(LETTER_TRANSLATIONS.get("A"), "take"),
 		WEAR_FINGER(LETTER_TRANSLATIONS.get("B"), "wear_finger"),
 		WEAR_NECK(LETTER_TRANSLATIONS.get("C"), "wear_neck"),
@@ -1051,6 +1051,102 @@ public abstract class GlobalVariables {
 			return BY_NUM.get(num);
 		}
 		public static DoorState valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+	public enum EquipSlot {  // Used in RESETS
+		NONE(-1, "none"),
+		LIGHT(0, "light"),
+		LEFT_FINGER(1, "left finger"),
+		RIGHT_FINGER(2, "right finger"),
+		NECK1(3, "neck1"),
+		NECK2(4, "neck2"),
+		BODY(5, "body"),
+		HEAD(6, "head"),
+		LEGS(7, "legs"),
+		FEET(8, "feet"),
+		HANDS(9, "hands"),
+		ARMS(10, "arms"),
+		SHIELD(11, "shield"),
+		ABOUT(12, "about"),
+		WAIST(13, "waist"),
+		LEFT_WRIST(14, "left wrist"),
+		RIGHT_WRIST(15, "right wrist"),
+		WIELD(16, "wield"),
+		HOLD(17, "hold"),
+		FLOAT(18, "float"),
+		TATTOO(19, "tattoo"),
+		SECOND_WIELD(20, "second wield"),
+		STUCK_IN(21, "stuck in"),
+		WEAR(22, "wear");
+		
+		private static final Map<Integer, EquipSlot> BY_NUM = new HashMap<>();
+		private static final Map<String, EquipSlot> BY_NAME = new HashMap<>();
+		
+		static {
+			for (EquipSlot e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private EquipSlot(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static EquipSlot valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static EquipSlot valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
+	public enum DoorFlag { // Used by RESETS
+		// TODO: continue from here
+		NORMAL_EXIT(0, "normal exit, no door"),
+		STAND_AT(LETTER_TRANSLATIONS.get("A"), "door that may be opened and closed, but no lock and resets to open"),
+		STAND_ON(LETTER_TRANSLATIONS.get("B"), "stand on"),
+		STAND_IN(LETTER_TRANSLATIONS.get("C"), "stand in"),
+		SIT_AT(LETTER_TRANSLATIONS.get("D"), "sit at"),
+		SIT_ON(LETTER_TRANSLATIONS.get("E"), "sit on"),
+		SIT_IN(LETTER_TRANSLATIONS.get("F"), "sit in"),
+		REST_AT(LETTER_TRANSLATIONS.get("G"), "rest_at"),
+		REST_ON(LETTER_TRANSLATIONS.get("H"), "rest on"),
+		REST_IN(LETTER_TRANSLATIONS.get("I"), "rest in"),
+		SLEEP_AT(LETTER_TRANSLATIONS.get("J"), "sleep at"),
+		SLEEP_ON(LETTER_TRANSLATIONS.get("K"), "sleep on"),
+		SLEEP_IN(LETTER_TRANSLATIONS.get("L"), "sleep in"),
+		PUT_AT(LETTER_TRANSLATIONS.get("M"), "put at"),
+		PUT_ON(LETTER_TRANSLATIONS.get("N"), "put on"),
+		PUT_IN(LETTER_TRANSLATIONS.get("O"), "put in"),
+		PUT_INSIDE(LETTER_TRANSLATIONS.get("P"), "put inside");
+		
+		private static final Map<Integer, DoorFlag> BY_NUM = new HashMap<>();
+		private static final Map<String, DoorFlag> BY_NAME = new HashMap<>();
+		
+		static {
+			for (DoorFlag e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private DoorFlag(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static DoorFlag valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static DoorFlag valueOfName(String name) {
 			return BY_NAME.get(name);
 		}
 	}

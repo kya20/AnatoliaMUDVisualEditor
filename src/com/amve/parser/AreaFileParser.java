@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import com.amve.area.Area;
 import com.amve.area.Mobile;
 import com.amve.area.Object;
+import com.amve.area.Reset;
 import com.amve.area.Room;
 import com.amve.globals.GlobalVariables;
 import com.amve.globals.GlobalVariables.DoorState;
@@ -86,8 +87,8 @@ public class AreaFileParser {
 				loadObjects(sbFile);
 				break;
 			case "RESETS":
-				loadResets(sbFile);
-				break;
+//				loadResets(sbFile);
+				return;
 			case "ROOMS":
 				loadRooms(sbFile);
 				break;
@@ -612,6 +613,25 @@ public class AreaFileParser {
 	
 	private void loadResets(StringBuilder file) {
 		System.out.println("entered load resets");
+		while (true) {
+			Reset reset = new Reset();
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			int index = file.indexOf("\n");
+			String line = file.substring(0, index).split("*")[0];
+			if ("S".equals(line)) {
+				file.delete(0, index);
+				while(Character.isWhitespace(file.charAt(0)))
+					file.deleteCharAt(0);
+				return;
+			}
+			if ("".equals(line)) continue;
+			if (line.startsWith("M")) {
+				// load mobile into room
+				String [] splitted = line.split(" ");
+				// TODO: continue from here
+			}
+		}
 	}
 	
 	private String removeWhiteSpace(String s) {
