@@ -2,6 +2,7 @@ package com.amve.area;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Area {
 	
@@ -12,9 +13,9 @@ public class Area {
 	private String longName;
 	private int[] vNumRange = new int[2];
 
-	public ArrayList<Mobile> mobiles = new ArrayList<>();
-	public ArrayList<Object> objects = new ArrayList<>();
-	public ArrayList<Room> rooms = new ArrayList<>();
+	private ArrayList<Mobile> mobiles = new ArrayList<>();
+	private ArrayList<Object> objects = new ArrayList<>();
+	private Map<String, Room> rooms = new HashMap<>();
 	
 	public ArrayList<Shop> shops = new ArrayList<>();
 	public ArrayList<Special> specials = new ArrayList<>();
@@ -76,6 +77,15 @@ public class Area {
 	}
 	public void setvNumRange(int index, int value) {
 		this.vNumRange[index] = value;
+	}
+	public ArrayList<Mobile> getMobiles() {
+		return mobiles;
+	}
+	public ArrayList<Object> getObjects() {
+		return objects;
+	}
+	public Map<String, Room> getRooms() {
+		return rooms;
 	}
 
 }

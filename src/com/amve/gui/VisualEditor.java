@@ -26,15 +26,26 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Tree;
 
+import com.amve.area.Room;
 import com.amve.parser.AreaFileParser;
+import com.amve.utils.MobileReset;
+import com.amve.utils.ObjectReset;
 
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import java.awt.Frame;
 import org.eclipse.swt.awt.SWT_AWT;
 import java.awt.Panel;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.awt.BorderLayout;
 import javax.swing.JRootPane;
 import javax.swing.JPanel;
@@ -46,14 +57,17 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.layout.TableColumnLayout;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-
+import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.core.resources.*;
 
 public class VisualEditor {
 
@@ -61,6 +75,7 @@ public class VisualEditor {
 	protected Shell shell;
 	private String filePath;
 	private AreaFileParser parser;
+	private String deneme;
 	private Text text;
 	private Text roomNameText;
 	private Text roomDescText;
@@ -77,6 +92,8 @@ public class VisualEditor {
 	private Text upDoorKeywordText;
 	private Text downDescText;
 	private Text downDoorKeywordText;
+	
+	private TreeViewer worldObjectTree;
 
 	/**
 	 * Launch the application.
@@ -165,7 +182,12 @@ public class VisualEditor {
 		grpWorldObjects.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		grpWorldObjects.setText("World Objects");
 		
-		Tree tree = new Tree(grpWorldObjects, SWT.BORDER);
+//		Tree tree = new Tree(grpWorldObjects, SWT.BORDER);
+		this.worldObjectTree = new TreeViewer(grpWorldObjects, SWT.BORDER);
+		this.worldObjectTree.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		this.worldObjectTree.setContentProvider(new TreeContentProvider());
+		this.worldObjectTree.setLabelProvider(new TreeLabelProvider());
+//		treeViewer.setInput(parser.area.rooms.values());
 		
 		Group grpResetInfo = new Group(composite, SWT.NONE);
 		grpResetInfo.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -907,6 +929,13 @@ public class VisualEditor {
 
 	}
 	
+	private void updateWorldObjectTree() {
+		this.worldObjectTree.setContentProvider(new TreeContentProvider());
+		this.worldObjectTree.setLabelProvider(new TreeLabelProvider());
+		this.worldObjectTree.setInput(parser.getArea().getRooms().values());
+	}
+	
+	
 	class fileOpenItemListener implements SelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
@@ -952,5 +981,134 @@ public class VisualEditor {
 		public void widgetDefaultSelected(SelectionEvent event) {
 			System.out.println("Exit clicked");
 		}
+	}
+	
+	public class TreeContentProvider implements ITreeContentProvider, IResourceChangeListener   {
+		@Override
+		public boolean hasChildren(Object element) {
+			return getChildren(element).length > 0;
+		}
+
+		@Override
+		public Object getParent(Object element) {
+			return null;
+		}
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+			return getChildren(inputElement);
+		}
+
+		@Override
+		public Object[] getChildren(Object parentElement) {
+			if(parentElement instanceof Room) {
+				Room room = (Room)parentElement;
+				return concat(room.getMobileResets().values().toArray(), 
+					room.getObjectResets().values().toArray());
+			}
+			else if(parentElement instanceof MobileReset) {
+				MobileReset mobileReset = (MobileReset)parentElement;
+				return concat(mobileReset.getGiveResets().toArray(),
+						mobileReset.getEquipResets().toArray());
+			}
+			else if(parentElement instanceof ObjectReset) {
+				ObjectReset objectReset = (ObjectReset)parentElement;
+				return objectReset.getListContains().toArray();
+			}
+			
+			// TODO: implement other resets, give equip...
+			return null;
+		}
+	}
+	
+	class TreeLabelProvider implements ILabelProvider {
+		
+		private Image room;
+		private Image mobile;
+		
+		public TreeLabelProvider() {
+		    // Create the list to hold the listeners
+//		    listeners = new ArrayList();
+		    // Create the images
+			try {
+				room = new Image(null, new FileInputStream("resources/tree/room.gif"));
+				mobile = new Image(null, new FileInputStream("resources/tree/mobile.gif"));
+			} 
+			catch (FileNotFoundException e) {
+				// Swallow it; we'll do without images
+			}
+		  }
+
+		@Override
+		public void addListener(ILabelProviderListener arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void dispose() {
+			// TODO Auto-generated method stub
+			if (room != null)
+				room.dispose();
+			if (mobile != null)
+				mobile.dispose();
+		}
+
+		@Override
+		public boolean isLabelProperty(Object arg0, String arg1) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void removeListener(ILabelProviderListener arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Image getImage(Object element) {
+			Image image = null;
+			if (element instanceof Room) {
+				image = room;
+			} 
+			else if (element instanceof MobileReset) {
+				image = mobile;
+			}
+//			else throw unknownElement(element);
+			return image;
+		}
+
+		@Override
+		// TODO: change returned names
+		public String getText(Object element) {
+			if (element instanceof Room) {
+				Room room = (Room) element;
+				return room.getHeader();
+			}
+			else if (element instanceof MobileReset) {
+				MobileReset mobileReset = (MobileReset) element;
+				return mobileReset.mobileVNum;
+			}
+			else if (element instanceof ObjectReset) {
+				ObjectReset objectReset = (ObjectReset) element;
+				return objectReset.objectVNum;
+			}
+			return "NO NAME";
+		}
+	}
+	
+	public static <T> T[] concat(T[] first, T[]... rest) {
+		int totalLength = first.length;
+		for (T[] array : rest) {
+			totalLength += array.length;
+		}
+		T[] result = Arrays.copyOf(first, totalLength);
+		int offset = first.length;
+		for (T[] array : rest) {
+			System.arraycopy(array, 0, result, offset, array.length);
+			offset += array.length;
+		}
+		return result;
 	}
 }

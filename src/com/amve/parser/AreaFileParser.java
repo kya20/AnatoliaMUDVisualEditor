@@ -22,17 +22,22 @@ import com.amve.utils.Armor;
 import com.amve.utils.Container;
 import com.amve.utils.Dice;
 import com.amve.utils.Drink;
+import com.amve.utils.EquipReset;
 import com.amve.utils.Exit;
 import com.amve.utils.Flag;
 import com.amve.utils.Food;
 import com.amve.utils.Fountain;
 import com.amve.utils.Furniture;
+import com.amve.utils.GiveReset;
 import com.amve.utils.Item;
 import com.amve.utils.Light;
+import com.amve.utils.MobileReset;
 import com.amve.utils.Money;
+import com.amve.utils.ObjectReset;
 import com.amve.utils.Pill;
 import com.amve.utils.Portal;
 import com.amve.utils.Potion;
+import com.amve.utils.PutReset;
 import com.amve.utils.Scroll;
 import com.amve.utils.Staff;
 import com.amve.utils.Treasure;
@@ -47,7 +52,7 @@ import java.security.InvalidParameterException;
 
 public class AreaFileParser {
 	
-	public Area area = new Area();
+	private Area area = new Area();
 	
 	public AreaFileParser(String areaFilePath) {
 		String rawFile = null;
@@ -87,13 +92,14 @@ public class AreaFileParser {
 				loadObjects(sbFile);
 				break;
 			case "RESETS":
-//				loadResets(sbFile);
-				return;
+				loadResets(sbFile);
+				break;
 			case "ROOMS":
 				loadRooms(sbFile);
 				break;
 			case "SHOPS":
-				break;
+				loadShops(sbFile);
+				return;
 			case "SOCIALS":
 				break;
 			case "OMPROGS":
@@ -171,7 +177,7 @@ public class AreaFileParser {
 				throw new IllegalArgumentException("Could not find # character for mobile vNum.");
 			file.deleteCharAt(0);
 			int index = file.indexOf("\n");
-			mobile.vNum = file.substring(0, index);
+			mobile.setvNum(file.substring(0, index));
 			file.delete(0, index);
 			while(Character.isWhitespace(file.charAt(0)))
 				file.deleteCharAt(0);
@@ -258,7 +264,7 @@ public class AreaFileParser {
 				file.deleteCharAt(0);
 			index = file.indexOf("\n");
 			
-			this.area.mobiles.add(mobile);
+			this.getArea().getMobiles().add(mobile);
 			
 			if ("#0".equals(file.substring(0, index))) {
 				file.delete(0, index);
@@ -469,7 +475,7 @@ public class AreaFileParser {
 			else
 				throw new InvalidParameterException(line6[0] + " object type is invalid.");
 			
-			this.area.objects.add(object);
+			this.getArea().getObjects().add(object);
 		}
 	}
 	
@@ -488,7 +494,7 @@ public class AreaFileParser {
 					file.deleteCharAt(0);
 				return;
 			}
-			room.vNum = file.substring(0, index);
+			room.setvNum(file.substring(0, index));;
 			file.delete(0, index);
 			while(Character.isWhitespace(file.charAt(0)))
 				file.deleteCharAt(0);
@@ -531,7 +537,7 @@ public class AreaFileParser {
 			for (int i = 0 ; i < 6 ; i++) { // max number of exits, may be less
 				if (!file.substring(0, index).startsWith("D")) 
 					break;
-				ExitDirection direction = ExitDirection.valueOfNum(Integer.parseInt(file.substring(1, index)));
+				Integer direction = Integer.parseInt(file.substring(1, index));
 				file.delete(0, index+1);
 				while(Character.isWhitespace(file.charAt(0)))
 					file.deleteCharAt(0);
@@ -541,16 +547,17 @@ public class AreaFileParser {
 				while(Character.isWhitespace(file.charAt(0)))
 					file.deleteCharAt(0);
 				index = file.indexOf("~");
-				List<String> doorKeywords = List.of(file.substring(0, index).split(" "));
+				String doorKeyword = file.substring(0, index);
 				file.delete(0, index+1);
 				while(Character.isWhitespace(file.charAt(0)))
 					file.deleteCharAt(0);
 				index = file.indexOf("\n");
 				String[] lineSplitted = file.substring(0, index).split(" ");
-				DoorState doorState = DoorState.valueOfNum(Integer.parseInt(lineSplitted[0]));
+				Integer doorState = Integer.parseInt(lineSplitted[0]);
 				String roomVNum = lineSplitted[1];
 				String keyVNum = lineSplitted[2];
-				room.exits.add(new Exit(direction, exitDescription, doorKeywords, doorState, roomVNum, keyVNum));
+				room.addExit(direction, exitDescription, doorKeyword, doorState, roomVNum, keyVNum);
+//				room.exits.add(new Exit(direction, exitDescription, doorKeywords, doorState, roomVNum, keyVNum));
 				file.delete(0, index+1);
 				while(Character.isWhitespace(file.charAt(0)))
 					file.deleteCharAt(0);
@@ -605,33 +612,85 @@ public class AreaFileParser {
 				file.delete(0, index+1);
 				while(Character.isWhitespace(file.charAt(0)))
 					file.deleteCharAt(0);
-				this.area.rooms.add(room);	
+				this.getArea().getRooms().put(room.getvNum(), room);	
 			}
 			else throw new InvalidParameterException("Reached end of the room, could not find stop 'S' line.");
 		}
 	}
 	
 	private void loadResets(StringBuilder file) {
-		System.out.println("entered load resets");
+		
+		MobileReset lastMobile = new MobileReset("", "", "0", "0");
+		ObjectReset lastObject = new ObjectReset("", "");
+		
 		while (true) {
 			Reset reset = new Reset();
 			while(Character.isWhitespace(file.charAt(0)))
 				file.deleteCharAt(0);
 			int index = file.indexOf("\n");
-			String line = file.substring(0, index).split("*")[0];
-			if ("S".equals(line)) {
-				file.delete(0, index);
-				while(Character.isWhitespace(file.charAt(0)))
-					file.deleteCharAt(0);
-				return;
+			if (index <= 1) {
+				if (file.charAt(0) =='S') {
+					file.delete(0, index);
+					while(Character.isWhitespace(file.charAt(0)))
+						file.deleteCharAt(0);
+					return;
+				}
+				file.delete(0, index+1);
+				continue;
 			}
-			if ("".equals(line)) continue;
-			if (line.startsWith("M")) {
+			String line = file.substring(0, index).split("\\*")[0];
+			
+			if ("".equals(line)) {
+				file.delete(0, index+1);
+				continue;
+			}
+			else if (line.startsWith("M")) {
 				// load mobile into room
-				String [] splitted = line.split(" ");
-				// TODO: continue from here
+				String [] splitted = line.split("(\\s)+");
+				Room room = this.getArea().getRooms().get(splitted[4]);
+				lastMobile = new MobileReset(splitted[2], splitted[3], splitted[4], splitted[5]);
+				room.addMobileReset(lastMobile);
 			}
+			else if (line.startsWith("O")) {
+				// load object into room
+				String [] splitted = line.split("(\\s)+");
+				Room room = this.getArea().getRooms().get(splitted[4]);
+				lastObject = new ObjectReset(splitted[2], splitted[4]);
+				room.addObjectReset(lastObject);
+			}
+			else if (line.startsWith("P")) {
+				// put object into another object
+				// assuming that Object was loaded one line before, 
+				// otherwise we cannot deduce which instance of that object we will put into, 
+				// Ex: there may be multiple bags that has the vNum of 16000; when we put something inside 16000, 
+				// do we put it in all of them? first one? second one?...
+				// goofy format :)
+				String [] splitted = line.split("(\\s)+");
+				ObjectReset containerObject = lastObject;
+				lastObject.addContainedObject(new PutReset(splitted[2], splitted[4], splitted[5]));
+			}
+			else if (line.startsWith("G")) {
+				String [] splitted = line.split("(\\s)+");
+				lastMobile.addGiveReset(new GiveReset(splitted[2], lastMobile.mobileVNum));
+			}
+			else if (line.startsWith("E")) {
+				String [] splitted = line.split("(\\s)+");
+				lastMobile.addEquipReset(new EquipReset(splitted[2], splitted[4], lastMobile.mobileVNum));
+			}
+			else if (line.startsWith("D")) {
+				String [] splitted = line.split("(\\s)+");
+				Exit exit = this.getArea().getRooms().get(splitted[2]).getExit(Integer.parseInt(splitted[3]));
+				exit.setDoorFlags(splitted[4]);
+			}
+			else {
+				throw new InvalidParameterException("RESETS: Could not find a valid character at: " + line);
+			}
+			file.delete(0, index+1);
 		}
+	}
+	
+	private void loadShops(StringBuilder file) {
+		System.out.println("entered loadShops");
 	}
 	
 	private String removeWhiteSpace(String s) {
@@ -642,5 +701,9 @@ public class AreaFileParser {
 		}
 		else
 			throw new InvalidParameterException("Could not find the pattern.");
+	}
+
+	public Area getArea() {
+		return area;
 	}
 }

@@ -91,6 +91,11 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.resources_3.16.0.v20211001-2032.jar" sourcepath="lib/org.eclipse.core.resources_3.16.0.v20211001-2032.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/com.ibm.icu_67.1.0.v20200706-1749.jar" sourcepath="lib/com.ibm.icu_67.1.0.v20200706-1749.jar"/>
 	<classpathentry kind="lib" path="lib/org.apiguardian_1.1.2.v20211018-1956.jar" sourcepath="lib/org.apiguardian_1.1.2.v20211018-1956.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.core.commands_3.10.100.v20210722-1426.jar" sourcepath="lib/org.eclipse.core.commands_3.10.100.v20210722-1426.jar"/>

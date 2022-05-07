@@ -1107,24 +1107,18 @@ public abstract class GlobalVariables {
 	}
 	
 	public enum DoorFlag { // Used by RESETS
-		// TODO: continue from here
-		NORMAL_EXIT(0, "normal exit, no door"),
-		STAND_AT(LETTER_TRANSLATIONS.get("A"), "door that may be opened and closed, but no lock and resets to open"),
-		STAND_ON(LETTER_TRANSLATIONS.get("B"), "stand on"),
-		STAND_IN(LETTER_TRANSLATIONS.get("C"), "stand in"),
-		SIT_AT(LETTER_TRANSLATIONS.get("D"), "sit at"),
-		SIT_ON(LETTER_TRANSLATIONS.get("E"), "sit on"),
-		SIT_IN(LETTER_TRANSLATIONS.get("F"), "sit in"),
-		REST_AT(LETTER_TRANSLATIONS.get("G"), "rest_at"),
-		REST_ON(LETTER_TRANSLATIONS.get("H"), "rest on"),
-		REST_IN(LETTER_TRANSLATIONS.get("I"), "rest in"),
-		SLEEP_AT(LETTER_TRANSLATIONS.get("J"), "sleep at"),
-		SLEEP_ON(LETTER_TRANSLATIONS.get("K"), "sleep on"),
-		SLEEP_IN(LETTER_TRANSLATIONS.get("L"), "sleep in"),
-		PUT_AT(LETTER_TRANSLATIONS.get("M"), "put at"),
-		PUT_ON(LETTER_TRANSLATIONS.get("N"), "put on"),
-		PUT_IN(LETTER_TRANSLATIONS.get("O"), "put in"),
-		PUT_INSIDE(LETTER_TRANSLATIONS.get("P"), "put inside");
+		NO_DOOR(0, "normal exit, no door"),
+		DOOR(LETTER_TRANSLATIONS.get("A"), "door that may be opened and closed, but no lock and resets to open"),
+		CLOSED(LETTER_TRANSLATIONS.get("B"), "door resets to closed"),
+		LOCKED(LETTER_TRANSLATIONS.get("C"), "door that is locked"),
+		NOFLEE(LETTER_TRANSLATIONS.get("D"), "no flee"),
+		PICKPROOF(LETTER_TRANSLATIONS.get("F"), "door with a lock that cannot be picked (key needed to open)"),
+		NOPASS(LETTER_TRANSLATIONS.get("G"), "door that the 'pass door' spell will not allow passage through (the lock may still be picked, however)"),
+		EASY(LETTER_TRANSLATIONS.get("H"), "lock that is easy to pick"),
+		HARD(LETTER_TRANSLATIONS.get("I"), "lock that is hard to pick"),
+		INFURIATING(LETTER_TRANSLATIONS.get("J"), "lock that is infuriating to pick"),
+		NOCLOSE(LETTER_TRANSLATIONS.get("K"), "door that cannot be closed"),
+		NOLOCK(LETTER_TRANSLATIONS.get("L"), "door that cannot be locked");
 		
 		private static final Map<Integer, DoorFlag> BY_NUM = new HashMap<>();
 		private static final Map<String, DoorFlag> BY_NAME = new HashMap<>();

@@ -7,4 +7,5 @@ module AnatoliaMUDVisualEditor {
 	requires org.junit.platform.commons;
 	requires org.junit.platform.launcher;
 	requires org.junit.platform.engine;
+	requires org.eclipse.core.resources;
 }

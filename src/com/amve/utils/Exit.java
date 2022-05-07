@@ -3,8 +3,11 @@ package com.amve.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.amve.globals.GlobalVariables;
+import com.amve.globals.GlobalVariables.DoorFlag;
 import com.amve.globals.GlobalVariables.DoorState;
 import com.amve.globals.GlobalVariables.ExitDirection;
+import com.amve.globals.GlobalVariables.ItemExtra;
 
 public class Exit {
 	
@@ -14,6 +17,10 @@ public class Exit {
 	public DoorState doorState;
 	public String roomVNum;
 	public String keyVNum;
+	
+	// adding doorflags from RESETS
+	
+	public List<DoorFlag> doorFlags;
 
 	public Exit(ExitDirection exitDirection, String exitDescription, 
 			List<String> keyWords, DoorState doorState, String roomVNum, String keyVNum) {
@@ -32,6 +39,12 @@ public class Exit {
 		this.doorState = doorState;
 		this.roomVNum = roomVNum;
 		this.keyVNum = keyVNum;
+	}
+	
+	public void setDoorFlags(String doorFlags) {
+		if (this.doorFlags == null) 
+			this.doorFlags = new ArrayList<>();
+		this.doorFlags.add(DoorFlag.valueOfNum(Integer.parseInt(doorFlags)));
 	}
 
 }

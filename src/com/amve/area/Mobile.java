@@ -11,7 +11,7 @@ import java.io.*;
 
 public class Mobile {
 	//TODO: implement globals for pos, sex, damage type, size and whatnot
-	public String vNum = null;
+	private String vNum = null;
 	public ArrayList<String> nameList = new ArrayList<>();
 	public String shortDescription = "";
 	public String longDescription = "";
@@ -112,6 +112,14 @@ public class Mobile {
 		public String getRaceName() {
 			return RaceTable.name[this.raceNumber];
 		}
+	}
+
+	public String getvNum() {
+		return vNum;
+	}
+
+	public void setvNum(String vNum) {
+		this.vNum = vNum;
 	}
 	
 	//TODO: implement toString function or something similar for writing to .are files
