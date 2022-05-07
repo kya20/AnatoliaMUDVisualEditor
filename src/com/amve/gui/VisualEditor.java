@@ -1019,6 +1019,12 @@ public class VisualEditor {
 			// TODO: implement other resets, give equip...
 			return null;
 		}
+
+		@Override
+		public void resourceChanged(IResourceChangeEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	class TreeLabelProvider implements ILabelProvider {
