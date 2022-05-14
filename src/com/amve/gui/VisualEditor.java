@@ -46,6 +46,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Map;
 import java.awt.BorderLayout;
 import javax.swing.JRootPane;
 import javax.swing.JPanel;
@@ -68,13 +69,19 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.core.resources.*;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 
 public class VisualEditor {
 
 	protected Display display;
 	protected Shell shell;
 	private String filePath;
-	private AreaFileParser parser;
+	private AreaFileParser parser = new AreaFileParser("under2.are");
 	private String deneme;
 	private Text text;
 	private Text roomNameText;
@@ -92,8 +99,9 @@ public class VisualEditor {
 	private Text upDoorKeywordText;
 	private Text downDescText;
 	private Text downDoorKeywordText;
-	
-	private TreeViewer worldObjectTree;
+	private Tree tree;
+	private Spinner RoomVnumSpinner;
+	private Group grpDoors;
 
 	/**
 	 * Launch the application.
@@ -101,6 +109,7 @@ public class VisualEditor {
 	 */
 	public static void main(String[] args) {
 		try {
+			
 			VisualEditor window = new VisualEditor();
 			window.open();
 		} catch (Exception e) {
@@ -127,6 +136,14 @@ public class VisualEditor {
 	 * Update contents of the window from parser.
 	 * */
 	private void updateContents() {
+		
+	}
+	
+	private void updateRoomPanel(String key) {
+		RoomVnumSpinner.setSelection(Integer.parseInt(key));
+		parser.getArea().getRooms().get(key);
+		setRoomNameTextVal(parser.getArea().getRooms().get(key).getHeader());
+		setRoomDescTextVal(parser.getArea().getRooms().get(key).description);
 		
 	}
 
@@ -182,19 +199,27 @@ public class VisualEditor {
 		grpWorldObjects.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		grpWorldObjects.setText("World Objects");
 		
-//		Tree tree = new Tree(grpWorldObjects, SWT.BORDER);
-		this.worldObjectTree = new TreeViewer(grpWorldObjects, SWT.BORDER);
-		this.worldObjectTree.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
-		this.worldObjectTree.setContentProvider(new TreeContentProvider());
-		this.worldObjectTree.setLabelProvider(new TreeLabelProvider());
-//		treeViewer.setInput(parser.area.rooms.values());
+		tree = new Tree(grpWorldObjects, SWT.BORDER);
+	    parser.getArea().getRooms().forEach((key, value) -> {
+	    	TreeItem roomItem = new TreeItem(tree,0);
+	    	roomItem.setText("Room " + key + " - " + value.header);
+	    });
+
+	      tree.addListener(SWT.Selection, new Listener() {
+	        public void handleEvent(Event event) {
+	          if (event.detail == SWT.CHECK) {
+	            text.setText(event.item + " was checked.");
+	          } 
+	          else {
+	            text.setText(event.item + " was selected");
+	            String tmp = tree.getSelection()[0].getText();
+	            tmp = tmp.replace("Room ", "");
+	            tmp = tmp.replaceAll("\\s.*", "");
+	            updateRoomPanel(tmp);
+	          }
+	        }
+	      });
 		
-		Group grpResetInfo = new Group(composite, SWT.NONE);
-		grpResetInfo.setLayout(new FillLayout(SWT.HORIZONTAL));
-		grpResetInfo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		grpResetInfo.setText("Reset Info");
-		
-		Tree tree_1 = new Tree(grpResetInfo, SWT.BORDER);
 		
 		Composite composite_1 = new Composite(shell, SWT.NONE);
 		composite_1.setLayout(new GridLayout(1, false));
@@ -230,14 +255,16 @@ public class VisualEditor {
 		grpVnum.setLayoutData(gd_grpVnum);
 		grpVnum.setText("Vnum");
 		
-		Spinner vnumSpinner = new Spinner(grpVnum, SWT.BORDER);
-		GridData gd_vnumSpinner = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_vnumSpinner.widthHint = 70;
-		vnumSpinner.setLayoutData(gd_vnumSpinner);
-		vnumSpinner.setToolTipText("Vnum value");
+		RoomVnumSpinner = new Spinner(grpVnum, SWT.BORDER);
+		RoomVnumSpinner.setMaximum(10000000);
+		GridData gd_RoomVnumSpinner = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_RoomVnumSpinner.widthHint = 70;
+		RoomVnumSpinner.setLayoutData(gd_RoomVnumSpinner);
+		RoomVnumSpinner.setToolTipText("Vnum value");
 		
-		Button vnumAutoButton = new Button(grpVnum, SWT.RADIO);
-		vnumAutoButton.setText("Automatic");
+		Button RoomVnumAutoButton = new Button(grpVnum, SWT.RADIO);
+		RoomVnumAutoButton.setSelection(true);
+		RoomVnumAutoButton.setText("Automatic");
 		
 		Group grpDescription = new Group(grpRoomData, SWT.NONE);
 		grpDescription.setLayout(new GridLayout(1, false));
@@ -302,7 +329,7 @@ public class VisualEditor {
 		grpRecoveryRates.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		grpRecoveryRates.setText("Recovery Rates");
 		
-		Group grpDoors = new Group(sashForm, SWT.NONE);
+		grpDoors = new Group(sashForm, SWT.NONE);
 		grpDoors.setText("Doors");
 		grpDoors.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
@@ -904,14 +931,6 @@ public class VisualEditor {
 		List list = listViewer.getList();
 		tbtmAreaOverview.setControl(list);
 		
-		TabItem tbtmWorldView = new TabItem(tabFolder, SWT.NONE);
-		tbtmWorldView.setText("World Visualizer");
-		
-		Composite composite_2 = new Composite(tabFolder, SWT.EMBEDDED);
-		tbtmWorldView.setControl(composite_2);
-		
-		Frame frame = SWT_AWT.new_Frame(composite_2);
-		
 		CLabel lblLog = new CLabel(composite_1, SWT.NONE);
 		lblLog.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		lblLog.setText("Log");
@@ -929,11 +948,11 @@ public class VisualEditor {
 
 	}
 	
-	private void updateWorldObjectTree() {
+	/*private void updateWorldObjectTree() {
 		this.worldObjectTree.setContentProvider(new TreeContentProvider());
 		this.worldObjectTree.setLabelProvider(new TreeLabelProvider());
 		this.worldObjectTree.setInput(parser.getArea().getRooms().values());
-	}
+	}*/
 	
 	
 	class fileOpenItemListener implements SelectionListener {
@@ -947,6 +966,12 @@ public class VisualEditor {
 			filePath = fd.open();
 			System.out.println("Open selected: " + filePath);
 			parser = new AreaFileParser(filePath);
+			tree.removeAll();
+			parser.getArea().getRooms().forEach((key, value) -> {
+		    	TreeItem roomItem = new TreeItem(tree,0);
+		    	roomItem.setText("Room " + key + " - " + value.header);
+		    });
+			
 		}
 		@Override
 		public void widgetDefaultSelected(SelectionEvent event) {
@@ -1116,5 +1141,38 @@ public class VisualEditor {
 			offset += array.length;
 		}
 		return result;
+	}
+	public Tree getTree() {
+		return tree;
+	}
+	public Spinner getRoomVnumSpinner() {
+		return RoomVnumSpinner;
+	}
+	public Text getRoomNameText() {
+		return roomNameText;
+	}
+	public Text getRoomDescText() {
+		return roomDescText;
+	}
+	public Group getGrpDoors() {
+		return grpDoors;
+	}
+	public int getRoomVnumSpinnerSelection() {
+		return RoomVnumSpinner.getSelection();
+	}
+	public void setRoomVnumSpinnerSelection(int selection) {
+		RoomVnumSpinner.setSelection(selection);
+	}
+	public String getRoomNameTextVal() {
+		return roomNameText.getText();
+	}
+	public void setRoomNameTextVal(String text_1) {
+		roomNameText.setText(text_1);
+	}
+	public String getRoomDescTextVal() {
+		return roomDescText.getText();
+	}
+	public void setRoomDescTextVal(String text_2) {
+		roomDescText.setText(text_2);
 	}
 }

@@ -133,10 +133,11 @@ public class AreaFileParser {
 		file.delete(0, index + 1);
 		while(Character.isWhitespace(file.charAt(0)))
 			file.deleteCharAt(0);
-		Pattern pattern = Pattern.compile("\\{\\d* \\d*\\}");
+		Pattern pattern = Pattern.compile("\\{\\s?\\d* \\d*\\s?\\}");
 	    Matcher matcher = pattern.matcher(file);
 	    matcher.find();
 		String levRangeStr = matcher.group(0);
+		levRangeStr = levRangeStr.replace("{ ", "{");
 		String[] levRangeSplit = levRangeStr.split(" ");
 		area.setLevelRange(0, Integer.parseInt(levRangeSplit[0].substring(1)));
 		area.setLevelRange(1, Integer.parseInt(levRangeSplit[1].substring(0, levRangeSplit[1].length()-1)));
