@@ -203,6 +203,17 @@ public class VisualEditor {
 	private Spinner roomHPSpinner;
 	private Scale roomMPScale;
 	private Spinner roomMPSpinner;
+	private Button roomSectorMountain;
+	private Button roomSectorCity;
+	private Button roomSectorForest;
+	private Button roomSectorHill;
+	private Button roomSectorDeepWater;
+	private Button roomSectorWater;
+	private Button roomSectorInside;
+	private Button roomSectorDesert;
+	private Button roomSectorAir;
+	private Button roomSectorField;
+	private Button roomSectorUnused;
 
 	/**
 	 * Launch the application.
@@ -253,11 +264,172 @@ public class VisualEditor {
 		roomExtrasTable.removeAll();
 		for (ExtraDescription extra : parser.getArea().getRooms().get(key).extras) {
 			TableItem extrasItem = new TableItem(roomExtrasTable, SWT.NONE);
-			extrasItem.setText(0, extra.extraDesciptionKeyword.toString());
+			String ss = "";
+			for (String s : extra.extraDesciptionKeyword) {
+				ss += s + ", ";
+				
+			}
+			if (ss.endsWith(", ")) {
+				ss = ss.substring(0, ss.length() - 2);
+			};
+			extrasItem.setText(0, ss);
 			extrasItem.setText(1, extra.extraDescriptionText);
 		}
 		getRoomHPSpinner().setSelection(Integer.parseInt(parser.getArea().getRooms().get(key).healingAdjust));
 		getRoomMPSpinner().setSelection(Integer.parseInt(parser.getArea().getRooms().get(key).manaAdjust));
+		
+		//sector buttons
+		if (parser.getArea().getRooms().get(key).roomSector == null) {
+			System.out.println(key);
+			System.out.println(parser.getArea().getRooms().get(key).header);
+		}
+		switch (parser.getArea().getRooms().get(key).roomSector.name) {
+		case "inside":
+			getRoomSectorInside().setSelection(true);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "city":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(true);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "field":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(true);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "forest":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(true);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "hill":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(true);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "mountain":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(true);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "water":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(true);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "deep water":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(true);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "unused":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(true);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "air":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(true);
+			getRoomSectorDesert().setSelection(false);
+			break;
+		case "desert":
+			getRoomSectorInside().setSelection(false);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(true);
+			break;
+		}
+		
+		//reset stuff
 		getNorthDescText().setText("");
 		getNorthDoorKeywordText().setText("");
 		getNorthDoorStateCombo().select(-1);
@@ -355,7 +527,10 @@ public class VisualEditor {
 				getNorthDescText().setText(ex.getValue().exitDescription);
 				String kw = "";
 				for(String j : ex.getValue().keyWords) {
-					kw += j + " ";
+					kw += j + ", ";
+				}
+				if (kw.endsWith(", ")) {
+					kw = kw.substring(0, kw.length() - 2);
 				}
 				getNorthDoorKeywordText().setText(kw);
 				switch(ex.getValue().doorState.num) {
@@ -420,7 +595,10 @@ public class VisualEditor {
 				getEastDescText().setText(ex.getValue().exitDescription);
 				String kw1 = "";
 				for(String j : ex.getValue().keyWords) {
-					kw1 += j + " ";
+					kw1 += j + ", ";
+				}
+				if (kw1.endsWith(", ")) {
+					kw1 = kw1.substring(0, kw1.length() - 2);
 				}
 				getEastDoorKeywordText().setText(kw1);
 				switch(ex.getValue().doorState.num) {
@@ -485,7 +663,10 @@ public class VisualEditor {
 				getSouthDescText().setText(ex.getValue().exitDescription);
 				String kw2 = "";
 				for(String j : ex.getValue().keyWords) {
-					kw2 += j + " ";
+					kw2 += j + ", ";
+				}
+				if (kw2.endsWith(", ")) {
+					kw2 = kw2.substring(0, kw2.length() - 2);
 				}
 				getSouthDoorKeywordText().setText(kw2);
 				switch(ex.getValue().doorState.num) {
@@ -550,7 +731,10 @@ public class VisualEditor {
 				getWestDescText().setText(ex.getValue().exitDescription);
 				String kw3 = "";
 				for(String j : ex.getValue().keyWords) {
-					kw3 += j + " ";
+					kw3 += j + ", ";
+				}
+				if (kw3.endsWith(", ")) {
+					kw3 = kw3.substring(0, kw3.length() - 2);
 				}
 				getWestDoorKeywordText().setText(kw3);
 				switch(ex.getValue().doorState.num) {
@@ -615,7 +799,10 @@ public class VisualEditor {
 				getUpDescText().setText(ex.getValue().exitDescription);
 				String kw4 = "";
 				for(String j : ex.getValue().keyWords) {
-					kw4 += j + " ";
+					kw4 += j + ", ";
+				}
+				if (kw4.endsWith(", ")) {
+					kw4 = kw4.substring(0, kw4.length() - 2);
 				}
 				getUpDoorKeywordText().setText(kw4);
 				switch(ex.getValue().doorState.num) {
@@ -680,7 +867,10 @@ public class VisualEditor {
 				getDownDescText().setText(ex.getValue().exitDescription);
 				String kw5 = "";
 				for(String j : ex.getValue().keyWords) {
-					kw5 += j + " ";
+					kw5 += j + ", ";
+				}
+				if (kw5.endsWith(", ")) {
+					kw5 = kw5.substring(0, kw5.length() - 2);
 				}
 				getDownDoorKeywordText().setText(kw5);
 				switch(ex.getValue().doorState.num) {
@@ -917,10 +1107,51 @@ public class VisualEditor {
 		grpFlags.setText("Flags");
 		
 		Group grpSectorType = new Group(grpRoomFlags, SWT.NONE);
+		RowLayout rl_grpSectorType = new RowLayout(SWT.HORIZONTAL);
+		rl_grpSectorType.pack = false;
+		grpSectorType.setLayout(rl_grpSectorType);
 		GridData gd_grpSectorType = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		gd_grpSectorType.heightHint = 106;
+		gd_grpSectorType.heightHint = 78;
 		grpSectorType.setLayoutData(gd_grpSectorType);
 		grpSectorType.setText("Sector Type");
+		
+		roomSectorInside = new Button(grpSectorType, SWT.RADIO);
+		roomSectorInside.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
+		roomSectorInside.setText("Inside");
+		
+		roomSectorCity = new Button(grpSectorType, SWT.RADIO);
+		roomSectorCity.setText("City");
+		
+		roomSectorField = new Button(grpSectorType, SWT.RADIO);
+		roomSectorField.setText("Field");
+		
+		roomSectorForest = new Button(grpSectorType, SWT.RADIO);
+		roomSectorForest.setText("Forest");
+		
+		roomSectorHill = new Button(grpSectorType, SWT.RADIO);
+		roomSectorHill.setText("Hill");
+		
+		roomSectorMountain = new Button(grpSectorType, SWT.RADIO);
+		roomSectorMountain.setText("Mountain");
+		
+		roomSectorWater = new Button(grpSectorType, SWT.RADIO);
+		roomSectorWater.setText("Water");
+		
+		roomSectorDeepWater = new Button(grpSectorType, SWT.RADIO);
+		roomSectorDeepWater.setText("Deep Water");
+		
+		roomSectorUnused = new Button(grpSectorType, SWT.RADIO);
+		roomSectorUnused.setText("Unused");
+		
+		roomSectorAir = new Button(grpSectorType, SWT.RADIO);
+		roomSectorAir.setText("Air");
+		
+		roomSectorDesert = new Button(grpSectorType, SWT.RADIO);
+		roomSectorDesert.setText("Desert");
 		
 		Group grpRecoveryRates = new Group(grpRoomFlags, SWT.NONE);
 		grpRecoveryRates.setLayout(new FillLayout(SWT.HORIZONTAL));
@@ -2121,5 +2352,38 @@ public class VisualEditor {
 		bindingContext.bindValue(observeSelectionRoomMPScaleObserveWidget, observeSelectionRoomMPSpinnerObserveWidget, null, null);
 		//
 		return bindingContext;
+	}
+	public Button getRoomSectorMountain() {
+		return roomSectorMountain;
+	}
+	public Button getRoomSectorCity() {
+		return roomSectorCity;
+	}
+	public Button getRoomSectorForest() {
+		return roomSectorForest;
+	}
+	public Button getRoomSectorHill() {
+		return roomSectorHill;
+	}
+	public Button getRoomSectorDeepWater() {
+		return roomSectorDeepWater;
+	}
+	public Button getRoomSectorWater() {
+		return roomSectorWater;
+	}
+	public Button getRoomSectorInside() {
+		return roomSectorInside;
+	}
+	public Button getRoomSectorDesert() {
+		return roomSectorDesert;
+	}
+	public Button getRoomSectorAir() {
+		return roomSectorAir;
+	}
+	public Button getRoomSectorField() {
+		return roomSectorField;
+	}
+	public Button getRoomSectorUnused() {
+		return roomSectorUnused;
 	}
 }
