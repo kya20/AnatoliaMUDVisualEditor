@@ -27,7 +27,12 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Tree;
 
 import com.amve.area.Room;
+import com.amve.globals.GlobalVariables;
+import com.amve.globals.GlobalVariables.DoorFlag;
+import com.amve.globals.GlobalVariables.ExitDirection;
 import com.amve.parser.AreaFileParser;
+import com.amve.utils.Exit;
+import com.amve.utils.ExtraDescription;
 import com.amve.utils.MobileReset;
 import com.amve.utils.ObjectReset;
 
@@ -37,6 +42,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import java.awt.Frame;
@@ -45,7 +51,9 @@ import java.awt.Panel;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
+import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
 import java.awt.BorderLayout;
 import javax.swing.JRootPane;
@@ -102,6 +110,87 @@ public class VisualEditor {
 	private Tree tree;
 	private Spinner RoomVnumSpinner;
 	private Group grpDoors;
+	private TableViewerColumn tableViewerColumn;
+	private TableViewerColumn tableViewerColumn_1;
+	private Combo northDoorStateCombo;
+	private Composite northComposite;
+	private Combo northDoorKeyCombo;
+	private Combo northDoorSizeCombo;
+	private Button northDoorFlagJCheck;
+	private Button northDoorFlagHCheck;
+	private Button northDoorFlagKCheck;
+	private Button northDoorFlagACheck;
+	private Button northDoorFlagBCheck;
+	private Button northDoorFlagICheck;
+	private Button northDoorFlagFCheck;
+	private Button northDoorFlagCCheck;
+	private Button northDoorFlagLCheck;
+	private Button northDoorFlagGCheck;
+	private Combo eastDoorStateCombo;
+	private Combo eastDoorKeyCombo;
+	private Combo eastDoorSizeCombo;
+	private Button eastDoorFlagJCheck;
+	private Button eastDoorFlagACheck;
+	private Button eastDoorFlagICheck;
+	private Button eastDoorFlagCCheck;
+	private Button eastDoorFlagFCheck;
+	private Button eastDoorFlagGCheck;
+	private Button eastDoorFlagHCheck;
+	private Button eastDoorFlagKCheck;
+	private Button eastDoorFlagLCheck;
+	private Button eastDoorFlagBCheck;
+	private Combo southDoorKeyCombo;
+	private Combo southDoorStateCombo;
+	private Combo southDoorSizeCombo;
+	private Button southDoorFlagICheck;
+	private Button southDoorFlagKCheck;
+	private Button southDoorFlagCCheck;
+	private Button southDoorFlagJCheck;
+	private Button southDoorFlagLCheck;
+	private Button southDoorFlagGCheck;
+	private Button southDoorFlagACheck;
+	private Button southDoorFlagBCheck;
+	private Button southDoorFlagFCheck;
+	private Button southDoorFlagHCheck;
+	private Combo westDoorSizeCombo;
+	private Combo westDoorKeyCombo;
+	private Combo westDoorStateCombo;
+	private Button westDoorFlagFCheck;
+	private Button westDoorFlagGCheck;
+	private Button westDoorFlagKCheck;
+	private Button westDoorFlagACheck;
+	private Button westDoorFlagICheck;
+	private Button westDoorFlagLCheck;
+	private Button westDoorFlagHCheck;
+	private Button westDoorFlagJCheck;
+	private Button westDoorFlagBCheck;
+	private Button westDoorFlagCCheck;
+	private Combo upDoorStateCombo;
+	private Combo upDoorKeyCombo;
+	private Combo upDoorSizeCombo;
+	private Button upDoorFlagACheck;
+	private Button upDoorFlagKCheck;
+	private Button upDoorFlagBCheck;
+	private Button upDoorFlagFCheck;
+	private Button upDoorFlagLCheck;
+	private Button upDoorFlagCCheck;
+	private Button upDoorFlagJCheck;
+	private Button upDoorFlagICheck;
+	private Button upDoorFlagGCheck;
+	private Button upDoorFlagHCheck;
+	private Combo downDoorKeyCombo;
+	private Combo downDoorStateCombo;
+	private Combo downDoorSizeCombo;
+	private Button downDoorFlagACheck;
+	private Button downDoorFlagGCheck;
+	private Button downDoorFlagHCheck;
+	private Button downDoorFlagBCheck;
+	private Button downDoorFlagJCheck;
+	private Button downDoorFlagCCheck;
+	private Button downDoorFlagFCheck;
+	private Button downDoorFlagKCheck;
+	private Button downDoorFlagICheck;
+	private Button downDoorFlagLCheck;
 
 	/**
 	 * Launch the application.
@@ -144,7 +233,496 @@ public class VisualEditor {
 		parser.getArea().getRooms().get(key);
 		setRoomNameTextVal(parser.getArea().getRooms().get(key).getHeader());
 		setRoomDescTextVal(parser.getArea().getRooms().get(key).description);
+		roomExtrasTable.removeAll();
+		for (ExtraDescription extra : parser.getArea().getRooms().get(key).extras) {
+			TableItem extrasItem = new TableItem(roomExtrasTable, SWT.NONE);
+			extrasItem.setText(0, extra.extraDesciptionKeyword.toString());
+			extrasItem.setText(1, extra.extraDescriptionText);
+		}
+		getNorthDescText().setText("");
+		getNorthDoorKeywordText().setText("");
+		getNorthDoorStateCombo().select(-1);
+		getNorthDoorFlagACheck().setSelection(false);
+		getNorthDoorFlagBCheck().setSelection(false);
+		getNorthDoorFlagCCheck().setSelection(false);
+		//getNorthDoorFlagDCheck().setSelection(false);
+		getNorthDoorFlagFCheck().setSelection(false);
+		getNorthDoorFlagGCheck().setSelection(false);
+		getNorthDoorFlagHCheck().setSelection(false);
+		getNorthDoorFlagICheck().setSelection(false);
+		getNorthDoorFlagJCheck().setSelection(false);
+		getNorthDoorFlagKCheck().setSelection(false);
+		getNorthDoorFlagLCheck().setSelection(false);
 		
+		getEastDescText().setText("");
+		getEastDoorKeywordText().setText("");
+		getEastDoorStateCombo().select(-1);
+		getEastDoorFlagACheck().setSelection(false);
+		getEastDoorFlagBCheck().setSelection(false);
+		getEastDoorFlagCCheck().setSelection(false);
+		//getEastDoorFlagDCheck().setSelection(false);
+		getEastDoorFlagFCheck().setSelection(false);
+		getEastDoorFlagGCheck().setSelection(false);
+		getEastDoorFlagHCheck().setSelection(false);
+		getEastDoorFlagICheck().setSelection(false);
+		getEastDoorFlagJCheck().setSelection(false);
+		getEastDoorFlagKCheck().setSelection(false);
+		getEastDoorFlagLCheck().setSelection(false);
+		
+		getSouthDescText().setText("");
+		getSouthDoorKeywordText().setText("");
+		getSouthDoorStateCombo().select(-1);
+		getSouthDoorFlagACheck().setSelection(false);
+		getSouthDoorFlagBCheck().setSelection(false);
+		getSouthDoorFlagCCheck().setSelection(false);
+		//getSouthDoorFlagDCheck().setSelection(false);
+		getSouthDoorFlagFCheck().setSelection(false);
+		getSouthDoorFlagGCheck().setSelection(false);
+		getSouthDoorFlagHCheck().setSelection(false);
+		getSouthDoorFlagICheck().setSelection(false);
+		getSouthDoorFlagJCheck().setSelection(false);
+		getSouthDoorFlagKCheck().setSelection(false);
+		getSouthDoorFlagLCheck().setSelection(false);
+		
+		getWestDescText().setText("");
+		getWestDoorKeywordText().setText("");
+		getWestDoorStateCombo().select(-1);
+		getWestDoorFlagACheck().setSelection(false);
+		getWestDoorFlagBCheck().setSelection(false);
+		getWestDoorFlagCCheck().setSelection(false);
+		//getWestDoorFlagDCheck().setSelection(false);
+		getWestDoorFlagFCheck().setSelection(false);
+		getWestDoorFlagGCheck().setSelection(false);
+		getWestDoorFlagHCheck().setSelection(false);
+		getWestDoorFlagICheck().setSelection(false);
+		getWestDoorFlagJCheck().setSelection(false);
+		getWestDoorFlagKCheck().setSelection(false);
+		getWestDoorFlagLCheck().setSelection(false);
+		
+		getUpDescText().setText("");
+		getUpDoorKeywordText().setText("");
+		getUpDoorStateCombo().select(-1);
+		getUpDoorFlagACheck().setSelection(false);
+		getUpDoorFlagBCheck().setSelection(false);
+		getUpDoorFlagCCheck().setSelection(false);
+		//getUpDoorFlagDCheck().setSelection(false);
+		getUpDoorFlagFCheck().setSelection(false);
+		getUpDoorFlagGCheck().setSelection(false);
+		getUpDoorFlagHCheck().setSelection(false);
+		getUpDoorFlagICheck().setSelection(false);
+		getUpDoorFlagJCheck().setSelection(false);
+		getUpDoorFlagKCheck().setSelection(false);
+		getUpDoorFlagLCheck().setSelection(false);
+		
+		getDownDescText().setText("");
+		getDownDoorKeywordText().setText("");
+		getDownDoorStateCombo().select(-1);
+		getDownDoorFlagACheck().setSelection(false);
+		getDownDoorFlagBCheck().setSelection(false);
+		getDownDoorFlagCCheck().setSelection(false);
+		//getDownDoorFlagDCheck().setSelection(false);
+		getDownDoorFlagFCheck().setSelection(false);
+		getDownDoorFlagGCheck().setSelection(false);
+		getDownDoorFlagHCheck().setSelection(false);
+		getDownDoorFlagICheck().setSelection(false);
+		getDownDoorFlagJCheck().setSelection(false);
+		getDownDoorFlagKCheck().setSelection(false);
+		getDownDoorFlagLCheck().setSelection(false);
+		for (Map.Entry<ExitDirection, Exit> ex : parser.getArea().getRooms().get(key).exits.entrySet()) {
+			int i = ex.getKey().num;
+			switch (i) {
+			case 0: //north
+				getNorthDescText().setText("");
+				getNorthDescText().setText(ex.getValue().exitDescription);
+				String kw = "";
+				for(String j : ex.getValue().keyWords) {
+					kw += j + " ";
+				}
+				getNorthDoorKeywordText().setText(kw);
+				switch(ex.getValue().doorState.num) {
+				case 0:
+					getNorthDoorStateCombo().select(0);
+					break;
+				case 1:
+					getNorthDoorStateCombo().select(1);
+					break;
+				case 2:
+					getNorthDoorStateCombo().select(2);
+					break;
+				}
+				if (ex.getValue().doorFlags != null) {
+					if (!ex.getValue().doorFlags.isEmpty()) {
+						//TODO: Implement door size and its GUI connection
+						for (DoorFlag f : ex.getValue().doorFlags) {
+							switch ((f.num)) {
+							case 1: //A
+								getNorthDoorFlagACheck().setSelection(true);
+								break;
+							case 2: //B
+								getNorthDoorFlagBCheck().setSelection(true);
+								break;
+							case 4: //C
+								getNorthDoorFlagCCheck().setSelection(true);
+								break;
+							case 8: //D
+								//TODO: implement new flag entry if required
+								//getNorthDoorFlagDCheck().setSelection(true);
+								break;
+							case 16: //E not used?
+								break;
+							case 32: //F
+								getNorthDoorFlagFCheck().setSelection(true);
+								break;
+							case 64: //G
+								getNorthDoorFlagGCheck().setSelection(true);
+								break;
+							case 128: //H
+								getNorthDoorFlagHCheck().setSelection(true);
+								break;
+							case 256: //I
+								getNorthDoorFlagICheck().setSelection(true);
+								break;
+							case 512: //J
+								getNorthDoorFlagJCheck().setSelection(true);
+								break;
+							case 1024: //K
+								getNorthDoorFlagKCheck().setSelection(true);
+								break;
+							case 2048: //L
+								getNorthDoorFlagLCheck().setSelection(true);
+								break;
+							}
+						} 
+					} 
+				}
+				break;
+			case 1: //east
+				getEastDescText().setText("");
+				getEastDescText().setText(ex.getValue().exitDescription);
+				String kw1 = "";
+				for(String j : ex.getValue().keyWords) {
+					kw1 += j + " ";
+				}
+				getEastDoorKeywordText().setText(kw1);
+				switch(ex.getValue().doorState.num) {
+				case 0:
+					getEastDoorStateCombo().select(0);
+					break;
+				case 1:
+					getEastDoorStateCombo().select(1);
+					break;
+				case 2:
+					getEastDoorStateCombo().select(2);
+					break;
+				}
+				if (ex.getValue().doorFlags != null) {
+					if (!ex.getValue().doorFlags.isEmpty()) {
+						//TODO: Implement door size and its GUI connection
+						for (DoorFlag f : ex.getValue().doorFlags) {
+							switch ((f.num)) {
+							case 1: //A
+								getEastDoorFlagACheck().setSelection(true);
+								break;
+							case 2: //B
+								getEastDoorFlagBCheck().setSelection(true);
+								break;
+							case 4: //C
+								getEastDoorFlagCCheck().setSelection(true);
+								break;
+							case 8: //D
+								//TODO: implement new flag entry if required
+								//getEastDoorFlagDCheck().setSelection(true);
+								break;
+							case 16: //E not used?
+								break;
+							case 32: //F
+								getEastDoorFlagFCheck().setSelection(true);
+								break;
+							case 64: //G
+								getEastDoorFlagGCheck().setSelection(true);
+								break;
+							case 128: //H
+								getEastDoorFlagHCheck().setSelection(true);
+								break;
+							case 256: //I
+								getEastDoorFlagICheck().setSelection(true);
+								break;
+							case 512: //J
+								getEastDoorFlagJCheck().setSelection(true);
+								break;
+							case 1024: //K
+								getEastDoorFlagKCheck().setSelection(true);
+								break;
+							case 2048: //L
+								getEastDoorFlagLCheck().setSelection(true);
+								break;
+							}
+						} 
+					} 
+				}
+				break;
+			case 2: //south
+				getSouthDescText().setText("");
+				getSouthDescText().setText(ex.getValue().exitDescription);
+				String kw2 = "";
+				for(String j : ex.getValue().keyWords) {
+					kw2 += j + " ";
+				}
+				getSouthDoorKeywordText().setText(kw2);
+				switch(ex.getValue().doorState.num) {
+				case 0:
+					getSouthDoorStateCombo().select(0);
+					break;
+				case 1:
+					getSouthDoorStateCombo().select(1);
+					break;
+				case 2:
+					getSouthDoorStateCombo().select(2);
+					break;
+				}
+				if (ex.getValue().doorFlags != null) {
+					if (!ex.getValue().doorFlags.isEmpty()) {
+						//TODO: Implement door size and its GUI connection
+						for (DoorFlag f : ex.getValue().doorFlags) {
+							switch ((f.num)) {
+							case 1: //A
+								getSouthDoorFlagACheck().setSelection(true);
+								break;
+							case 2: //B
+								getSouthDoorFlagBCheck().setSelection(true);
+								break;
+							case 4: //C
+								getSouthDoorFlagCCheck().setSelection(true);
+								break;
+							case 8: //D
+								//TODO: implement new flag entry if required
+								//getSouthDoorFlagDCheck().setSelection(true);
+								break;
+							case 16: //E not used?
+								break;
+							case 32: //F
+								getSouthDoorFlagFCheck().setSelection(true);
+								break;
+							case 64: //G
+								getSouthDoorFlagGCheck().setSelection(true);
+								break;
+							case 128: //H
+								getSouthDoorFlagHCheck().setSelection(true);
+								break;
+							case 256: //I
+								getSouthDoorFlagICheck().setSelection(true);
+								break;
+							case 512: //J
+								getSouthDoorFlagJCheck().setSelection(true);
+								break;
+							case 1024: //K
+								getSouthDoorFlagKCheck().setSelection(true);
+								break;
+							case 2048: //L
+								getSouthDoorFlagLCheck().setSelection(true);
+								break;
+							}
+						} 
+					} 
+				}
+				break;
+			case 3: //west
+				getWestDescText().setText("");
+				getWestDescText().setText(ex.getValue().exitDescription);
+				String kw3 = "";
+				for(String j : ex.getValue().keyWords) {
+					kw3 += j + " ";
+				}
+				getWestDoorKeywordText().setText(kw3);
+				switch(ex.getValue().doorState.num) {
+				case 0:
+					getWestDoorStateCombo().select(0);
+					break;
+				case 1:
+					getWestDoorStateCombo().select(1);
+					break;
+				case 2:
+					getWestDoorStateCombo().select(2);
+					break;
+				}
+				if (ex.getValue().doorFlags != null) {
+					if (!ex.getValue().doorFlags.isEmpty()) {
+						//TODO: Implement door size and its GUI connection
+						for (DoorFlag f : ex.getValue().doorFlags) {
+							switch ((f.num)) {
+							case 1: //A
+								getWestDoorFlagACheck().setSelection(true);
+								break;
+							case 2: //B
+								getWestDoorFlagBCheck().setSelection(true);
+								break;
+							case 4: //C
+								getWestDoorFlagCCheck().setSelection(true);
+								break;
+							case 8: //D
+								//TODO: implement new flag entry if required
+								//getWestDoorFlagDCheck().setSelection(true);
+								break;
+							case 16: //E not used?
+								break;
+							case 32: //F
+								getWestDoorFlagFCheck().setSelection(true);
+								break;
+							case 64: //G
+								getWestDoorFlagGCheck().setSelection(true);
+								break;
+							case 128: //H
+								getWestDoorFlagHCheck().setSelection(true);
+								break;
+							case 256: //I
+								getWestDoorFlagICheck().setSelection(true);
+								break;
+							case 512: //J
+								getWestDoorFlagJCheck().setSelection(true);
+								break;
+							case 1024: //K
+								getWestDoorFlagKCheck().setSelection(true);
+								break;
+							case 2048: //L
+								getWestDoorFlagLCheck().setSelection(true);
+								break;
+							}
+						} 
+					} 
+				}
+				break;
+			case 4: //up
+				getUpDescText().setText("");
+				getUpDescText().setText(ex.getValue().exitDescription);
+				String kw4 = "";
+				for(String j : ex.getValue().keyWords) {
+					kw4 += j + " ";
+				}
+				getUpDoorKeywordText().setText(kw4);
+				switch(ex.getValue().doorState.num) {
+				case 0:
+					getUpDoorStateCombo().select(0);
+					break;
+				case 1:
+					getUpDoorStateCombo().select(1);
+					break;
+				case 2:
+					getUpDoorStateCombo().select(2);
+					break;
+				}
+				if (ex.getValue().doorFlags != null) {
+					if (!ex.getValue().doorFlags.isEmpty()) {
+						//TODO: Implement door size and its GUI connection
+						for (DoorFlag f : ex.getValue().doorFlags) {
+							switch ((f.num)) {
+							case 1: //A
+								getUpDoorFlagACheck().setSelection(true);
+								break;
+							case 2: //B
+								getUpDoorFlagBCheck().setSelection(true);
+								break;
+							case 4: //C
+								getUpDoorFlagCCheck().setSelection(true);
+								break;
+							case 8: //D
+								//TODO: implement new flag entry if required
+								//getUpDoorFlagDCheck().setSelection(true);
+								break;
+							case 16: //E not used?
+								break;
+							case 32: //F
+								getUpDoorFlagFCheck().setSelection(true);
+								break;
+							case 64: //G
+								getUpDoorFlagGCheck().setSelection(true);
+								break;
+							case 128: //H
+								getUpDoorFlagHCheck().setSelection(true);
+								break;
+							case 256: //I
+								getUpDoorFlagICheck().setSelection(true);
+								break;
+							case 512: //J
+								getUpDoorFlagJCheck().setSelection(true);
+								break;
+							case 1024: //K
+								getUpDoorFlagKCheck().setSelection(true);
+								break;
+							case 2048: //L
+								getUpDoorFlagLCheck().setSelection(true);
+								break;
+							}
+						} 
+					} 
+				}
+				break;
+			case 5: //down
+				getDownDescText().setText("");
+				getDownDescText().setText(ex.getValue().exitDescription);
+				String kw5 = "";
+				for(String j : ex.getValue().keyWords) {
+					kw5 += j + " ";
+				}
+				getDownDoorKeywordText().setText(kw5);
+				switch(ex.getValue().doorState.num) {
+				case 0:
+					getDownDoorStateCombo().select(0);
+					break;
+				case 1:
+					getDownDoorStateCombo().select(1);
+					break;
+				case 2:
+					getDownDoorStateCombo().select(2);
+					break;
+				}
+				if (ex.getValue().doorFlags != null) {
+					if (!ex.getValue().doorFlags.isEmpty()) {
+						//TODO: Implement door size and its GUI connection
+						for (DoorFlag f : ex.getValue().doorFlags) {
+							switch ((f.num)) {
+							case 1: //A
+								getDownDoorFlagACheck().setSelection(true);
+								break;
+							case 2: //B
+								getDownDoorFlagBCheck().setSelection(true);
+								break;
+							case 4: //C
+								getDownDoorFlagCCheck().setSelection(true);
+								break;
+							case 8: //D
+								//TODO: implement new flag entry if required
+								//getDownDoorFlagDCheck().setSelection(true);
+								break;
+							case 16: //E not used?
+								break;
+							case 32: //F
+								getDownDoorFlagFCheck().setSelection(true);
+								break;
+							case 64: //G
+								getDownDoorFlagGCheck().setSelection(true);
+								break;
+							case 128: //H
+								getDownDoorFlagHCheck().setSelection(true);
+								break;
+							case 256: //I
+								getDownDoorFlagICheck().setSelection(true);
+								break;
+							case 512: //J
+								getDownDoorFlagJCheck().setSelection(true);
+								break;
+							case 1024: //K
+								getDownDoorFlagKCheck().setSelection(true);
+								break;
+							case 2048: //L
+								getDownDoorFlagLCheck().setSelection(true);
+								break;
+							}
+						} 
+					} 
+				}
+				break;
+			}
+		}
 	}
 
 	/**
@@ -299,12 +877,12 @@ public class VisualEditor {
 		roomExtrasTable.setHeaderVisible(true);
 		roomExtrasTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnKeywords = tableViewerColumn.getColumn();
 		tblclmnKeywords.setWidth(100);
 		tblclmnKeywords.setText("keywords");
 		
-		TableViewerColumn tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
+		tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
 		TableColumn tblclmnDescription = tableViewerColumn_1.getColumn();
 		tblclmnDescription.setWidth(223);
 		tblclmnDescription.setText("Description");
@@ -338,7 +916,7 @@ public class VisualEditor {
 		TabItem tbtmNorth = new TabItem(tabFolder_2, SWT.NONE);
 		tbtmNorth.setText("North");
 		
-		Composite northComposite = new Composite(tabFolder_2, SWT.NONE);
+		northComposite = new Composite(tabFolder_2, SWT.NONE);
 		tbtmNorth.setControl(northComposite);
 		northComposite.setLayout(new GridLayout(1, false));
 		
@@ -366,7 +944,7 @@ public class VisualEditor {
 		lblDoorState.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorState.setText("Door State");
 		
-		Combo northDoorStateCombo = new Combo(northComposite, SWT.READ_ONLY);
+		northDoorStateCombo = new Combo(northComposite, SWT.READ_ONLY);
 		northDoorStateCombo.setVisibleItemCount(3);
 		northDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
 		northDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -375,7 +953,7 @@ public class VisualEditor {
 		lblDoorKey.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey.setText("Door Key");
 		
-		Combo northDoorKeyCombo = new Combo(northComposite, SWT.READ_ONLY);
+		northDoorKeyCombo = new Combo(northComposite, SWT.READ_ONLY);
 		northDoorKeyCombo.setItems(new String[] {"(None)"});
 		northDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -383,7 +961,7 @@ public class VisualEditor {
 		lblDoorSize.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorSize.setText("Door Size");
 		
-		Combo northDoorSizeCombo = new Combo(northComposite, SWT.READ_ONLY);
+		northDoorSizeCombo = new Combo(northComposite, SWT.READ_ONLY);
 		northDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
 		northDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -400,34 +978,34 @@ public class VisualEditor {
 		Composite composite_4 = new Composite(scrolledComposite_1, SWT.EMBEDDED);
 		composite_4.setLayout(new RowLayout(SWT.VERTICAL));
 		
-		Button northDoorFlagACheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagACheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
 		
-		Button northDoorFlagBCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagBCheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagBCheck.setText("Door resets to closed");
 		
-		Button northDoorFlagCCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagCCheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagCCheck.setText("Door resets to locked");
 		
-		Button northDoorFlagFCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagFCheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
 		
-		Button northDoorFlagGCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagGCheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
 		
-		Button northDoorFlagHCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagHCheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagHCheck.setText("Lock easy to pick");
 		
-		Button northDoorFlagICheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagICheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagICheck.setText("Lock hard to pick");
 		
-		Button northDoorFlagJCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagJCheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagJCheck.setText("Lock infuriating to pick");
 		
-		Button northDoorFlagKCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagKCheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagKCheck.setText("Door cannot be closed");
 		
-		Button northDoorFlagLCheck = new Button(composite_4, SWT.CHECK);
+		northDoorFlagLCheck = new Button(composite_4, SWT.CHECK);
 		northDoorFlagLCheck.setText("Door cannot be locked");
 		scrolledComposite_1.setContent(composite_4);
 		scrolledComposite_1.setMinSize(composite_4.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -463,7 +1041,7 @@ public class VisualEditor {
 		lblDoorState_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorState_1.setText("Door State");
 		
-		Combo eastDoorStateCombo = new Combo(eastComposite, SWT.READ_ONLY);
+		eastDoorStateCombo = new Combo(eastComposite, SWT.READ_ONLY);
 		eastDoorStateCombo.setVisibleItemCount(3);
 		eastDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
 		eastDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -472,7 +1050,7 @@ public class VisualEditor {
 		lblDoorKey_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_1.setText("Door Key");
 		
-		Combo eastDoorKeyCombo = new Combo(eastComposite, SWT.READ_ONLY);
+		eastDoorKeyCombo = new Combo(eastComposite, SWT.READ_ONLY);
 		eastDoorKeyCombo.setItems(new String[] {"(None)"});
 		eastDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -480,7 +1058,7 @@ public class VisualEditor {
 		lblDoorSize_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorSize_1.setText("Door Size");
 		
-		Combo eastDoorSizeCombo = new Combo(eastComposite, SWT.READ_ONLY);
+		eastDoorSizeCombo = new Combo(eastComposite, SWT.READ_ONLY);
 		eastDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
 		eastDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -496,34 +1074,34 @@ public class VisualEditor {
 		Composite composite_4_1 = new Composite(scrolledComposite_1_1, SWT.EMBEDDED);
 		composite_4_1.setLayout(new RowLayout(SWT.VERTICAL));
 		
-		Button eastDoorFlagACheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagACheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
 		
-		Button eastDoorFlagBCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagBCheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagBCheck.setText("Door resets to closed");
 		
-		Button eastDoorFlagCCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagCCheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagCCheck.setText("Door resets to locked");
 		
-		Button eastDoorFlagFCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagFCheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
 		
-		Button eastDoorFlagGCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagGCheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
 		
-		Button eastDoorFlagHCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagHCheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagHCheck.setText("Lock easy to pick");
 		
-		Button eastDoorFlagICheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagICheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagICheck.setText("Lock hard to pick");
 		
-		Button eastDoorFlagJCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagJCheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagJCheck.setText("Lock infuriating to pick");
 		
-		Button eastDoorFlagKCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagKCheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagKCheck.setText("Door cannot be closed");
 		
-		Button eastDoorFlagLCheck = new Button(composite_4_1, SWT.CHECK);
+		eastDoorFlagLCheck = new Button(composite_4_1, SWT.CHECK);
 		eastDoorFlagLCheck.setText("Door cannot be locked");
 		scrolledComposite_1_1.setContent(composite_4_1);
 		scrolledComposite_1_1.setMinSize(composite_4_1.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -560,7 +1138,7 @@ public class VisualEditor {
 		lblDoorState_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorState_2.setText("Door State");
 		
-		Combo southDoorStateCombo = new Combo(southComposite, SWT.READ_ONLY);
+		southDoorStateCombo = new Combo(southComposite, SWT.READ_ONLY);
 		southDoorStateCombo.setVisibleItemCount(3);
 		southDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
 		southDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -569,7 +1147,7 @@ public class VisualEditor {
 		lblDoorKey_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_2.setText("Door Key");
 		
-		Combo southDoorKeyCombo = new Combo(southComposite, SWT.READ_ONLY);
+		southDoorKeyCombo = new Combo(southComposite, SWT.READ_ONLY);
 		southDoorKeyCombo.setItems(new String[] {"(None)"});
 		southDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -577,7 +1155,7 @@ public class VisualEditor {
 		lblDoorSize_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorSize_2.setText("Door Size");
 		
-		Combo southDoorSizeCombo = new Combo(southComposite, SWT.READ_ONLY);
+		southDoorSizeCombo = new Combo(southComposite, SWT.READ_ONLY);
 		southDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
 		southDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -593,34 +1171,34 @@ public class VisualEditor {
 		Composite composite_4_2 = new Composite(scrolledComposite_1_2, SWT.EMBEDDED);
 		composite_4_2.setLayout(new RowLayout(SWT.VERTICAL));
 		
-		Button southDoorFlagACheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagACheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
 		
-		Button southDoorFlagBCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagBCheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagBCheck.setText("Door resets to closed");
 		
-		Button southDoorFlagCCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagCCheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagCCheck.setText("Door resets to locked");
 		
-		Button southDoorFlagFCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagFCheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
 		
-		Button southDoorFlagGCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagGCheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
 		
-		Button southDoorFlagHCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagHCheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagHCheck.setText("Lock easy to pick");
 		
-		Button southDoorFlagICheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagICheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagICheck.setText("Lock hard to pick");
 		
-		Button southDoorFlagJCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagJCheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagJCheck.setText("Lock infuriating to pick");
 		
-		Button southDoorFlagKCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagKCheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagKCheck.setText("Door cannot be closed");
 		
-		Button southDoorFlagLCheck = new Button(composite_4_2, SWT.CHECK);
+		southDoorFlagLCheck = new Button(composite_4_2, SWT.CHECK);
 		southDoorFlagLCheck.setText("Door cannot be locked");
 		scrolledComposite_1_2.setContent(composite_4_2);
 		scrolledComposite_1_2.setMinSize(composite_4_2.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -657,7 +1235,7 @@ public class VisualEditor {
 		lblDoorState_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorState_3.setText("Door State");
 		
-		Combo westDoorStateCombo = new Combo(westComposite, SWT.READ_ONLY);
+		westDoorStateCombo = new Combo(westComposite, SWT.READ_ONLY);
 		westDoorStateCombo.setVisibleItemCount(3);
 		westDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
 		westDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -666,7 +1244,7 @@ public class VisualEditor {
 		lblDoorKey_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_3.setText("Door Key");
 		
-		Combo westDoorKeyCombo = new Combo(westComposite, SWT.READ_ONLY);
+		westDoorKeyCombo = new Combo(westComposite, SWT.READ_ONLY);
 		westDoorKeyCombo.setItems(new String[] {"(None)"});
 		westDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -674,7 +1252,7 @@ public class VisualEditor {
 		lblDoorSize_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorSize_3.setText("Door Size");
 		
-		Combo westDoorSizeCombo = new Combo(westComposite, SWT.READ_ONLY);
+		westDoorSizeCombo = new Combo(westComposite, SWT.READ_ONLY);
 		westDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
 		westDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -690,34 +1268,34 @@ public class VisualEditor {
 		Composite composite_4_3 = new Composite(scrolledComposite_1_3, SWT.EMBEDDED);
 		composite_4_3.setLayout(new RowLayout(SWT.VERTICAL));
 		
-		Button westDoorFlagACheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagACheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
 		
-		Button westDoorFlagBCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagBCheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagBCheck.setText("Door resets to closed");
 		
-		Button westDoorFlagCCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagCCheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagCCheck.setText("Door resets to locked");
 		
-		Button westDoorFlagFCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagFCheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
 		
-		Button westDoorFlagGCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagGCheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
 		
-		Button westDoorFlagHCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagHCheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagHCheck.setText("Lock easy to pick");
 		
-		Button westDoorFlagICheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagICheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagICheck.setText("Lock hard to pick");
 		
-		Button westDoorFlagJCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagJCheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagJCheck.setText("Lock infuriating to pick");
 		
-		Button westDoorFlagKCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagKCheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagKCheck.setText("Door cannot be closed");
 		
-		Button westDoorFlagLCheck = new Button(composite_4_3, SWT.CHECK);
+		westDoorFlagLCheck = new Button(composite_4_3, SWT.CHECK);
 		westDoorFlagLCheck.setText("Door cannot be locked");
 		scrolledComposite_1_3.setContent(composite_4_3);
 		scrolledComposite_1_3.setMinSize(composite_4_3.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -754,7 +1332,7 @@ public class VisualEditor {
 		lblDoorState_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorState_4.setText("Door State");
 		
-		Combo upDoorStateCombo = new Combo(upComposite, SWT.READ_ONLY);
+		upDoorStateCombo = new Combo(upComposite, SWT.READ_ONLY);
 		upDoorStateCombo.setVisibleItemCount(3);
 		upDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
 		upDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -763,7 +1341,7 @@ public class VisualEditor {
 		lblDoorKey_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_4.setText("Door Key");
 		
-		Combo upDoorKeyCombo = new Combo(upComposite, SWT.READ_ONLY);
+		upDoorKeyCombo = new Combo(upComposite, SWT.READ_ONLY);
 		upDoorKeyCombo.setItems(new String[] {"(None)"});
 		upDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -771,7 +1349,7 @@ public class VisualEditor {
 		lblDoorSize_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorSize_4.setText("Door Size");
 		
-		Combo upDoorSizeCombo = new Combo(upComposite, SWT.READ_ONLY);
+		upDoorSizeCombo = new Combo(upComposite, SWT.READ_ONLY);
 		upDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
 		upDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -787,34 +1365,34 @@ public class VisualEditor {
 		Composite composite_4_4 = new Composite(scrolledComposite_1_4, SWT.EMBEDDED);
 		composite_4_4.setLayout(new RowLayout(SWT.VERTICAL));
 		
-		Button upDoorFlagACheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagACheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
 		
-		Button upDoorFlagBCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagBCheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagBCheck.setText("Door resets to closed");
 		
-		Button upDoorFlagCCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagCCheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagCCheck.setText("Door resets to locked");
 		
-		Button upDoorFlagFCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagFCheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
 		
-		Button upDoorFlagGCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagGCheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
 		
-		Button upDoorFlagHCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagHCheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagHCheck.setText("Lock easy to pick");
 		
-		Button upDoorFlagICheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagICheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagICheck.setText("Lock hard to pick");
 		
-		Button upDoorFlagJCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagJCheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagJCheck.setText("Lock infuriating to pick");
 		
-		Button upDoorFlagKCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagKCheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagKCheck.setText("Door cannot be closed");
 		
-		Button upDoorFlagLCheck = new Button(composite_4_4, SWT.CHECK);
+		upDoorFlagLCheck = new Button(composite_4_4, SWT.CHECK);
 		upDoorFlagLCheck.setText("Door cannot be locked");
 		scrolledComposite_1_4.setContent(composite_4_4);
 		scrolledComposite_1_4.setMinSize(composite_4_4.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -851,7 +1429,7 @@ public class VisualEditor {
 		lblDoorState_5.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorState_5.setText("Door State");
 		
-		Combo downDoorStateCombo = new Combo(downComposite, SWT.READ_ONLY);
+		downDoorStateCombo = new Combo(downComposite, SWT.READ_ONLY);
 		downDoorStateCombo.setVisibleItemCount(3);
 		downDoorStateCombo.setItems(new String[] {"Opened", "Closed", "Locked"});
 		downDoorStateCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -860,7 +1438,7 @@ public class VisualEditor {
 		lblDoorKey_5.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_5.setText("Door Key");
 		
-		Combo downDoorKeyCombo = new Combo(downComposite, SWT.READ_ONLY);
+		downDoorKeyCombo = new Combo(downComposite, SWT.READ_ONLY);
 		downDoorKeyCombo.setItems(new String[] {"(None)"});
 		downDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -868,7 +1446,7 @@ public class VisualEditor {
 		lblDoorSize_5.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorSize_5.setText("Door Size");
 		
-		Combo downDoorSizeCombo = new Combo(downComposite, SWT.READ_ONLY);
+		downDoorSizeCombo = new Combo(downComposite, SWT.READ_ONLY);
 		downDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
 		downDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -884,34 +1462,34 @@ public class VisualEditor {
 		Composite composite_4_5 = new Composite(scrolledComposite_1_5, SWT.EMBEDDED);
 		composite_4_5.setLayout(new RowLayout(SWT.VERTICAL));
 		
-		Button downDoorFlagACheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagACheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagACheck.setText("Door may be opened and closed, no lock, resets to open");
 		
-		Button downDoorFlagBCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagBCheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagBCheck.setText("Door resets to closed");
 		
-		Button downDoorFlagCCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagCCheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagCCheck.setText("Door resets to locked");
 		
-		Button downDoorFlagFCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagFCheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagFCheck.setText("Door with unpickable lock (key needed)");
 		
-		Button downDoorFlagGCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagGCheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagGCheck.setText("Door immune to \"pass door\" spell (can pick)");
 		
-		Button downDoorFlagHCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagHCheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagHCheck.setText("Lock easy to pick");
 		
-		Button downDoorFlagICheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagICheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagICheck.setText("Lock hard to pick");
 		
-		Button downDoorFlagJCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagJCheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagJCheck.setText("Lock infuriating to pick");
 		
-		Button downDoorFlagKCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagKCheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagKCheck.setText("Door cannot be closed");
 		
-		Button downDoorFlagLCheck = new Button(composite_4_5, SWT.CHECK);
+		downDoorFlagLCheck = new Button(composite_4_5, SWT.CHECK);
 		downDoorFlagLCheck.setText("Door cannot be locked");
 		scrolledComposite_1_5.setContent(composite_4_5);
 		scrolledComposite_1_5.setMinSize(composite_4_5.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -1174,5 +1752,287 @@ public class VisualEditor {
 	}
 	public void setRoomDescTextVal(String text_2) {
 		roomDescText.setText(text_2);
+	}
+	public Table getRoomExtrasTable() {
+		return roomExtrasTable;
+	}
+	public TableViewerColumn getRoomExtrasKeywordsColumn() {
+		return tableViewerColumn;
+	}
+	public TableViewerColumn getRoomExtrasDescColumn() {
+		return tableViewerColumn_1;
+	}
+	public Text getNorthDescText() {
+		return northDescText;
+	}
+	public Text getNorthDoorKeywordText() {
+		return northDoorKeywordText;
+	}
+	public Combo getNorthDoorStateCombo() {
+		return northDoorStateCombo;
+	}
+	public Composite getNorthComposite() {
+		return northComposite;
+	}
+	public Combo getNorthDoorKeyCombo() {
+		return northDoorKeyCombo;
+	}
+	public Combo getNorthDoorSizeCombo() {
+		return northDoorSizeCombo;
+	}
+	public Button getNorthDoorFlagJCheck() {
+		return northDoorFlagJCheck;
+	}
+	public Button getNorthDoorFlagHCheck() {
+		return northDoorFlagHCheck;
+	}
+	public Button getNorthDoorFlagKCheck() {
+		return northDoorFlagKCheck;
+	}
+	public Button getNorthDoorFlagACheck() {
+		return northDoorFlagACheck;
+	}
+	public Button getNorthDoorFlagBCheck() {
+		return northDoorFlagBCheck;
+	}
+	public Button getNorthDoorFlagICheck() {
+		return northDoorFlagICheck;
+	}
+	public Button getNorthDoorFlagFCheck() {
+		return northDoorFlagFCheck;
+	}
+	public Button getNorthDoorFlagCCheck() {
+		return northDoorFlagCCheck;
+	}
+	public Button getNorthDoorFlagLCheck() {
+		return northDoorFlagLCheck;
+	}
+	public Button getNorthDoorFlagGCheck() {
+		return northDoorFlagGCheck;
+	}
+	public Text getEastDescText() {
+		return eastDescText;
+	}
+	public Text getEastDoorKeywordText() {
+		return eastDoorKeywordText;
+	}
+	public Combo getEastDoorStateCombo() {
+		return eastDoorStateCombo;
+	}
+	public Combo getEastDoorKeyCombo() {
+		return eastDoorKeyCombo;
+	}
+	public Combo getEastDoorSizeCombo() {
+		return eastDoorSizeCombo;
+	}
+	public Button getEastDoorFlagJCheck() {
+		return eastDoorFlagJCheck;
+	}
+	public Button getEastDoorFlagACheck() {
+		return eastDoorFlagACheck;
+	}
+	public Button getEastDoorFlagICheck() {
+		return eastDoorFlagICheck;
+	}
+	public Button getEastDoorFlagCCheck() {
+		return eastDoorFlagCCheck;
+	}
+	public Button getEastDoorFlagFCheck() {
+		return eastDoorFlagFCheck;
+	}
+	public Button getEastDoorFlagGCheck() {
+		return eastDoorFlagGCheck;
+	}
+	public Button getEastDoorFlagHCheck() {
+		return eastDoorFlagHCheck;
+	}
+	public Button getEastDoorFlagKCheck() {
+		return eastDoorFlagKCheck;
+	}
+	public Button getEastDoorFlagLCheck() {
+		return eastDoorFlagLCheck;
+	}
+	public Button getEastDoorFlagBCheck() {
+		return eastDoorFlagBCheck;
+	}
+	public Combo getSouthDoorKeyCombo() {
+		return southDoorKeyCombo;
+	}
+	public Combo getSouthDoorStateCombo() {
+		return southDoorStateCombo;
+	}
+	public Combo getSouthDoorSizeCombo() {
+		return southDoorSizeCombo;
+	}
+	public Text getSouthDescText() {
+		return southDescText;
+	}
+	public Text getSouthDoorKeywordText() {
+		return southDoorKeywordText;
+	}
+	public Button getSouthDoorFlagICheck() {
+		return southDoorFlagICheck;
+	}
+	public Button getSouthDoorFlagKCheck() {
+		return southDoorFlagKCheck;
+	}
+	public Button getSouthDoorFlagCCheck() {
+		return southDoorFlagCCheck;
+	}
+	public Button getSouthDoorFlagJCheck() {
+		return southDoorFlagJCheck;
+	}
+	public Button getSouthDoorFlagLCheck() {
+		return southDoorFlagLCheck;
+	}
+	public Button getSouthDoorFlagGCheck() {
+		return southDoorFlagGCheck;
+	}
+	public Button getSouthDoorFlagACheck() {
+		return southDoorFlagACheck;
+	}
+	public Button getSouthDoorFlagBCheck() {
+		return southDoorFlagBCheck;
+	}
+	public Button getSouthDoorFlagFCheck() {
+		return southDoorFlagFCheck;
+	}
+	public Button getSouthDoorFlagHCheck() {
+		return southDoorFlagHCheck;
+	}
+	public Combo getWestDoorSizeCombo() {
+		return westDoorSizeCombo;
+	}
+	public Combo getWestDoorKeyCombo() {
+		return westDoorKeyCombo;
+	}
+	public Text getWestDescText() {
+		return westDescText;
+	}
+	public Combo getWestDoorStateCombo() {
+		return westDoorStateCombo;
+	}
+	public Text getWestDoorKeywordText() {
+		return westDoorKeywordText;
+	}
+	public Button getWestDoorFlagFCheck() {
+		return westDoorFlagFCheck;
+	}
+	public Button getWestDoorFlagGCheck() {
+		return westDoorFlagGCheck;
+	}
+	public Button getWestDoorFlagKCheck() {
+		return westDoorFlagKCheck;
+	}
+	public Button getWestDoorFlagACheck() {
+		return westDoorFlagACheck;
+	}
+	public Button getWestDoorFlagICheck() {
+		return westDoorFlagICheck;
+	}
+	public Button getWestDoorFlagLCheck() {
+		return westDoorFlagLCheck;
+	}
+	public Button getWestDoorFlagHCheck() {
+		return westDoorFlagHCheck;
+	}
+	public Button getWestDoorFlagJCheck() {
+		return westDoorFlagJCheck;
+	}
+	public Button getWestDoorFlagBCheck() {
+		return westDoorFlagBCheck;
+	}
+	public Button getWestDoorFlagCCheck() {
+		return westDoorFlagCCheck;
+	}
+	public Text getUpDoorKeywordText() {
+		return upDoorKeywordText;
+	}
+	public Text getUpDescText() {
+		return upDescText;
+	}
+	public Combo getUpDoorStateCombo() {
+		return upDoorStateCombo;
+	}
+	public Combo getUpDoorKeyCombo() {
+		return upDoorKeyCombo;
+	}
+	public Combo getUpDoorSizeCombo() {
+		return upDoorSizeCombo;
+	}
+	public Button getUpDoorFlagACheck() {
+		return upDoorFlagACheck;
+	}
+	public Button getUpDoorFlagKCheck() {
+		return upDoorFlagKCheck;
+	}
+	public Button getUpDoorFlagBCheck() {
+		return upDoorFlagBCheck;
+	}
+	public Button getUpDoorFlagFCheck() {
+		return upDoorFlagFCheck;
+	}
+	public Button getUpDoorFlagLCheck() {
+		return upDoorFlagLCheck;
+	}
+	public Button getUpDoorFlagCCheck() {
+		return upDoorFlagCCheck;
+	}
+	public Button getUpDoorFlagJCheck() {
+		return upDoorFlagJCheck;
+	}
+	public Button getUpDoorFlagICheck() {
+		return upDoorFlagICheck;
+	}
+	public Button getUpDoorFlagGCheck() {
+		return upDoorFlagGCheck;
+	}
+	public Button getUpDoorFlagHCheck() {
+		return upDoorFlagHCheck;
+	}
+	public Text getDownDescText() {
+		return downDescText;
+	}
+	public Combo getDownDoorKeyCombo() {
+		return downDoorKeyCombo;
+	}
+	public Combo getDownDoorStateCombo() {
+		return downDoorStateCombo;
+	}
+	public Combo getDownDoorSizeCombo() {
+		return downDoorSizeCombo;
+	}
+	public Text getDownDoorKeywordText() {
+		return downDoorKeywordText;
+	}
+	public Button getDownDoorFlagACheck() {
+		return downDoorFlagACheck;
+	}
+	public Button getDownDoorFlagGCheck() {
+		return downDoorFlagGCheck;
+	}
+	public Button getDownDoorFlagHCheck() {
+		return downDoorFlagHCheck;
+	}
+	public Button getDownDoorFlagBCheck() {
+		return downDoorFlagBCheck;
+	}
+	public Button getDownDoorFlagJCheck() {
+		return downDoorFlagJCheck;
+	}
+	public Button getDownDoorFlagCCheck() {
+		return downDoorFlagCCheck;
+	}
+	public Button getDownDoorFlagFCheck() {
+		return downDoorFlagFCheck;
+	}
+	public Button getDownDoorFlagKCheck() {
+		return downDoorFlagKCheck;
+	}
+	public Button getDownDoorFlagICheck() {
+		return downDoorFlagICheck;
+	}
+	public Button getDownDoorFlagLCheck() {
+		return downDoorFlagLCheck;
 	}
 }
