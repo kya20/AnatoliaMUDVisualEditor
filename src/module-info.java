@@ -8,4 +8,7 @@ module AnatoliaMUDVisualEditor {
 	requires org.junit.platform.launcher;
 	requires org.junit.platform.engine;
 	requires org.eclipse.core.resources;
+	requires org.eclipse.core.databinding;
+	requires org.eclipse.jface.databinding;
+	requires org.eclipse.core.databinding.observable;
 }

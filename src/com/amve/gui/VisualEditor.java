@@ -83,8 +83,16 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.widgets.Scale;
+
+import org.eclipse.core.databinding.*;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 
 public class VisualEditor {
+	private DataBindingContext m_bindingContext;
 
 	protected Display display;
 	protected Shell shell;
@@ -191,19 +199,28 @@ public class VisualEditor {
 	private Button downDoorFlagKCheck;
 	private Button downDoorFlagICheck;
 	private Button downDoorFlagLCheck;
+	private Scale roomHPScale;
+	private Spinner roomHPSpinner;
+	private Scale roomMPScale;
+	private Spinner roomMPSpinner;
 
 	/**
 	 * Launch the application.
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		try {
-			
-			VisualEditor window = new VisualEditor();
-			window.open();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Display display = Display.getDefault();
+		Realm.runWithDefault(SWTObservables.getRealm(display), new Runnable() {
+			public void run() {
+				try {
+					
+					VisualEditor window = new VisualEditor();
+					window.open();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	/**
@@ -239,6 +256,8 @@ public class VisualEditor {
 			extrasItem.setText(0, extra.extraDesciptionKeyword.toString());
 			extrasItem.setText(1, extra.extraDescriptionText);
 		}
+		getRoomHPSpinner().setSelection(Integer.parseInt(parser.getArea().getRooms().get(key).healingAdjust));
+		getRoomMPSpinner().setSelection(Integer.parseInt(parser.getArea().getRooms().get(key).manaAdjust));
 		getNorthDescText().setText("");
 		getNorthDoorKeywordText().setText("");
 		getNorthDoorStateCombo().select(-1);
@@ -904,8 +923,49 @@ public class VisualEditor {
 		grpSectorType.setText("Sector Type");
 		
 		Group grpRecoveryRates = new Group(grpRoomFlags, SWT.NONE);
+		grpRecoveryRates.setLayout(new FillLayout(SWT.HORIZONTAL));
 		grpRecoveryRates.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		grpRecoveryRates.setText("Recovery Rates");
+		
+		Composite composite_2 = new Composite(grpRecoveryRates, SWT.NONE);
+		RowLayout rl_composite_2 = new RowLayout(SWT.HORIZONTAL);
+		rl_composite_2.marginBottom = 0;
+		rl_composite_2.center = true;
+		rl_composite_2.justify = true;
+		composite_2.setLayout(rl_composite_2);
+		
+		Label lblNewLabel = new Label(composite_2, SWT.NONE);
+		lblNewLabel.setText("HP Recovery Rate");
+		
+		roomHPScale = new Scale(composite_2, SWT.NONE);
+		roomHPScale.setPageIncrement(25);
+		roomHPScale.setMaximum(200);
+		roomHPScale.setSelection(100);
+		
+		roomHPSpinner = new Spinner(composite_2, SWT.BORDER);
+		roomHPSpinner.setMaximum(200);
+		roomHPSpinner.setSelection(100);
+		roomHPSpinner.setLayoutData(new RowData(60, SWT.DEFAULT));
+		
+		Composite composite_3 = new Composite(grpRecoveryRates, SWT.NONE);
+		RowLayout rl_composite_3 = new RowLayout(SWT.HORIZONTAL);
+		rl_composite_3.marginBottom = 0;
+		rl_composite_3.justify = true;
+		rl_composite_3.center = true;
+		composite_3.setLayout(rl_composite_3);
+		
+		Label lblNewLabel_1 = new Label(composite_3, SWT.NONE);
+		lblNewLabel_1.setText("MP Recovery Rate");
+		
+		roomMPScale = new Scale(composite_3, SWT.NONE);
+		roomMPScale.setPageIncrement(25);
+		roomMPScale.setMaximum(200);
+		roomMPScale.setSelection(100);
+		
+		roomMPSpinner = new Spinner(composite_3, SWT.BORDER);
+		roomMPSpinner.setMaximum(200);
+		roomMPSpinner.setSelection(100);
+		roomMPSpinner.setLayoutData(new RowData(60, -1));
 		
 		grpDoors = new Group(sashForm, SWT.NONE);
 		grpDoors.setText("Doors");
@@ -932,6 +992,7 @@ public class VisualEditor {
 		gd_northDoorCheckbox.horizontalIndent = 1;
 		northDoorCheckbox.setLayoutData(gd_northDoorCheckbox);
 		northDoorCheckbox.setText("There's a door");
+		
 		
 		Label lblDoorKeywordoptional = new Label(northComposite, SWT.NONE);
 		lblDoorKeywordoptional.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
@@ -1523,6 +1584,7 @@ public class VisualEditor {
 		text = new Text(scrolledComposite, SWT.BORDER | SWT.WRAP | SWT.H_SCROLL | SWT.CANCEL | SWT.MULTI);
 		scrolledComposite.setContent(text);
 		scrolledComposite.setMinSize(text.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		m_bindingContext = initDataBindings();
 
 	}
 	
@@ -2034,5 +2096,30 @@ public class VisualEditor {
 	}
 	public Button getDownDoorFlagLCheck() {
 		return downDoorFlagLCheck;
+	}
+	public Scale getRoomHPScale() {
+		return roomHPScale;
+	}
+	public Spinner getRoomHPSpinner() {
+		return roomHPSpinner;
+	}
+	public Scale getRoomMPScale() {
+		return roomMPScale;
+	}
+	public Spinner getRoomMPSpinner() {
+		return roomMPSpinner;
+	}
+	protected DataBindingContext initDataBindings() {
+		DataBindingContext bindingContext = new DataBindingContext();
+		//
+		IObservableValue observeSelectionRoomHPScaleObserveWidget = WidgetProperties.selection().observe(roomHPScale);
+		IObservableValue observeSelectionRoomHPSpinnerObserveWidget = WidgetProperties.selection().observe(roomHPSpinner);
+		bindingContext.bindValue(observeSelectionRoomHPScaleObserveWidget, observeSelectionRoomHPSpinnerObserveWidget, null, null);
+		//
+		IObservableValue observeSelectionRoomMPScaleObserveWidget = WidgetProperties.selection().observe(roomMPScale);
+		IObservableValue observeSelectionRoomMPSpinnerObserveWidget = WidgetProperties.selection().observe(roomMPSpinner);
+		bindingContext.bindValue(observeSelectionRoomMPScaleObserveWidget, observeSelectionRoomMPSpinnerObserveWidget, null, null);
+		//
+		return bindingContext;
 	}
 }
