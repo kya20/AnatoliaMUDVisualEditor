@@ -30,6 +30,7 @@ import com.amve.area.Room;
 import com.amve.globals.GlobalVariables;
 import com.amve.globals.GlobalVariables.DoorFlag;
 import com.amve.globals.GlobalVariables.ExitDirection;
+import com.amve.globals.GlobalVariables.RoomFlag;
 import com.amve.parser.AreaFileParser;
 import com.amve.utils.Exit;
 import com.amve.utils.ExtraDescription;
@@ -214,6 +215,24 @@ public class VisualEditor {
 	private Button roomSectorAir;
 	private Button roomSectorField;
 	private Button roomSectorUnused;
+	private Button btnRoomDark;
+	private Button btnRoomNoMob;
+	private Button btnRoomIndoors;
+	private Button btnRoomPrivate;
+	private Button btnRoomSafe;
+	private Button btnRoomSolitary;
+	private Button btnRoomPetShop;
+	private Button btnRoomNoRecall;
+	private Button btnRoomImpOnly;
+	private Button btnRoomGodsOnly;
+	private Button btnRoomHeroesOnly;
+	private Button btnRoomNewbiesOnly;
+	private Button btnRoomLaw;
+	private Button btnRoomNowhere;
+	private Button btnRoomBank;
+	private Button btnRoomNoMagic;
+	private Button btnRoomNoSummon;
+	private Button btnRoomRegistry;
 
 	/**
 	 * Launch the application.
@@ -278,9 +297,96 @@ public class VisualEditor {
 		getRoomHPSpinner().setSelection(Integer.parseInt(parser.getArea().getRooms().get(key).healingAdjust));
 		getRoomMPSpinner().setSelection(Integer.parseInt(parser.getArea().getRooms().get(key).manaAdjust));
 		
+		//room flag buttons
+		getBtnRoomDark().setSelection(false);
+		getBtnRoomNoMob().setSelection(false);
+		getBtnRoomIndoors().setSelection(false);
+		getBtnRoomPrivate().setSelection(false);
+		getBtnRoomSafe().setSelection(false);
+		getBtnRoomSolitary().setSelection(false);
+		getBtnRoomPetShop().setSelection(false);
+		getBtnRoomNoRecall().setSelection(false);
+		getBtnRoomImpOnly().setSelection(false);
+		getBtnRoomGodsOnly().setSelection(false);
+		getBtnRoomHeroesOnly().setSelection(false);
+		getBtnRoomNewbiesOnly().setSelection(false);
+		getBtnRoomLaw().setSelection(false);
+		getBtnRoomNowhere().setSelection(false);
+		getBtnRoomBank().setSelection(false);
+		getBtnRoomNoMagic().setSelection(false);
+		getBtnRoomNoSummon().setSelection(false);
+		getBtnRoomRegistry().setSelection(false);
+		
+		if (parser.getArea().getRooms().get(key).roomFlags == null || parser.getArea().getRooms().get(key).roomFlags.isEmpty()) {
+			System.out.println("null/empty flags: " + key);
+			System.out.println(parser.getArea().getRooms().get(key).header);
+		}
+		for (RoomFlag flag : parser.getArea().getRooms().get(key).roomFlags) {
+			if (flag == null) { //it's always room 16160 forgotten alley
+				System.out.println("null flag: " + key);
+				System.out.println(parser.getArea().getRooms().get(key).header);
+			}
+			switch (flag.name) {
+			case "dark":
+				getBtnRoomDark().setSelection(true);
+				break;
+			case "no mob":
+				getBtnRoomNoMob().setSelection(true);
+				break;
+			case "indoors":
+				getBtnRoomIndoors().setSelection(true);
+				break;
+			case "private":
+				getBtnRoomPrivate().setSelection(true);
+				break;
+			case "safe":
+				getBtnRoomSafe().setSelection(true);
+				break;
+			case "solitary":
+				getBtnRoomSolitary().setSelection(true);
+				break;
+			case "pet shop":
+				getBtnRoomPetShop().setSelection(true);
+				break;
+			case "no recall":
+				getBtnRoomNoRecall().setSelection(true);
+				break;
+			case "imp only":
+				getBtnRoomImpOnly().setSelection(true);
+				break;
+			case "gods only":
+				getBtnRoomGodsOnly().setSelection(true);
+				break;
+			case "heroes only":
+				getBtnRoomHeroesOnly().setSelection(true);
+				break;
+			case "newbies only":
+				getBtnRoomNewbiesOnly().setSelection(true);
+				break;
+			case "law":
+				getBtnRoomLaw().setSelection(true);
+				break;
+			case "nowhere":
+				getBtnRoomNowhere().setSelection(true);
+				break;
+			case "bank":
+				getBtnRoomBank().setSelection(true);
+				break;
+			case "no magic":
+				getBtnRoomNoMagic().setSelection(true);
+				break;
+			case "no summon":
+				getBtnRoomNoSummon().setSelection(true);
+				break;
+			case "registry":
+				getBtnRoomRegistry().setSelection(true);
+				break;
+			}
+		}
+		
 		//sector buttons
 		if (parser.getArea().getRooms().get(key).roomSector == null) {
-			System.out.println(key);
+			System.out.println("null sectors: " + key);
 			System.out.println(parser.getArea().getRooms().get(key).header);
 		}
 		switch (parser.getArea().getRooms().get(key).roomSector.name) {
@@ -1100,11 +1206,68 @@ public class VisualEditor {
 		grpRoomFlags.setText("Room Flags");
 		grpRoomFlags.setLayout(new GridLayout(1, false));
 		
-		Group grpFlags = new Group(grpRoomFlags, SWT.NONE);
-		GridData gd_grpFlags = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		gd_grpFlags.heightHint = 157;
-		grpFlags.setLayoutData(gd_grpFlags);
-		grpFlags.setText("Flags");
+		Group grpRoomFlagsInner = new Group(grpRoomFlags, SWT.NONE);
+		RowLayout rl_grpRoomFlagsInner = new RowLayout(SWT.HORIZONTAL);
+		rl_grpRoomFlagsInner.pack = false;
+		grpRoomFlagsInner.setLayout(rl_grpRoomFlagsInner);
+		GridData gd_grpRoomFlagsInner = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpRoomFlagsInner.heightHint = 157;
+		grpRoomFlagsInner.setLayoutData(gd_grpRoomFlagsInner);
+		grpRoomFlagsInner.setText("Flags");
+		
+		btnRoomDark = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomDark.setText("Dark");
+		
+		btnRoomNoMob = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomNoMob.setText("No mob");
+		
+		btnRoomIndoors = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomIndoors.setText("Indoors");
+		
+		btnRoomPrivate = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomPrivate.setText("Private");
+		
+		btnRoomSafe = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomSafe.setText("Safe");
+		
+		btnRoomSolitary = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomSolitary.setText("Solitary");
+		
+		btnRoomPetShop = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomPetShop.setText("Pet Shop");
+		
+		btnRoomNoRecall = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomNoRecall.setText("No recall");
+		
+		btnRoomImpOnly = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomImpOnly.setText("Imp only");
+		
+		btnRoomGodsOnly = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomGodsOnly.setText("Gods only");
+		
+		btnRoomHeroesOnly = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomHeroesOnly.setText("Heroes only");
+		
+		btnRoomNewbiesOnly = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomNewbiesOnly.setText("Newbies only");
+		
+		btnRoomLaw = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomLaw.setText("Law");
+		
+		btnRoomNowhere = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomNowhere.setText("Nowhere");
+		
+		btnRoomBank = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomBank.setText("Bank");
+		
+		btnRoomNoMagic = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomNoMagic.setText("No magic");
+		
+		btnRoomNoSummon = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomNoSummon.setText("No summon");
+		
+		btnRoomRegistry = new Button(grpRoomFlagsInner, SWT.CHECK);
+		btnRoomRegistry.setText("Registry");
 		
 		Group grpSectorType = new Group(grpRoomFlags, SWT.NONE);
 		RowLayout rl_grpSectorType = new RowLayout(SWT.HORIZONTAL);
@@ -2385,5 +2548,59 @@ public class VisualEditor {
 	}
 	public Button getRoomSectorUnused() {
 		return roomSectorUnused;
+	}
+	public Button getBtnRoomRegistry() {
+		return btnRoomRegistry;
+	}
+	public Button getBtnRoomNowhere() {
+		return btnRoomNowhere;
+	}
+	public Button getBtnRoomBank() {
+		return btnRoomBank;
+	}
+	public Button getBtnRoomDark() {
+		return btnRoomDark;
+	}
+	public Button getBtnRoomNoSummon() {
+		return btnRoomNoSummon;
+	}
+	public Button getBtnRoomNoMob() {
+		return btnRoomNoMob;
+	}
+	public Button getBtnRoomHeroesOnly() {
+		return btnRoomHeroesOnly;
+	}
+	public Button getBtnRoomNoMagic() {
+		return btnRoomNoMagic;
+	}
+	public Button getBtnRoomPrivate() {
+		return btnRoomPrivate;
+	}
+	public Button getBtnRoomLaw() {
+		return btnRoomLaw;
+	}
+	public Button getBtnRoomIndoors() {
+		return btnRoomIndoors;
+	}
+	public Button getBtnRoomSolitary() {
+		return btnRoomSolitary;
+	}
+	public Button getBtnRoomSafe() {
+		return btnRoomSafe;
+	}
+	public Button getBtnRoomImpOnly() {
+		return btnRoomImpOnly;
+	}
+	public Button getBtnRoomNoRecall() {
+		return btnRoomNoRecall;
+	}
+	public Button getBtnRoomNewbiesOnly() {
+		return btnRoomNewbiesOnly;
+	}
+	public Button getBtnRoomPetShop() {
+		return btnRoomPetShop;
+	}
+	public Button getBtnRoomGodsOnly() {
+		return btnRoomGodsOnly;
 	}
 }
