@@ -133,9 +133,5 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.ui.workbench_3.124.0.v20211116-0651.jar" sourcepath="lib/org.eclipse.ui.workbench_3.123.0.v20210817-0704.jar"/>
 	<classpathentry kind="lib" path="lib/org.hamcrest.core_1.3.0.v20180420-1519.jar" sourcepath="lib/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
 	<classpathentry kind="lib" path="lib/swing2swt.jar" sourcepath="lib/swing2swt.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.databinding.beans_1.8.0.v20210619-1111.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.databinding.beans_1.8.0.v20210619-1111.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.databinding.observable_1.12.0.v20211231-1006.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.databinding.observable_1.12.0.v20211231-1006.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.databinding.property_1.9.0.v20210619-1129.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.databinding.property_1.9.0.v20210619-1129.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.jface.databinding_1.13.0.v20210619-1146.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.jface.databinding_1.13.0.v20210619-1146.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

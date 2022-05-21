@@ -96,6 +96,7 @@ public class Room {
 		if (list == null) 
 			list = new ArrayList<MobileReset>();
 		list.add(mobileReset);
+		this.mobileResets.put(mobileReset.mobileVNum, list);
 	}
 	
 	public Map<String, List<ObjectReset>> getObjectResets() {
@@ -107,6 +108,7 @@ public class Room {
 		if (list == null)
 			list = new ArrayList<ObjectReset>();
 		list.add(objectReset);
+		this.objectResets.put(objectReset.objectVNum, list);
 	}
 	
 	//function that returns a string output in normal area file format for the room
