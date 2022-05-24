@@ -30,6 +30,8 @@ import com.amve.utils.Fountain;
 import com.amve.utils.Furniture;
 import com.amve.utils.GiveReset;
 import com.amve.utils.Item;
+import com.amve.utils.Jewelry;
+import com.amve.utils.Key;
 import com.amve.utils.Light;
 import com.amve.utils.MobileReset;
 import com.amve.utils.Money;
@@ -467,6 +469,14 @@ public class AreaFileParser {
 				break;
 			case "treasure":
 				item = new Treasure(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2],line8[3], line9, line11, line12);
+				break;
+			case "key":
+				item = new Key(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2],line8[3], line9, line11, line12);
+				break;
+			case "jewelry":
+				item = new Jewelry(line6[0], line6[1], line6[2], line8[0], 
 						line8[1], line8[2],line8[3], line9, line11, line12);
 				break;
 				

@@ -62,11 +62,21 @@ public class Room {
 	//for reading from file
 	
 	public void addFlags(String flags) {
-		// Instead of using "ABC" Letter Translations, they preferred this notation "1|2|4"
-		List<String> splitted = List.of(flags.split("\\|"));
-		splitted.forEach(f -> {
-			this.roomFlags.add(RoomFlag.valueOfNum(Integer.parseInt(f)));
-		});
+		// Both "ABC" Letter Translations and "1|2|4" can be used.
+		
+		if(flags.matches("[A-Z]+")) {
+			for (int i = 0; i < flags.length() ; i++) {
+				this.roomFlags.add(RoomFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(flags.substring(i, i+1))));
+			}
+		}
+		else if(flags.matches("\\d+(\\|\\d+)*")) {
+			List<String> splitted = List.of(flags.split("\\|"));
+			splitted.forEach(f -> {
+				this.roomFlags.add(RoomFlag.valueOfNum(Integer.parseInt(f)));
+			});
+		}
+		
+		
 	}
 	
 	public void addExit(Integer direction, String description, String keyword, 
