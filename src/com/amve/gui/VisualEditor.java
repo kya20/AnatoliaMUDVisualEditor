@@ -71,11 +71,14 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.core.resources.*;
 import org.eclipse.swt.widgets.Event;
@@ -103,7 +106,6 @@ public class VisualEditor {
 	private Text text;
 	private Text roomNameText;
 	private Text roomDescText;
-	private Table roomExtrasTable;
 	private Text northDescText;
 	private Text northDoorKeywordText;
 	private Text eastDescText;
@@ -119,8 +121,6 @@ public class VisualEditor {
 	private Tree tree;
 	private Spinner RoomVnumSpinner;
 	private Group grpDoors;
-	private TableViewerColumn tableViewerColumn;
-	private TableViewerColumn tableViewerColumn_1;
 	private Combo northDoorStateCombo;
 	private Composite northComposite;
 	private Combo northDoorKeyCombo;
@@ -394,6 +394,7 @@ public class VisualEditor {
 	private Text text_3;
 	private Text text_4;
 	private Text txtTxt;
+	private Table roomExtrasTable;
 
 	/**
 	 * Launch the application.
@@ -1295,8 +1296,15 @@ public class VisualEditor {
 		TabItem tbtmRoomEditor = new TabItem(tabFolder_1, SWT.NONE);
 		tbtmRoomEditor.setText("Room Editor");
 		
-		SashForm sashForm = new SashForm(tabFolder_1, SWT.NONE);
-		tbtmRoomEditor.setControl(sashForm);
+		ScrolledComposite scrolledComposite_3 = new ScrolledComposite(tabFolder_1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		tbtmRoomEditor.setControl(scrolledComposite_3);
+		scrolledComposite_3.setExpandHorizontal(true);
+		scrolledComposite_3.setExpandVertical(true);
+		
+		Composite composite_15 = new Composite(scrolledComposite_3, SWT.NONE);
+		composite_15.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		SashForm sashForm = new SashForm(composite_15, SWT.NONE);
 		
 		Group grpRoomData = new Group(sashForm, SWT.NONE);
 		grpRoomData.setText("Room Data");
@@ -1305,6 +1313,7 @@ public class VisualEditor {
 		Group grpVnum = new Group(grpRoomData, SWT.NONE);
 		grpVnum.setLayout(new GridLayout(2, false));
 		GridData gd_grpVnum = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpVnum.widthHint = 1;
 		gd_grpVnum.heightHint = 35;
 		grpVnum.setLayoutData(gd_grpVnum);
 		grpVnum.setText("Vnum");
@@ -1323,6 +1332,7 @@ public class VisualEditor {
 		Group grpDescription = new Group(grpRoomData, SWT.NONE);
 		grpDescription.setLayout(new GridLayout(1, false));
 		GridData gd_grpDescription = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_grpDescription.widthHint = 250;
 		gd_grpDescription.heightHint = 355;
 		grpDescription.setLayoutData(gd_grpDescription);
 		grpDescription.setText("Description");
@@ -1333,7 +1343,9 @@ public class VisualEditor {
 		
 		roomNameText = new Text(grpDescription, SWT.BORDER);
 		roomNameText.setToolTipText("Room name (a few words)");
-		roomNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_roomNameText = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_roomNameText.widthHint = 1;
+		roomNameText.setLayoutData(gd_roomNameText);
 		
 		Label lblRoomDescription = new Label(grpDescription, SWT.NONE);
 		lblRoomDescription.setText("Room Description");
@@ -1341,27 +1353,28 @@ public class VisualEditor {
 		roomDescText = new Text(grpDescription, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
 		roomDescText.setToolTipText("Room description (a few lines)");
 		GridData gd_roomDescText = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_roomDescText.widthHint = 250;
 		gd_roomDescText.heightHint = 68;
 		roomDescText.setLayoutData(gd_roomDescText);
 		
 		Label lblDetailsAndExtras = new Label(grpDescription, SWT.NONE);
 		lblDetailsAndExtras.setText("Details and Extras");
 		
-		TableViewer tableViewer = new TableViewer(grpDescription, SWT.BORDER | SWT.FULL_SELECTION);
-		roomExtrasTable = tableViewer.getTable();
-		roomExtrasTable.setLinesVisible(true);
-		roomExtrasTable.setHeaderVisible(true);
+		roomExtrasTable = new Table(grpDescription, SWT.BORDER | SWT.FULL_SELECTION);
 		roomExtrasTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		roomExtrasTable.setHeaderVisible(true);
+		roomExtrasTable.setLinesVisible(true);
+		makeLastColumnAutoExpand(roomExtrasTable, 200);
 		
-		tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnKeywords = tableViewerColumn.getColumn();
-		tblclmnKeywords.setWidth(100);
-		tblclmnKeywords.setText("keywords");
+		TableColumn tblclmnKeywords = new TableColumn(roomExtrasTable, SWT.NONE);
+		tblclmnKeywords.setWidth(150);
+		tblclmnKeywords.setText("Keywords");
 		
-		tableViewerColumn_1 = new TableViewerColumn(tableViewer, SWT.NONE);
-		TableColumn tblclmnDescription = tableViewerColumn_1.getColumn();
-		tblclmnDescription.setWidth(223);
-		tblclmnDescription.setText("Description");
+		TableColumn tblclmnDetails = new TableColumn(roomExtrasTable, SWT.NONE);
+		Rectangle rect = roomExtrasTable.getClientArea();
+		int extraspace = rect.width - 100;
+		tblclmnDetails.setWidth(300);
+		tblclmnDetails.setText("Details");
 		
 		Group grpRoomFlags = new Group(sashForm, SWT.NONE);
 		grpRoomFlags.setText("Room Flags");
@@ -1372,7 +1385,7 @@ public class VisualEditor {
 		rl_grpRoomFlagsInner.pack = false;
 		grpRoomFlagsInner.setLayout(rl_grpRoomFlagsInner);
 		GridData gd_grpRoomFlagsInner = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		gd_grpRoomFlagsInner.heightHint = 157;
+		gd_grpRoomFlagsInner.widthHint = 1;
 		grpRoomFlagsInner.setLayoutData(gd_grpRoomFlagsInner);
 		grpRoomFlagsInner.setText("Flags");
 		
@@ -1435,7 +1448,7 @@ public class VisualEditor {
 		rl_grpSectorType.pack = false;
 		grpSectorType.setLayout(rl_grpSectorType);
 		GridData gd_grpSectorType = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		gd_grpSectorType.heightHint = 78;
+		gd_grpSectorType.widthHint = 1;
 		grpSectorType.setLayoutData(gd_grpSectorType);
 		grpSectorType.setText("Sector Type");
 		
@@ -1479,7 +1492,9 @@ public class VisualEditor {
 		
 		Group grpRecoveryRates = new Group(grpRoomFlags, SWT.NONE);
 		grpRecoveryRates.setLayout(new FillLayout(SWT.HORIZONTAL));
-		grpRecoveryRates.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		GridData gd_grpRecoveryRates = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpRecoveryRates.widthHint = 1;
+		grpRecoveryRates.setLayoutData(gd_grpRecoveryRates);
 		grpRecoveryRates.setText("Recovery Rates");
 		
 		Composite composite_2 = new Composite(grpRecoveryRates, SWT.NONE);
@@ -1583,7 +1598,9 @@ public class VisualEditor {
 		
 		Group grpResets = new Group(northComposite, SWT.NONE);
 		grpResets.setLayout(new FillLayout(SWT.HORIZONTAL));
-		grpResets.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_grpResets = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_grpResets.widthHint = 200;
+		grpResets.setLayoutData(gd_grpResets);
 		grpResets.setText("Resets");
 		
 		ScrolledComposite scrolledComposite_1 = new ScrolledComposite(grpResets, SWT.V_SCROLL);
@@ -1679,7 +1696,9 @@ public class VisualEditor {
 		eastDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpResets_1 = new Group(eastComposite, SWT.NONE);
-		grpResets_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_grpResets_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_grpResets_1.widthHint = 200;
+		grpResets_1.setLayoutData(gd_grpResets_1);
 		grpResets_1.setText("Resets");
 		grpResets_1.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
@@ -1776,7 +1795,9 @@ public class VisualEditor {
 		southDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpResets_2 = new Group(southComposite, SWT.NONE);
-		grpResets_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_grpResets_2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_grpResets_2.widthHint = 200;
+		grpResets_2.setLayoutData(gd_grpResets_2);
 		grpResets_2.setText("Resets");
 		grpResets_2.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
@@ -1873,7 +1894,9 @@ public class VisualEditor {
 		westDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpResets_3 = new Group(westComposite, SWT.NONE);
-		grpResets_3.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_grpResets_3 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_grpResets_3.widthHint = 200;
+		grpResets_3.setLayoutData(gd_grpResets_3);
 		grpResets_3.setText("Resets");
 		grpResets_3.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
@@ -1970,7 +1993,9 @@ public class VisualEditor {
 		upDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpResets_4 = new Group(upComposite, SWT.NONE);
-		grpResets_4.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_grpResets_4 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_grpResets_4.widthHint = 200;
+		grpResets_4.setLayoutData(gd_grpResets_4);
 		grpResets_4.setText("Resets");
 		grpResets_4.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
@@ -2067,7 +2092,9 @@ public class VisualEditor {
 		downDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpResets_5 = new Group(downComposite, SWT.NONE);
-		grpResets_5.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_grpResets_5 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_grpResets_5.widthHint = 200;
+		grpResets_5.setLayoutData(gd_grpResets_5);
 		grpResets_5.setText("Resets");
 		grpResets_5.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
@@ -2111,12 +2138,21 @@ public class VisualEditor {
 		scrolledComposite_1_5.setMinSize(composite_4_5.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		scrolledComposite_1_5.setMinSize(new Point(323, 193));
 		sashForm.setWeights(new int[] {1, 1, 1});
+		scrolledComposite_3.setContent(composite_15);
+		scrolledComposite_3.setMinSize(composite_15.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
 		TabItem tbtmMobEditor = new TabItem(tabFolder_1, SWT.NONE);
 		tbtmMobEditor.setText("Mob Editor");
 		
-		sashForm_1 = new SashForm(tabFolder_1, SWT.NONE);
-		tbtmMobEditor.setControl(sashForm_1);
+		ScrolledComposite scrolledComposite_4 = new ScrolledComposite(tabFolder_1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		tbtmMobEditor.setControl(scrolledComposite_4);
+		scrolledComposite_4.setExpandHorizontal(true);
+		scrolledComposite_4.setExpandVertical(true);
+		
+		Composite composite_16 = new Composite(scrolledComposite_4, SWT.NONE);
+		composite_16.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		sashForm_1 = new SashForm(composite_16, SWT.NONE);
 		
 		grpVisual = new Group(sashForm_1, SWT.NONE);
 		grpVisual.setText("Visual");
@@ -2132,19 +2168,24 @@ public class VisualEditor {
 		lblName.setText("Name");
 		
 		mobNameText = new Text(grpDescription_1, SWT.BORDER);
-		mobNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_mobNameText = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_mobNameText.widthHint = 250;
+		mobNameText.setLayoutData(gd_mobNameText);
 		
 		Label lblShortDescription = new Label(grpDescription_1, SWT.NONE);
 		lblShortDescription.setText("Short Description");
 		
 		mobShortDescText = new Text(grpDescription_1, SWT.BORDER);
-		mobShortDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_mobShortDescText = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_mobShortDescText.widthHint = 250;
+		mobShortDescText.setLayoutData(gd_mobShortDescText);
 		
 		Label lblLongDescription = new Label(grpDescription_1, SWT.NONE);
 		lblLongDescription.setText("Long Description");
 		
 		mobLongDescText = new Text(grpDescription_1, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		GridData gd_mobLongDescText = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_mobLongDescText.widthHint = 250;
 		gd_mobLongDescText.heightHint = 61;
 		mobLongDescText.setLayoutData(gd_mobLongDescText);
 		
@@ -2154,11 +2195,14 @@ public class VisualEditor {
 		
 		mobLookDescText = new Text(grpDescription_1, SWT.BORDER | SWT.V_SCROLL);
 		GridData gd_mobLookDescText = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_mobLookDescText.widthHint = 250;
 		gd_mobLookDescText.heightHint = 119;
 		mobLookDescText.setLayoutData(gd_mobLookDescText);
 		
 		grpAppearance = new Group(grpVisual, SWT.NONE);
-		grpAppearance.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		GridData gd_grpAppearance = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpAppearance.widthHint = 250;
+		grpAppearance.setLayoutData(gd_grpAppearance);
 		grpAppearance.setText("Appearance");
 		grpAppearance.setLayout(new GridLayout(3, false));
 		
@@ -2186,7 +2230,9 @@ public class VisualEditor {
 		
 		mobMaterialText = new Text(grpAppearance, SWT.BORDER);
 		mobMaterialText.setToolTipText("The material of the mobile");
-		mobMaterialText.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		GridData gd_mobMaterialText = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_mobMaterialText.widthHint = 250;
+		mobMaterialText.setLayoutData(gd_mobMaterialText);
 		
 		Label lblStartPos = new Label(grpAppearance, SWT.NONE);
 		lblStartPos.setText("Start Pos.");
@@ -2210,12 +2256,14 @@ public class VisualEditor {
 		combo_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
 		grpFlags = new Group(grpVisual, SWT.NONE);
-		grpFlags.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		grpFlags.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		grpFlags.setLayout(new GridLayout(1, false));
 		grpFlags.setText("Flags");
 		
 		Group grpCorpseFlags = new Group(grpFlags, SWT.NONE);
-		grpCorpseFlags.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		GridData gd_grpCorpseFlags = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpCorpseFlags.widthHint = 1;
+		grpCorpseFlags.setLayoutData(gd_grpCorpseFlags);
 		grpCorpseFlags.setText("Corpse Flags");
 		RowLayout rl_grpCorpseFlags = new RowLayout(SWT.HORIZONTAL);
 		rl_grpCorpseFlags.pack = false;
@@ -2243,7 +2291,7 @@ public class VisualEditor {
 		
 		Group grpFormFlags = new Group(grpFlags, SWT.NONE);
 		GridData gd_grpFormFlags = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		gd_grpFormFlags.widthHint = 0;
+		gd_grpFormFlags.widthHint = 1;
 		grpFormFlags.setLayoutData(gd_grpFormFlags);
 		RowLayout rl_grpFormFlags = new RowLayout(SWT.HORIZONTAL);
 		rl_grpFormFlags.pack = false;
@@ -2318,7 +2366,7 @@ public class VisualEditor {
 		rl_grpPartsFlags.pack = false;
 		grpPartsFlags.setLayout(rl_grpPartsFlags);
 		GridData gd_grpPartsFlags = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
-		gd_grpPartsFlags.widthHint = 0;
+		gd_grpPartsFlags.widthHint = 1;
 		grpPartsFlags.setLayoutData(gd_grpPartsFlags);
 		grpPartsFlags.setText("Parts Flags");
 		
@@ -2394,14 +2442,19 @@ public class VisualEditor {
 		
 		grpCombatValues = new Group(grpValues, SWT.NONE);
 		grpCombatValues.setLayout(new GridLayout(1, false));
-		grpCombatValues.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		GridData gd_grpCombatValues = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpCombatValues.minimumWidth = 250;
+		gd_grpCombatValues.widthHint = 300;
+		grpCombatValues.setLayoutData(gd_grpCombatValues);
 		grpCombatValues.setText("Combat Values");
 		
 		Group grpCore = new Group(grpCombatValues, SWT.NONE);
 		RowLayout rl_grpCore = new RowLayout(SWT.HORIZONTAL);
 		rl_grpCore.justify = true;
 		grpCore.setLayout(rl_grpCore);
-		grpCore.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpCore = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpCore.widthHint = 1;
+		grpCore.setLayoutData(gd_grpCore);
 		grpCore.setText("Core");
 		
 		Composite composite_5 = new Composite(grpCore, SWT.NONE);
@@ -2433,7 +2486,9 @@ public class VisualEditor {
 		mobGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Group grpAcValues = new Group(grpCombatValues, SWT.NONE);
-		grpAcValues.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpAcValues = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpAcValues.widthHint = 1;
+		grpAcValues.setLayoutData(gd_grpAcValues);
 		grpAcValues.setText("AC Values/Damage");
 		RowLayout rl_grpAcValues = new RowLayout(SWT.HORIZONTAL);
 		rl_grpAcValues.justify = true;
@@ -2515,7 +2570,10 @@ public class VisualEditor {
 		
 		grpDice = new Group(grpCombatValues, SWT.NONE);
 		grpDice.setLayout(new GridLayout(6, false));
-		grpDice.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpDice = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpDice.widthHint = 1;
+		gd_grpDice.minimumWidth = 250;
+		grpDice.setLayoutData(gd_grpDice);
 		grpDice.setText("Dice");
 		
 		lblHit = new Label(grpDice, SWT.NONE);
@@ -2598,7 +2656,9 @@ public class VisualEditor {
 		
 		Group grpAlignment = new Group(grpValues, SWT.NONE);
 		grpAlignment.setLayout(new GridLayout(1, false));
-		grpAlignment.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpAlignment = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpAlignment.widthHint = 1;
+		grpAlignment.setLayoutData(gd_grpAlignment);
 		grpAlignment.setText("Alignment");
 		
 		Scale scale_2 = new Scale(grpAlignment, SWT.NONE);
@@ -2631,7 +2691,9 @@ public class VisualEditor {
 		RowLayout rl_grpActFlags = new RowLayout(SWT.HORIZONTAL);
 		rl_grpActFlags.pack = false;
 		grpActFlags.setLayout(rl_grpActFlags);
-		grpActFlags.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpActFlags = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpActFlags.widthHint = 1;
+		grpActFlags.setLayoutData(gd_grpActFlags);
 		grpActFlags.setText("Act Flags");
 		
 		Button btnNpc = new Button(grpActFlags, SWT.CHECK);
@@ -2713,7 +2775,9 @@ public class VisualEditor {
 		RowLayout rl_grpAffFlags = new RowLayout(SWT.HORIZONTAL);
 		rl_grpAffFlags.pack = false;
 		grpAffFlags.setLayout(rl_grpAffFlags);
-		grpAffFlags.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpAffFlags = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpAffFlags.widthHint = 1;
+		grpAffFlags.setLayoutData(gd_grpAffFlags);
 		grpAffFlags.setText("Aff Flags");
 		
 		Button btnBlind = new Button(grpAffFlags, SWT.CHECK);
@@ -2780,7 +2844,9 @@ public class VisualEditor {
 		RowLayout rl_grpOffFlags = new RowLayout(SWT.HORIZONTAL);
 		rl_grpOffFlags.pack = false;
 		grpOffFlags.setLayout(rl_grpOffFlags);
-		grpOffFlags.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpOffFlags = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpOffFlags.widthHint = 1;
+		grpOffFlags.setLayoutData(gd_grpOffFlags);
 		grpOffFlags.setText("Off Flags");
 		
 		Button btnAreaAttack = new Button(grpOffFlags, SWT.CHECK);
@@ -2829,7 +2895,9 @@ public class VisualEditor {
 		btnCrush.setText("Crush");
 		
 		grpImmresvuln = new Group(grpActAffOffFlags, SWT.NONE);
-		grpImmresvuln.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpImmresvuln = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpImmresvuln.widthHint = 1;
+		grpImmresvuln.setLayoutData(gd_grpImmresvuln);
 		grpImmresvuln.setLayout(new GridLayout(5, false));
 		grpImmresvuln.setText("Imm/Res/Vuln");
 		new Label(grpImmresvuln, SWT.NONE);
@@ -3153,7 +3221,9 @@ public class VisualEditor {
 		grpShopspecial.setLayout(new GridLayout(1, false));
 		
 		Group grpShopkeeper = new Group(grpShopspecial, SWT.NONE);
-		grpShopkeeper.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpShopkeeper = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpShopkeeper.widthHint = 1;
+		grpShopkeeper.setLayoutData(gd_grpShopkeeper);
 		grpShopkeeper.setText("Shopkeeper");
 		grpShopkeeper.setLayout(new GridLayout(1, false));
 		
@@ -3184,7 +3254,9 @@ public class VisualEditor {
 		mobShopCloseHour.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
 		Composite composite_9 = new Composite(grpShopkeeper, SWT.NONE);
-		composite_9.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_composite_9 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_composite_9.widthHint = 1;
+		composite_9.setLayoutData(gd_composite_9);
 		composite_9.setSize(345, 99);
 		composite_9.setLayout(new GridLayout(2, true));
 		
@@ -3217,7 +3289,9 @@ public class VisualEditor {
 		
 		Composite composite_10 = new Composite(grpShopkeeper, SWT.NONE);
 		composite_10.setLayout(new GridLayout(2, false));
-		composite_10.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_composite_10 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_composite_10.widthHint = 1;
+		composite_10.setLayoutData(gd_composite_10);
 		
 		Label lblNoOfItem = new Label(composite_10, SWT.NONE);
 		lblNoOfItem.setText("No. of item types to buy");
@@ -3227,7 +3301,9 @@ public class VisualEditor {
 		
 		Composite composite_11 = new Composite(grpShopkeeper, SWT.NONE);
 		composite_11.setLayout(new GridLayout(2, false));
-		composite_11.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_composite_11 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_composite_11.widthHint = 1;
+		composite_11.setLayoutData(gd_composite_11);
 		
 		Label lblItemType = new Label(composite_11, SWT.NONE);
 		lblItemType.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
@@ -3268,7 +3344,9 @@ public class VisualEditor {
 		RowLayout rl_grpPracticer = new RowLayout(SWT.HORIZONTAL);
 		rl_grpPracticer.pack = false;
 		grpPracticer.setLayout(rl_grpPracticer);
-		grpPracticer.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpPracticer = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpPracticer.widthHint = 1;
+		grpPracticer.setLayoutData(gd_grpPracticer);
 		grpPracticer.setText("Practicer");
 		
 		Button btnGroupnone = new Button(grpPracticer, SWT.CHECK);
@@ -3345,7 +3423,9 @@ public class VisualEditor {
 		
 		Group grpProgsfuncs = new Group(grpShopspecial, SWT.NONE);
 		grpProgsfuncs.setLayout(new RowLayout(SWT.HORIZONTAL));
-		grpProgsfuncs.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpProgsfuncs = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpProgsfuncs.widthHint = 1;
+		grpProgsfuncs.setLayoutData(gd_grpProgsfuncs);
 		grpProgsfuncs.setText("Progs/Funcs");
 		
 		Composite composite_12 = new Composite(grpProgsfuncs, SWT.NONE);
@@ -3376,7 +3456,9 @@ public class VisualEditor {
 		GridData gd_text_4 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_text_4.widthHint = 100;
 		text_4.setLayoutData(gd_text_4);
-		sashForm_1.setWeights(new int[] {413, 326, 418, 360});
+		sashForm_1.setWeights(new int[] {1, 1, 1, 1});
+		scrolledComposite_4.setContent(composite_16);
+		scrolledComposite_4.setMinSize(new Point(1200, 800));
 		
 		TabItem tbtmObjectEditor_1 = new TabItem(tabFolder_1, SWT.NONE);
 		tbtmObjectEditor_1.setText("Object Editor");
@@ -3440,6 +3522,9 @@ public class VisualEditor {
 		ListViewer listViewer = new ListViewer(tabFolder, SWT.BORDER | SWT.V_SCROLL);
 		List list = listViewer.getList();
 		tbtmAreaOverview.setControl(list);
+		
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("New Item");
 		
 		CLabel lblLog = new CLabel(composite_1, SWT.NONE);
 		lblLog.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -3685,15 +3770,6 @@ public class VisualEditor {
 	}
 	public void setRoomDescTextVal(String text_2) {
 		roomDescText.setText(text_2);
-	}
-	public Table getRoomExtrasTable() {
-		return roomExtrasTable;
-	}
-	public TableViewerColumn getRoomExtrasKeywordsColumn() {
-		return tableViewerColumn;
-	}
-	public TableViewerColumn getRoomExtrasDescColumn() {
-		return tableViewerColumn_1;
 	}
 	public Text getNorthDescText() {
 		return northDescText;
@@ -4080,4 +4156,37 @@ public class VisualEditor {
 	public Button getBtnRoomGodsOnly() {
 		return btnRoomGodsOnly;
 	}
+	public Table getRoomExtrasTable() {
+		return roomExtrasTable;
+	}
+	
+	public static void makeLastColumnAutoExpand(Table table, int minWidth) {
+		   var resizer = new ControlAdapter() {
+		      @Override
+		      public void controlResized(ControlEvent event) {
+		         var columns = table.getColumns();
+		         if (columns.length == 0)
+		            return;
+
+		         if (columns.length == 1) {
+		            columns[0].setWidth(Math.max(minWidth, table.getClientArea().width));
+		            return;
+		         }
+
+		         var totalWidthOfOtherColumns = 0;
+		         for (var i = 0; i < columns.length - 1; i++) {
+		            totalWidthOfOtherColumns += columns[i].getWidth();
+		         }
+
+		         var newWidth = Math.max(minWidth, table.getClientArea().width - totalWidthOfOtherColumns);
+		         columns[columns.length - 1].setWidth(newWidth);
+		      }
+		   };
+
+		   table.addControlListener(resizer);
+		   for (final var col : table.getColumns()) {
+		      col.addControlListener(resizer);
+		   }
+		}
 }
+
