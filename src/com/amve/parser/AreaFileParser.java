@@ -13,6 +13,7 @@ import com.amve.area.Object;
 import com.amve.area.Reset;
 import com.amve.area.Room;
 import com.amve.area.Shop;
+import com.amve.area.Special;
 import com.amve.globals.GlobalVariables;
 import com.amve.globals.GlobalVariables.DoorState;
 import com.amve.globals.GlobalVariables.ExitDirection;
@@ -20,6 +21,7 @@ import com.amve.globals.GlobalVariables.Position;
 import com.amve.globals.GlobalVariables.RoomFlag;
 import com.amve.globals.GlobalVariables.Sex;
 import com.amve.globals.GlobalVariables.Size;
+import com.amve.globals.GlobalVariables.SpecialType;
 import com.amve.utils.Armor;
 import com.amve.utils.Container;
 import com.amve.utils.Dice;
@@ -744,7 +746,35 @@ public class AreaFileParser {
 	}
 	
 	private void loadSpecials(StringBuilder file) {
-		System.out.println("entered loadSpecials");
+		while (true) {
+			Special special = new Special();
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			int index = file.indexOf("\n");
+			if (index <= 1) {
+				if (file.charAt(0) =='S') {
+					file.delete(0, index);
+					while(Character.isWhitespace(file.charAt(0)))
+						file.deleteCharAt(0);
+					return;
+				}
+				file.delete(0, index+1);
+				continue;
+			}
+			String line = file.substring(0, index).split("\\*")[0];
+			if ("".equals(line)) {
+				file.delete(0, index+1);
+				continue;
+			}
+			else if (line.startsWith("M")) {
+				Scanner scanner = new Scanner(line);
+				scanner.next("\\w");
+				special.setMobVNum(Integer.toString(scanner.nextInt()));
+				special.setSpecial(SpecialType.valueOfName(scanner.next("\\w+")));
+			}
+			file.delete(0, index+1);
+			this.area.specials.add(special);
+		}
 	}
 	
 	private String removeWhiteSpace(String s) {

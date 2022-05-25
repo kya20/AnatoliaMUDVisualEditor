@@ -1145,6 +1145,53 @@ public abstract class GlobalVariables {
 		}
 	}
 	
+	public enum SpecialType { // May require more specials, these are the ones listed on anatolia3.1.txt
+		BREATH_ACID(0, "spec_breath_acid"),
+		BREATH_FIRE(1, "spec_breath_fire"),
+		BREATH_FROST(2, "spec_breath_frost"),
+		BREATH_GAS(3, "spec_breath_gas"),
+		BREATH_LIGHTNING(4, "spec_breath_lightning"),
+		BREATH_ANY(5, "spec_breath_any"),
+		CAST_ADEPT(6, "spec_cast_adept"),
+		CAST_CLERIC(7, "spec_cast_cleric"),
+		CAST_JUDGE(8, "spec_cast_judge"),
+		CAST_MAGE(9, "spec_cast_mage"),
+		CAST_UNDEAD(10, "spec_cast_undead"),
+		EXECUTIONER(11, "spec_executioner"),
+		FIDO(12, "spec_fido"),
+		GUARD(13, "spec_guard"),
+		JANITOR(14, "spec_janitor"),
+		POISON(15, "spec_poison"),
+		THIEF(16, "spec_thief"),
+		NASTY_THIEF(17, "spec_nasty_thief"),
+		// the ones below are added later from example area files.
+		CAST_BEHOLDER(18, "spec_cast_beholder");
+		
+		private static final Map<Integer, SpecialType> BY_NUM = new HashMap<>();
+		private static final Map<String, SpecialType> BY_NAME = new HashMap<>();
+		
+		static {
+			for (SpecialType e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private SpecialType(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static SpecialType valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static SpecialType valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
 	public static final String WEAPON_TYPE_EXOTIC = "exotic";
 	public static final String WEAPON_TYPE_SWORD = "sword";
 	public static final String WEAPON_TYPE_DAGGER = "dagger";
