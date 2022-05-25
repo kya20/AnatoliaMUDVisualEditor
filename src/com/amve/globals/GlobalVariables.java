@@ -1192,6 +1192,58 @@ public abstract class GlobalVariables {
 		}
 	}
 	
+	public enum PracticeGroup {
+		NONE(0, "group_none"),
+		WEAPONMASTER(1, "group_weaponsmaster"),
+		ATTACK(2, "group_attack"),
+		BEGUILING(3, "group_beguiling"),
+		BENEDICTIONS(4, "group_benedictions"),
+		COMBAT(5, "group_combat"),
+		CREATION(6, "group_creation"),
+		CURATIVE(7, "group_curative"),
+		DETECTION(8, "group_detection"),
+		DRACONIAN(9, "group_draconian"),
+		ENCHANTMENT(10, "group_enchantment"),
+		ENHANCEMENT(11, "group_enhancement"),
+		HARMFUL(12, "group_harmful"),
+		HEALING(13, "group_healing"),
+		ILLUSION(14, "group_illusion"),
+		MALADICTIONS(15, "group_maladictions"),
+		PROTECTIVE(16, "group_protective"),
+		TRANSPORTATION(17, "group_transportation"),
+		WEATHER(18, "group_weather"),
+		FIGHTMASTER(19, "group_fightmaster"),
+		SUDDENDEATH(20, "group_suddendeath"),
+		MEDITATION(21, "group_meditation"),
+		CABAL(22, "group_cabal"),
+		DEFENSIVE(23, "group_defensive"),
+		WIZARD(24, "group_wizard");
+		
+		private static final Map<Integer, PracticeGroup> BY_NUM = new HashMap<>();
+		private static final Map<String, PracticeGroup> BY_NAME = new HashMap<>();
+		
+		static {
+			for (PracticeGroup e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private PracticeGroup(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static PracticeGroup valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static PracticeGroup valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
 	public static final String WEAPON_TYPE_EXOTIC = "exotic";
 	public static final String WEAPON_TYPE_SWORD = "sword";
 	public static final String WEAPON_TYPE_DAGGER = "dagger";

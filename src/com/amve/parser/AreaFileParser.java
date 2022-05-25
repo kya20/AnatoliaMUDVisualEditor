@@ -2,23 +2,21 @@ package com.amve.parser;
 
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.amve.area.Area;
 import com.amve.area.Mobile;
+import com.amve.area.OLimit;
 import com.amve.area.Object;
-import com.amve.area.Reset;
+import com.amve.area.Omprog;
+import com.amve.area.Practicer;
 import com.amve.area.Room;
 import com.amve.area.Shop;
 import com.amve.area.Special;
-import com.amve.globals.GlobalVariables;
-import com.amve.globals.GlobalVariables.DoorState;
-import com.amve.globals.GlobalVariables.ExitDirection;
 import com.amve.globals.GlobalVariables.Position;
-import com.amve.globals.GlobalVariables.RoomFlag;
+import com.amve.globals.GlobalVariables.PracticeGroup;
 import com.amve.globals.GlobalVariables.Sex;
 import com.amve.globals.GlobalVariables.Size;
 import com.amve.globals.GlobalVariables.SpecialType;
@@ -109,18 +107,23 @@ public class AreaFileParser {
 			case "SOCIALS":
 				break;
 			case "OMPROGS":
+				loadOmprogs(sbFile);
 				break;
 			case "OLIMITS":
+				loadOLimits(sbFile);
 				break;
 			case "SPECIALS":
 				loadSpecials(sbFile);
-				return;
+				break;
 			case "PRACTICERS":
+				loadPracticers(sbFile);
 				break;
 			case "RESETMESSAGE":
 				break;
 			case "FLAG":
 				break;
+			case "$":
+				return;
 			default:
 				throw new IllegalArgumentException("Bad section name.");
 			}
@@ -739,6 +742,7 @@ public class AreaFileParser {
 				shop.setSellMultiplier(scanner.nextInt());
 				shop.setOpenHour(scanner.nextInt());
 				shop.setCloseHour(scanner.nextInt());
+				scanner.close();
 			}
 			file.delete(0, index+1);
 			this.area.shops.add(shop);
@@ -771,9 +775,114 @@ public class AreaFileParser {
 				scanner.next("\\w");
 				special.setMobVNum(Integer.toString(scanner.nextInt()));
 				special.setSpecial(SpecialType.valueOfName(scanner.next("\\w+")));
+				scanner.close();
 			}
+			else throw new InvalidParameterException("SPECIALS: Could not find a valid character at: " + line);
 			file.delete(0, index+1);
 			this.area.specials.add(special);
+		}
+	}
+	
+	private void loadOmprogs(StringBuilder file) {
+		while (true) {
+			Omprog omprog = new Omprog();
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			int index = file.indexOf("\n");
+			if (index <= 1) {
+				if (file.charAt(0) =='S') {
+					file.delete(0, index);
+					while(Character.isWhitespace(file.charAt(0)))
+						file.deleteCharAt(0);
+					return;
+				}
+				file.delete(0, index+1);
+				continue;
+			}
+			String line = file.substring(0, index).split("\\*")[0];
+			if ("".equals(line)) {
+				file.delete(0, index+1);
+				continue;
+			}
+			else if (line.startsWith("M") || line.startsWith("O")) {
+				Scanner scanner = new Scanner(line);
+				omprog.setType(scanner.next("\\w"));
+				omprog.setvNum(Integer.toString(scanner.nextInt()));
+				omprog.setProgType(scanner.next("\\w+"));
+				omprog.setFunctionName(scanner.next("\\w+"));
+				scanner.close();
+			}
+			else throw new InvalidParameterException("OMPROG: Could not find a valid character at: " + line);
+			file.delete(0, index+1);
+			this.area.objMobProgs.add(omprog);
+		}
+	}
+	
+	private void loadOLimits(StringBuilder file) {
+		while (true) {
+			OLimit oLimit = new OLimit();
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			int index = file.indexOf("\n");
+			if (index <= 1) {
+				if (file.charAt(0) =='S') {
+					file.delete(0, index);
+					while(Character.isWhitespace(file.charAt(0)))
+						file.deleteCharAt(0);
+					return;
+				}
+				file.delete(0, index+1);
+				continue;
+			}
+			String line = file.substring(0, index).split("\\*")[0];
+			if ("".equals(line)) {
+				file.delete(0, index+1);
+				continue;
+			}
+			else if (line.startsWith("O")) {
+				Scanner scanner = new Scanner(line);
+				scanner.next("\\w");
+				oLimit.setvNum(Integer.toString(scanner.nextInt()));
+				oLimit.setLimit(scanner.nextInt());
+				scanner.close();
+			}
+			else throw new InvalidParameterException("OLIMIT: Could not find a valid character at: " + line);
+			file.delete(0, index+1);
+			this.area.objLimits.add(oLimit);
+		}
+	}
+	
+	private void loadPracticers(StringBuilder file) {
+		while (true) {
+			Practicer practicer = new Practicer();
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			int index = file.indexOf("\n");
+			if (index <= 1) {
+				if (file.charAt(0) =='S') {
+					file.delete(0, index);
+					while(Character.isWhitespace(file.charAt(0)))
+						file.deleteCharAt(0);
+					return;
+				}
+				file.delete(0, index+1);
+				continue;
+			}
+			String line = file.substring(0, index).split("\\*")[0];
+			if ("".equals(line)) {
+				file.delete(0, index+1);
+				continue;
+			}
+			else if (line.startsWith("M")) {
+				Scanner scanner = new Scanner(line);
+				scanner.next("\\w");
+				practicer.setvNum(Integer.toString(scanner.nextInt()));
+				practicer.setPracticeGroup(PracticeGroup.valueOfName(scanner.next("\\w+")));
+				scanner.close();
+			}
+			else throw new InvalidParameterException("PRACTICER: Could not find a valid character at: " + line);
+			file.delete(0, index+1);
+			this.area.practicers.add(practicer);
 		}
 	}
 	
