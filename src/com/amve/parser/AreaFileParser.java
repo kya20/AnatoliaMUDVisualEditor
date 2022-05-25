@@ -3,6 +3,7 @@ package com.amve.parser;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +12,7 @@ import com.amve.area.Mobile;
 import com.amve.area.Object;
 import com.amve.area.Reset;
 import com.amve.area.Room;
+import com.amve.area.Shop;
 import com.amve.globals.GlobalVariables;
 import com.amve.globals.GlobalVariables.DoorState;
 import com.amve.globals.GlobalVariables.ExitDirection;
@@ -101,7 +103,7 @@ public class AreaFileParser {
 				break;
 			case "SHOPS":
 				loadShops(sbFile);
-				return;
+				break;
 			case "SOCIALS":
 				break;
 			case "OMPROGS":
@@ -109,7 +111,8 @@ public class AreaFileParser {
 			case "OLIMITS":
 				break;
 			case "SPECIALS":
-				break;
+				loadSpecials(sbFile);
+				return;
 			case "PRACTICERS":
 				break;
 			case "RESETMESSAGE":
@@ -635,7 +638,7 @@ public class AreaFileParser {
 		ObjectReset lastObject = new ObjectReset("", "");
 		
 		while (true) {
-			Reset reset = new Reset();
+//			Reset reset = new Reset();
 			while(Character.isWhitespace(file.charAt(0)))
 				file.deleteCharAt(0);
 			int index = file.indexOf("\n");
@@ -701,7 +704,47 @@ public class AreaFileParser {
 	}
 	
 	private void loadShops(StringBuilder file) {
-		System.out.println("entered loadShops");
+		while(true) {
+			Shop shop = new Shop();
+			while(Character.isWhitespace(file.charAt(0)))
+				file.deleteCharAt(0);
+			int index = file.indexOf("\n");
+			if (index <= 1) {
+				if (file.charAt(0) =='0') {
+					file.delete(0, index);
+					while(Character.isWhitespace(file.charAt(0)))
+						file.deleteCharAt(0);
+					return;
+				}
+				file.delete(0, index+1);
+				continue;
+			}
+			String line = file.substring(0, index).split("\\*")[0];
+			if ("".equals(line)) {
+				file.delete(0, index+1);
+				continue;
+			}
+			else {
+				Scanner scanner = new Scanner(line);
+				shop.setMobileVNum(Integer.toString(scanner.nextInt()));
+				for(int i=1; i<6 ; i++) {
+					int num = scanner.nextInt();
+					if (num != 0)
+						shop.addBuyItemType(Integer.toString(num));
+				}
+					
+				shop.setBuyMultiplier(scanner.nextInt());
+				shop.setSellMultiplier(scanner.nextInt());
+				shop.setOpenHour(scanner.nextInt());
+				shop.setCloseHour(scanner.nextInt());
+			}
+			file.delete(0, index+1);
+			this.area.shops.add(shop);
+		}
+	}
+	
+	private void loadSpecials(StringBuilder file) {
+		System.out.println("entered loadSpecials");
 	}
 	
 	private String removeWhiteSpace(String s) {
