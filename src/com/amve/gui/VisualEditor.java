@@ -393,8 +393,11 @@ public class VisualEditor {
 	private Text mobDamageDice3;
 	private Text text_3;
 	private Text text_4;
-	private Text txtTxt;
 	private Table roomExtrasTable;
+	private Text text_5;
+	private Text text_6;
+	private Text text_7;
+	private Table objectExtrasTable;
 
 	/**
 	 * Launch the application.
@@ -3473,48 +3476,750 @@ public class VisualEditor {
 		
 		SashForm sashForm_2 = new SashForm(composite_14, SWT.SMOOTH);
 		
-		Group grpGrp = new Group(sashForm_2, SWT.NONE);
-		grpGrp.setText("grp1");
-		grpGrp.setLayout(new GridLayout(1, false));
+		Group grpGeneralProperties = new Group(sashForm_2, SWT.NONE);
+		grpGeneralProperties.setText("General Properties");
+		grpGeneralProperties.setLayout(new GridLayout(1, false));
 		
-		Group grpGrp_4 = new Group(grpGrp, SWT.NONE);
-		grpGrp_4.setLayout(new GridLayout(1, false));
-		GridData gd_grpGrp_4 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_grpGrp_4.widthHint = 200;
-		grpGrp_4.setLayoutData(gd_grpGrp_4);
-		grpGrp_4.setText("grp1_1");
+		Group grpDescription_2 = new Group(grpGeneralProperties, SWT.NONE);
+		grpDescription_2.setLayout(new GridLayout(1, false));
+		grpDescription_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpDescription_2.setText("Description");
 		
-		Label lblLbl = new Label(grpGrp_4, SWT.NONE);
-		lblLbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		lblLbl.setText("lbl1");
+		Label lblObjectName = new Label(grpDescription_2, SWT.NONE);
+		lblObjectName.setText("Object Name");
 		
-		txtTxt = new Text(grpGrp_4, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
-		txtTxt.setText("txt1");
-		GridData gd_txtTxt = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_txtTxt.widthHint = 150;
-		gd_txtTxt.heightHint = 250;
-		txtTxt.setLayoutData(gd_txtTxt);
+		text_5 = new Text(grpDescription_2, SWT.BORDER);
+		text_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Group grpGrp_1 = new Group(sashForm_2, SWT.NONE);
-		grpGrp_1.setText("grp2");
-		grpGrp_1.setLayout(new GridLayout(1, false));
+		Label lblShortDescription_1 = new Label(grpDescription_2, SWT.NONE);
+		lblShortDescription_1.setText("Short Description");
 		
-		Group grpGrp_5 = new Group(grpGrp_1, SWT.NONE);
-		GridData gd_grpGrp_5 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_grpGrp_5.widthHint = 250;
-		grpGrp_5.setLayoutData(gd_grpGrp_5);
-		grpGrp_5.setText("grp2_1");
+		text_6 = new Text(grpDescription_2, SWT.BORDER);
+		text_6.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Group grpGrp_2 = new Group(sashForm_2, SWT.NONE);
-		grpGrp_2.setText("grp3");
-		grpGrp_2.setLayout(new GridLayout(1, false));
+		Label lblLongDescription_1 = new Label(grpDescription_2, SWT.NONE);
+		lblLongDescription_1.setText("Long Description");
 		
-		Group grpGrp_3 = new Group(sashForm_2, SWT.NONE);
-		grpGrp_3.setText("grp4");
-		grpGrp_3.setLayout(new GridLayout(1, false));
-		sashForm_2.setWeights(new int[] {10, 10, 10, 10});
+		text_7 = new Text(grpDescription_2, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
+		GridData gd_text_7 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_text_7.heightHint = 72;
+		text_7.setLayoutData(gd_text_7);
+		
+		Label lblExtras = new Label(grpDescription_2, SWT.NONE);
+		lblExtras.setText("Extras");
+		
+		objectExtrasTable = new Table(grpDescription_2, SWT.BORDER | SWT.FULL_SELECTION);
+		GridData gd_objectExtrasTable = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_objectExtrasTable.heightHint = 200;
+		objectExtrasTable.setLayoutData(gd_objectExtrasTable);
+		objectExtrasTable.setHeaderVisible(true);
+		objectExtrasTable.setLinesVisible(true);
+		makeLastColumnAutoExpand(objectExtrasTable, 200);
+		
+		TableColumn tblclmnKeywords_1 = new TableColumn(objectExtrasTable, SWT.NONE);
+		tblclmnKeywords_1.setWidth(100);
+		tblclmnKeywords_1.setText("Keywords");
+		
+		TableColumn tblclmnDescription = new TableColumn(objectExtrasTable, SWT.NONE);
+		tblclmnDescription.setWidth(100);
+		tblclmnDescription.setText("Description");
+		
+		Group grpType = new Group(grpGeneralProperties, SWT.NONE);
+		grpType.setLayout(new RowLayout(SWT.HORIZONTAL));
+		grpType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpType.setText("Type");
+		
+		Composite composite_17 = new Composite(grpType, SWT.NONE);
+		composite_17.setLayout(new GridLayout(1, false));
+		
+		Label lblMaterial_1 = new Label(composite_17, SWT.NONE);
+		lblMaterial_1.setText("Material");
+		
+		Combo objMaterialCombo = new Combo(composite_17, SWT.NONE);
+		objMaterialCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Composite composite_17_1 = new Composite(grpType, SWT.NONE);
+		composite_17_1.setLayout(new GridLayout(1, false));
+		
+		Label lbLevel = new Label(composite_17_1, SWT.NONE);
+		lbLevel.setText("Level");
+		
+		Spinner spinner = new Spinner(composite_17_1, SWT.BORDER);
+		
+		Composite composite_17_1_1 = new Composite(grpType, SWT.NONE);
+		composite_17_1_1.setLayout(new GridLayout(1, false));
+		
+		Label lblWeight = new Label(composite_17_1_1, SWT.NONE);
+		lblWeight.setText("Weight");
+		
+		Spinner spinner_1 = new Spinner(composite_17_1_1, SWT.BORDER);
+		spinner_1.setMaximum(9999);
+		
+		Composite composite_17_1_1_1 = new Composite(grpType, SWT.NONE);
+		composite_17_1_1_1.setLayout(new GridLayout(1, false));
+		
+		Label lblCost = new Label(composite_17_1_1_1, SWT.NONE);
+		lblCost.setText("Cost");
+		
+		Spinner spinner_1_1 = new Spinner(composite_17_1_1_1, SWT.BORDER);
+		spinner_1_1.setMaximum(9999);
+		
+		Composite composite_17_2 = new Composite(grpType, SWT.NONE);
+		composite_17_2.setLayout(new GridLayout(1, false));
+		
+		Label lbStatus = new Label(composite_17_2, SWT.NONE);
+		lbStatus.setText("Status");
+		
+		Combo objStatus = new Combo(composite_17_2, SWT.NONE);
+		objStatus.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Composite composite_17_2_1 = new Composite(grpType, SWT.NONE);
+		composite_17_2_1.setLayout(new GridLayout(1, false));
+		
+		Label lblType = new Label(composite_17_2_1, SWT.NONE);
+		lblType.setText("Type");
+		
+		Combo objStatus_1 = new Combo(composite_17_2_1, SWT.NONE);
+		objStatus_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Group grpTypeProperties = new Group(grpGeneralProperties, SWT.NONE);
+		grpTypeProperties.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpTypeProperties.setText("Type Properties");
+		
+		Group grpFlags_1 = new Group(sashForm_2, SWT.NONE);
+		grpFlags_1.setText("Flags");
+		grpFlags_1.setLayout(new GridLayout(1, false));
+		
+		Group grpExtraFlags = new Group(grpFlags_1, SWT.NONE);
+		grpExtraFlags.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpExtraFlags.setText("Extra Flags");
+		RowLayout rl_grpExtraFlags = new RowLayout(SWT.HORIZONTAL);
+		rl_grpExtraFlags.pack = false;
+		grpExtraFlags.setLayout(rl_grpExtraFlags);
+		
+		Button btnGlowing = new Button(grpExtraFlags, SWT.CHECK);
+		btnGlowing.setText("Glowing");
+		
+		Button btnHumming = new Button(grpExtraFlags, SWT.CHECK);
+		btnHumming.setText("Humming");
+		
+		Button btnDark = new Button(grpExtraFlags, SWT.CHECK);
+		btnDark.setText("Dark");
+		
+		Button btnLock = new Button(grpExtraFlags, SWT.CHECK);
+		btnLock.setText("Lock");
+		
+		Button btnEvil = new Button(grpExtraFlags, SWT.CHECK);
+		btnEvil.setText("Evil");
+		
+		Button btnInvisible_1 = new Button(grpExtraFlags, SWT.CHECK);
+		btnInvisible_1.setText("Invisible");
+		
+		Button btnMagic = new Button(grpExtraFlags, SWT.CHECK);
+		btnMagic.setText("Magic");
+		
+		Button btnNoDrop = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoDrop.setText("No drop");
+		
+		Button btnBless = new Button(grpExtraFlags, SWT.CHECK);
+		btnBless.setText("Bless");
+		
+		Button btnAntigood = new Button(grpExtraFlags, SWT.CHECK);
+		btnAntigood.setText("Anti-good");
+		
+		Button btnAntievil = new Button(grpExtraFlags, SWT.CHECK);
+		btnAntievil.setText("Anti-evil");
+		
+		Button btnAntineutral = new Button(grpExtraFlags, SWT.CHECK);
+		btnAntineutral.setText("Anti-neutral");
+		
+		Button btnNoRemove = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoRemove.setText("No remove");
+		
+		Button btnInventory = new Button(grpExtraFlags, SWT.CHECK);
+		btnInventory.setText("Inventory");
+		
+		Button btnNoPurge_1 = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoPurge_1.setText("No purge");
+		
+		Button btnRotDeath = new Button(grpExtraFlags, SWT.CHECK);
+		btnRotDeath.setText("Rot death");
+		
+		Button btnVisDeeath = new Button(grpExtraFlags, SWT.CHECK);
+		btnVisDeeath.setText("Vis deeath");
+		
+		Button btnNoSacrifice = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoSacrifice.setText("No sacrifice");
+		
+		Button btnNonmetal = new Button(grpExtraFlags, SWT.CHECK);
+		btnNonmetal.setText("Non-metal");
+		
+		Button btnNoLocate = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoLocate.setText("No locate");
+		
+		Button btnMeltDrop = new Button(grpExtraFlags, SWT.CHECK);
+		btnMeltDrop.setText("Melt drop");
+		
+		Button btnHadTimer = new Button(grpExtraFlags, SWT.CHECK);
+		btnHadTimer.setText("Had timer");
+		
+		Button btnSellExtract = new Button(grpExtraFlags, SWT.CHECK);
+		btnSellExtract.setText("Sell extract");
+		
+		Button btnBurnproof = new Button(grpExtraFlags, SWT.CHECK);
+		btnBurnproof.setText("Burn-proof");
+		
+		Button btnNoUncurse = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoUncurse.setText("No uncurse");
+		
+		Button btnNoSell = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoSell.setText("No sell");
+		
+		Button btnVisRot = new Button(grpExtraFlags, SWT.CHECK);
+		btnVisRot.setText("Vis rot");
+		
+		Group grpWearFlags = new Group(grpFlags_1, SWT.NONE);
+		grpWearFlags.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpWearFlags.setText("Wear Flags");
+		RowLayout rl_grpWearFlags = new RowLayout(SWT.HORIZONTAL);
+		rl_grpWearFlags.pack = false;
+		grpWearFlags.setLayout(rl_grpWearFlags);
+		
+		Button btnTake = new Button(grpWearFlags, SWT.CHECK);
+		btnTake.setText("Take");
+		
+		Button btnFinger = new Button(grpWearFlags, SWT.RADIO);
+		btnFinger.setText("Finger");
+		
+		Button btnNeck = new Button(grpWearFlags, SWT.RADIO);
+		btnNeck.setText("Neck");
+		
+		Button btnOnTorso = new Button(grpWearFlags, SWT.RADIO);
+		btnOnTorso.setText("On torso");
+		
+		Button btnHead_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnHead_1.setText("Head");
+		
+		Button btnLegs_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnLegs_1.setText("Legs");
+		
+		Button btnFeet_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnFeet_1.setText("Feet");
+		
+		Button btnHands_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnHands_1.setText("Hands");
+		
+		Button btnArms_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnArms_1.setText("Arms");
+		
+		Button btnAsShield = new Button(grpWearFlags, SWT.RADIO);
+		btnAsShield.setText("As shield");
+		
+		Button btnAboutBody = new Button(grpWearFlags, SWT.RADIO);
+		btnAboutBody.setText("About body");
+		
+		Button btnWaist = new Button(grpWearFlags, SWT.RADIO);
+		btnWaist.setText("Waist");
+		
+		Button btnLeftWrist = new Button(grpWearFlags, SWT.RADIO);
+		btnLeftWrist.setText("Left wrist");
+		
+		Button btnWielded = new Button(grpWearFlags, SWT.RADIO);
+		btnWielded.setText("Wielded");
+		
+		Button btnHeld = new Button(grpWearFlags, SWT.RADIO);
+		btnHeld.setText("Held");
+		
+		Button btnNoSac = new Button(grpWearFlags, SWT.RADIO);
+		btnNoSac.setText("No sac");
+		
+		Button btnFloatingNearby = new Button(grpWearFlags, SWT.RADIO);
+		btnFloatingNearby.setText("Floating nearby");
+		
+		Button btnTattoo = new Button(grpWearFlags, SWT.RADIO);
+		btnTattoo.setText("Tattoo");
+		
+		Button btnTwoHands = new Button(grpWearFlags, SWT.RADIO);
+		btnTwoHands.setText("Two hands");
+		
+		Group grpImmresvuln_1 = new Group(grpFlags_1, SWT.NONE);
+		grpImmresvuln_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpImmresvuln_1.setText("Imm/Res/Vuln");
+		grpImmresvuln_1.setLayout(new GridLayout(5, false));
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Label label_4 = new Label(grpImmresvuln_1, SWT.NONE);
+		label_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblImmune_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblImmune_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		lblImmune_1.setText("Imm");
+		
+		Label lblResistant_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblResistant_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		lblResistant_1.setText("Res");
+		
+		Label lblVuln_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
+		lblVuln_1.setText("Vuln");
+		
+		Label lblSummon_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblSummon_1.setText("Summon");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button summonImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		summonImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button summonRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		summonRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button summonVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		summonVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblCharm_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblCharm_1.setText("Charm");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button charmImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		charmImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button charmRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		charmRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button charmVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		charmVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblMagic_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblMagic_1.setText("Magic");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button magicImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		magicImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button magicRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		magicRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button magicVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		magicVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblWeapons_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblWeapons_1.setText("Weapons");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button weaponsImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		weaponsImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button weaponsRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		weaponsRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button weaponsVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		weaponsVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblBash_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblBash_1.setText("Bash");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button bashImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		bashImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button bashRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		bashRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button bashVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		bashVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblPierce_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblPierce_1.setText("Pierce");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button pierceImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		pierceImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button pierceRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		pierceRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button pierceVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		pierceVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblSlash_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblSlash_1.setText("Slash");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button slashImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		slashImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button slashRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		slashRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button slashVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		slashVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblFire_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblFire_1.setText("Fire");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button fireImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		fireImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button fireRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		fireRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button fireVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		fireVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblCold_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblCold_1.setText("Cold");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button coldImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		coldImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button coldRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		coldRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button coldVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		coldVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblLightning_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblLightning_1.setText("Lightning");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button lightningImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		lightningImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button lightningRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		lightningRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button lightningVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		lightningVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblAcid_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblAcid_1.setText("Acid");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button acidImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		acidImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button acidRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		acidRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button acidVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		acidVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblPoison_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblPoison_1.setText("Poison");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button poisonImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		poisonImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button poisonRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		poisonRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button poisonVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		poisonVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblNegative_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblNegative_1.setText("Negative");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button negativeImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		negativeImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button negativeRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		negativeRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button negativeVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		negativeVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblHoly_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblHoly_1.setText("Holy");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button holyImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		holyImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button holyRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		holyRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button holyVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		holyVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblEnergy_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblEnergy_1.setText("Energy");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button energyImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		energyImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button energyRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		energyRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button energyVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		energyVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblMental_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblMental_1.setText("Mental");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button mentalImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		mentalImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button mentalRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		mentalRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button mentalVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		mentalVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblDisease_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblDisease_1.setText("Disease");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button diseaseImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		diseaseImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button diseaseRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		diseaseRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button diseaseVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		diseaseVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblDrowning_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblDrowning_1.setText("Drowning");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button drowningImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		drowningImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button drowningRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		drowningRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button drowningVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		drowningVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblLight_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblLight_1.setText("Light");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button lightImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		lightImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button lightRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		lightRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button lightVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		lightVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblSound_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblSound_1.setText("Sound");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button soundImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		soundImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button soundRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		soundRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button soundVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		soundVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblWood_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblWood_1.setText("Wood");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button woodImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		woodImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button woodRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		woodRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button woodVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		woodVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblSilver_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblSilver_1.setText("Silver");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button silverImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		silverImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button silverRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		silverRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button silverVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		silverVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Label lblIron_1 = new Label(grpImmresvuln_1, SWT.NONE);
+		lblIron_1.setText("Iron");
+		new Label(grpImmresvuln_1, SWT.NONE);
+		
+		Button ironImm_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		ironImm_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button ironRes_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		ironRes_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Button ironVuln_1 = new Button(grpImmresvuln_1, SWT.CHECK);
+		ironVuln_1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		
+		Group grpAffectsSpecials = new Group(sashForm_2, SWT.NONE);
+		grpAffectsSpecials.setText("Affects and Specials");
+		grpAffectsSpecials.setLayout(new GridLayout(1, false));
+		
+		Group grpGeneralAffects = new Group(grpAffectsSpecials, SWT.NONE);
+		RowLayout rl_grpGeneralAffects = new RowLayout(SWT.HORIZONTAL);
+		rl_grpGeneralAffects.pack = false;
+		grpGeneralAffects.setLayout(rl_grpGeneralAffects);
+		grpGeneralAffects.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpGeneralAffects.setText("General Affects");
+		
+		Button btnBlind_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnBlind_1.setText("Blind");
+		
+		Button btnInvisible_2 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnInvisible_2.setText("Invisible");
+		
+		Button btnOnlyImp = new Button(grpGeneralAffects, SWT.CHECK);
+		btnOnlyImp.setText("Only imp");
+		
+		Button btnFade_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnFade_1.setText("Fade");
+		
+		Button btnScream = new Button(grpGeneralAffects, SWT.CHECK);
+		btnScream.setText("Scream");
+		
+		Button btnBloodthirst = new Button(grpGeneralAffects, SWT.CHECK);
+		btnBloodthirst.setText("Bloodthirst");
+		
+		Button btnStun = new Button(grpGeneralAffects, SWT.CHECK);
+		btnStun.setText("Stun");
+		
+		Button btnSanctuary_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnSanctuary_1.setText("Sanctuary");
+		
+		Button btnFaerieFire_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnFaerieFire_1.setText("Faerie fire");
+		
+		Button btnInfrared = new Button(grpGeneralAffects, SWT.CHECK);
+		btnInfrared.setText("Infrared");
+		
+		Button btnCurse = new Button(grpGeneralAffects, SWT.CHECK);
+		btnCurse.setText("Curse");
+		
+		Button btnCorruption = new Button(grpGeneralAffects, SWT.CHECK);
+		btnCorruption.setText("Corruption");
+		
+		Button btnPoison_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnPoison_1.setText("Poison");
+		
+		Button btnProtectionEvil = new Button(grpGeneralAffects, SWT.CHECK);
+		btnProtectionEvil.setText("Protection evil");
+		
+		Button btnProtectionGood = new Button(grpGeneralAffects, SWT.CHECK);
+		btnProtectionGood.setText("Protection good");
+		
+		Button btnSneak = new Button(grpGeneralAffects, SWT.CHECK);
+		btnSneak.setText("Sneak");
+		
+		Button btnHide = new Button(grpGeneralAffects, SWT.CHECK);
+		btnHide.setText("Hide");
+		
+		Button btnSleep = new Button(grpGeneralAffects, SWT.CHECK);
+		btnSleep.setText("Sleep");
+		
+		Button btnCharm = new Button(grpGeneralAffects, SWT.CHECK);
+		btnCharm.setText("Charm");
+		
+		Button btnFlying_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnFlying_1.setText("Flying");
+		
+		Button btnPassDoor_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnPassDoor_1.setText("Pass door");
+		
+		Button btnHaste_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnHaste_1.setText("Haste");
+		
+		Button btnCalm = new Button(grpGeneralAffects, SWT.CHECK);
+		btnCalm.setText("Calm");
+		
+		Button btnPlague = new Button(grpGeneralAffects, SWT.CHECK);
+		btnPlague.setText("Plague");
+		
+		Button btnWeaken = new Button(grpGeneralAffects, SWT.CHECK);
+		btnWeaken.setText("Weaken");
+		
+		Button btnWeakenStun = new Button(grpGeneralAffects, SWT.CHECK);
+		btnWeakenStun.setText("Weaken stun");
+		
+		Button btnBerserk_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnBerserk_1.setText("Berserk");
+		
+		Button btnSwim = new Button(grpGeneralAffects, SWT.CHECK);
+		btnSwim.setText("Swim");
+		
+		Button btnRegeneration_1 = new Button(grpGeneralAffects, SWT.CHECK);
+		btnRegeneration_1.setText("Regeneration");
+		
+		Button btnSlow = new Button(grpGeneralAffects, SWT.CHECK);
+		btnSlow.setText("Slow");
+		
+		Button btnCamouflage = new Button(grpGeneralAffects, SWT.CHECK);
+		btnCamouflage.setText("Camouflage");
+		
+		Button btnFlaming = new Button(grpGeneralAffects, SWT.CHECK);
+		btnFlaming.setText("Flaming");
+		
+		Button btnHold = new Button(grpGeneralAffects, SWT.CHECK);
+		btnHold.setText("Hold");
+		
+		Button btnProtect = new Button(grpGeneralAffects, SWT.CHECK);
+		btnProtect.setText("Protect");
+		
+		Button btnParalysis = new Button(grpGeneralAffects, SWT.CHECK);
+		btnParalysis.setText("Paralysis");
+		
+		Group grpDetectionAffects = new Group(grpAffectsSpecials, SWT.NONE);
+		grpDetectionAffects.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpDetectionAffects.setText("Detection Affects");
+		RowLayout rl_grpDetectionAffects = new RowLayout(SWT.HORIZONTAL);
+		rl_grpDetectionAffects.pack = false;
+		grpDetectionAffects.setLayout(rl_grpDetectionAffects);
+		
+		Button btnDetectImpInvis = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDetectImpInvis.setText("Detect imp invis");
+		
+		Button btnDetectFade = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDetectFade.setText("Detect fade");
+		
+		Button btnDetectEvil_1 = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDetectEvil_1.setText("Detect evil");
+		
+		Button btnDetectInvis_1 = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDetectInvis_1.setText("Detect invis");
+		
+		Button btnDetectMagic_1 = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDetectMagic_1.setText("Detect magic");
+		
+		Button btnDetectHidden = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDetectHidden.setText("Detect hidden");
+		
+		Button btnDetectGood_1 = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDetectGood_1.setText("Detect good");
+		
+		Button btnDetectSneak = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDetectSneak.setText("Detect sneak");
+		
+		Button btnDetectUndead = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDetectUndead.setText("Detect undead");
+		
+		Button btnDarkVision_1 = new Button(grpDetectionAffects, SWT.CHECK);
+		btnDarkVision_1.setText("Dark vision");
+		
+		Button btnAcuteVision = new Button(grpDetectionAffects, SWT.CHECK);
+		btnAcuteVision.setText("Acute vision");
+		sashForm_2.setWeights(new int[] {1, 1, 1});
 		scrolledComposite_2.setContent(composite_14);
-		scrolledComposite_2.setMinSize(composite_14.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite_2.setMinSize(new Point(1200, 661));
 		
 		TabItem tbtmAreaOverview = new TabItem(tabFolder, SWT.NONE);
 		tbtmAreaOverview.setText("Area Overview");
