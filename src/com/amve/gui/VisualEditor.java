@@ -393,6 +393,7 @@ public class VisualEditor {
 	private Text mobDamageDice3;
 	private Text text_3;
 	private Text text_4;
+	private Text txtTxt;
 
 	/**
 	 * Launch the application.
@@ -3379,6 +3380,59 @@ public class VisualEditor {
 		
 		TabItem tbtmObjectEditor_1 = new TabItem(tabFolder_1, SWT.NONE);
 		tbtmObjectEditor_1.setText("Object Editor");
+		
+		ScrolledComposite scrolledComposite_2 = new ScrolledComposite(tabFolder_1, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		tbtmObjectEditor_1.setControl(scrolledComposite_2);
+		scrolledComposite_2.setExpandHorizontal(true);
+		scrolledComposite_2.setExpandVertical(true);
+		
+		Composite composite_14 = new Composite(scrolledComposite_2, SWT.NONE);
+		composite_14.setLayout(new FillLayout(SWT.HORIZONTAL));
+		
+		SashForm sashForm_2 = new SashForm(composite_14, SWT.SMOOTH);
+		
+		Group grpGrp = new Group(sashForm_2, SWT.NONE);
+		grpGrp.setText("grp1");
+		grpGrp.setLayout(new GridLayout(1, false));
+		
+		Group grpGrp_4 = new Group(grpGrp, SWT.NONE);
+		grpGrp_4.setLayout(new GridLayout(1, false));
+		GridData gd_grpGrp_4 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpGrp_4.widthHint = 200;
+		grpGrp_4.setLayoutData(gd_grpGrp_4);
+		grpGrp_4.setText("grp1_1");
+		
+		Label lblLbl = new Label(grpGrp_4, SWT.NONE);
+		lblLbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblLbl.setText("lbl1");
+		
+		txtTxt = new Text(grpGrp_4, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
+		txtTxt.setText("txt1");
+		GridData gd_txtTxt = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_txtTxt.widthHint = 150;
+		gd_txtTxt.heightHint = 250;
+		txtTxt.setLayoutData(gd_txtTxt);
+		
+		Group grpGrp_1 = new Group(sashForm_2, SWT.NONE);
+		grpGrp_1.setText("grp2");
+		grpGrp_1.setLayout(new GridLayout(1, false));
+		
+		Group grpGrp_5 = new Group(grpGrp_1, SWT.NONE);
+		GridData gd_grpGrp_5 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpGrp_5.widthHint = 250;
+		grpGrp_5.setLayoutData(gd_grpGrp_5);
+		grpGrp_5.setText("grp2_1");
+		
+		Group grpGrp_2 = new Group(sashForm_2, SWT.NONE);
+		grpGrp_2.setText("grp3");
+		grpGrp_2.setLayout(new GridLayout(1, false));
+		
+		Group grpGrp_3 = new Group(sashForm_2, SWT.NONE);
+		grpGrp_3.setText("grp4");
+		grpGrp_3.setLayout(new GridLayout(1, false));
+		sashForm_2.setWeights(new int[] {10, 10, 10, 10});
+		scrolledComposite_2.setContent(composite_14);
+		scrolledComposite_2.setMinSize(composite_14.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
 		TabItem tbtmAreaOverview = new TabItem(tabFolder, SWT.NONE);
 		tbtmAreaOverview.setText("Area Overview");
