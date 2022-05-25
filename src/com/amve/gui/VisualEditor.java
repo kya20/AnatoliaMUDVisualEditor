@@ -398,6 +398,35 @@ public class VisualEditor {
 	private Text text_6;
 	private Text text_7;
 	private Table objectExtrasTable;
+	private Text noneModifTxt;
+	private Text text_8;
+	private Text text_9;
+	private Text text_10;
+	private Text text_11;
+	private Text text_12;
+	private Text text_13;
+	private Text text_14;
+	private Text text_15;
+	private Text text_16;
+	private Text text_17;
+	private Text text_18;
+	private Text text_19;
+	private Text text_20;
+	private Text text_21;
+	private Text text_22;
+	private Text text_23;
+	private Text text_24;
+	private Text text_25;
+	private Text text_26;
+	private Text text_27;
+	private Text text_28;
+	private Text text_29;
+	private Text text_30;
+	private Text text_31;
+	private Text text_32;
+	private Text text_33;
+	private Text text_34;
+	private Text text_35;
 
 	/**
 	 * Launch the application.
@@ -1258,6 +1287,18 @@ public class VisualEditor {
 		grpWorldObjects.setText("World Objects");
 		
 		tree = new Tree(grpWorldObjects, SWT.BORDER);
+		
+		Composite composite_18 = new Composite(composite, SWT.NONE);
+		RowLayout rl_composite_18 = new RowLayout(SWT.HORIZONTAL);
+		rl_composite_18.pack = false;
+		composite_18.setLayout(rl_composite_18);
+		composite_18.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		
+		Button btnSave = new Button(composite_18, SWT.NONE);
+		btnSave.setText("Save");
+		
+		Button btnReload = new Button(composite_18, SWT.NONE);
+		btnReload.setText("Reload");
 	    parser.getArea().getRooms().forEach((key, value) -> {
 	    	TreeItem roomItem = new TreeItem(tree,0);
 	    	roomItem.setText("Room " + key + " - " + value.header);
@@ -2221,12 +2262,12 @@ public class VisualEditor {
 		lblMaterial.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		lblMaterial.setText("Material");
 		
-		Combo mobRaceCombo = new Combo(grpAppearance, SWT.NONE);
+		Combo mobRaceCombo = new Combo(grpAppearance, SWT.READ_ONLY);
 		mobRaceCombo.setToolTipText("Race of the mobile");
 		mobRaceCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		mobRaceCombo.setText("TODO: add race");
 		
-		Combo mobSizeCombo = new Combo(grpAppearance, SWT.NONE);
+		Combo mobSizeCombo = new Combo(grpAppearance, SWT.READ_ONLY);
 		mobSizeCombo.setToolTipText("Size of the mobile");
 		mobSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
 		mobSizeCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
@@ -2246,15 +2287,15 @@ public class VisualEditor {
 		Label lblSex = new Label(grpAppearance, SWT.NONE);
 		lblSex.setText("Sex");
 		
-		Combo combo = new Combo(grpAppearance, SWT.NONE);
+		Combo combo = new Combo(grpAppearance, SWT.READ_ONLY);
 		combo.setToolTipText("Position the mobile will be loaded in");
 		combo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
-		Combo combo_1 = new Combo(grpAppearance, SWT.NONE);
+		Combo combo_1 = new Combo(grpAppearance, SWT.READ_ONLY);
 		combo_1.setToolTipText("Position the mobile will return after a fight. Cannot go back to sleep");
 		combo_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
-		Combo combo_2 = new Combo(grpAppearance, SWT.NONE);
+		Combo combo_2 = new Combo(grpAppearance, SWT.READ_ONLY);
 		combo_2.setToolTipText("Gender of the mobile");
 		combo_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
@@ -2554,7 +2595,7 @@ public class VisualEditor {
 		lblDmgType.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		lblDmgType.setText("Dmg Type");
 		
-		Combo mobDamageType = new Combo(composite_7_4, SWT.NONE);
+		Combo mobDamageType = new Combo(composite_7_4, SWT.READ_ONLY);
 		GridData gd_mobDamageType = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_mobDamageType.widthHint = 42;
 		mobDamageType.setLayoutData(gd_mobDamageType);
@@ -2566,7 +2607,7 @@ public class VisualEditor {
 		lblDamage.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		lblDamage.setText("Damage");
 		
-		Combo mobDamage = new Combo(composite_7_4_1, SWT.NONE);
+		Combo mobDamage = new Combo(composite_7_4_1, SWT.READ_ONLY);
 		GridData gd_mobDamage = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_mobDamage.widthHint = 42;
 		mobDamage.setLayoutData(gd_mobDamage);
@@ -3312,35 +3353,35 @@ public class VisualEditor {
 		lblItemType.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblItemType.setText("Item type 1");
 		
-		Combo mobShopItemType1 = new Combo(composite_11, SWT.NONE);
+		Combo mobShopItemType1 = new Combo(composite_11, SWT.READ_ONLY);
 		mobShopItemType1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Label lblItemType_5 = new Label(composite_11, SWT.NONE);
 		lblItemType_5.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblItemType_5.setText("Item type 2");
 		
-		Combo mobShopItemType2 = new Combo(composite_11, SWT.NONE);
+		Combo mobShopItemType2 = new Combo(composite_11, SWT.READ_ONLY);
 		mobShopItemType2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Label lblItemType_1 = new Label(composite_11, SWT.NONE);
 		lblItemType_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblItemType_1.setText("Item type 3");
 		
-		Combo mobShopItemType3 = new Combo(composite_11, SWT.NONE);
+		Combo mobShopItemType3 = new Combo(composite_11, SWT.READ_ONLY);
 		mobShopItemType3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Label lblItemType_2 = new Label(composite_11, SWT.NONE);
 		lblItemType_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblItemType_2.setText("Item type 4");
 		
-		Combo mobShopItemType4 = new Combo(composite_11, SWT.NONE);
+		Combo mobShopItemType4 = new Combo(composite_11, SWT.READ_ONLY);
 		mobShopItemType4.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Label lblItemType_3 = new Label(composite_11, SWT.NONE);
 		lblItemType_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblItemType_3.setText("Item type 5");
 		
-		Combo mobShopItemType5 = new Combo(composite_11, SWT.NONE);
+		Combo mobShopItemType5 = new Combo(composite_11, SWT.READ_ONLY);
 		mobShopItemType5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Group grpPracticer = new Group(grpShopspecial, SWT.NONE);
@@ -3441,7 +3482,8 @@ public class VisualEditor {
 		Label lblFunction = new Label(composite_12, SWT.NONE);
 		lblFunction.setText("Function");
 		
-		Combo combo_3 = new Combo(composite_12, SWT.NONE);
+		Combo combo_3 = new Combo(composite_12, SWT.READ_ONLY);
+		combo_3.setItems(new String[] {"fight_prog", "death_prog", "give_prog", "greet_prog", "speech_prog", "bribe_prog", "area_prog"});
 		combo_3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		text_3 = new Text(composite_12, SWT.BORDER);
@@ -3535,7 +3577,7 @@ public class VisualEditor {
 		Label lblMaterial_1 = new Label(composite_17, SWT.NONE);
 		lblMaterial_1.setText("Material");
 		
-		Combo objMaterialCombo = new Combo(composite_17, SWT.NONE);
+		Combo objMaterialCombo = new Combo(composite_17, SWT.READ_ONLY);
 		objMaterialCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Composite composite_17_1 = new Composite(grpType, SWT.NONE);
@@ -3570,7 +3612,8 @@ public class VisualEditor {
 		Label lbStatus = new Label(composite_17_2, SWT.NONE);
 		lbStatus.setText("Status");
 		
-		Combo objStatus = new Combo(composite_17_2, SWT.NONE);
+		Combo objStatus = new Combo(composite_17_2, SWT.READ_ONLY);
+		objStatus.setItems(new String[] {"excellent", "good", "fine", "average", "poor", "fragile", "broken"});
 		objStatus.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Composite composite_17_2_1 = new Composite(grpType, SWT.NONE);
@@ -3579,7 +3622,7 @@ public class VisualEditor {
 		Label lblType = new Label(composite_17_2_1, SWT.NONE);
 		lblType.setText("Type");
 		
-		Combo objStatus_1 = new Combo(composite_17_2_1, SWT.NONE);
+		Combo objStatus_1 = new Combo(composite_17_2_1, SWT.READ_ONLY);
 		objStatus_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpTypeProperties = new Group(grpGeneralProperties, SWT.NONE);
@@ -4217,6 +4260,204 @@ public class VisualEditor {
 		
 		Button btnAcuteVision = new Button(grpDetectionAffects, SWT.CHECK);
 		btnAcuteVision.setText("Acute vision");
+		
+		Group grpLocalAffects = new Group(grpAffectsSpecials, SWT.NONE);
+		grpLocalAffects.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpLocalAffects.setText("Local Affect Modifiers");
+		grpLocalAffects.setLayout(new GridLayout(4, true));
+		
+		Label lblNone = new Label(grpLocalAffects, SWT.NONE);
+		lblNone.setText("None:");
+		
+		noneModifTxt = new Text(grpLocalAffects, SWT.BORDER);
+		noneModifTxt.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblStrength = new Label(grpLocalAffects, SWT.NONE);
+		lblStrength.setText("Strength:");
+		
+		text_8 = new Text(grpLocalAffects, SWT.BORDER);
+		text_8.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDexterity = new Label(grpLocalAffects, SWT.NONE);
+		lblDexterity.setText("Dexterity:");
+		
+		text_9 = new Text(grpLocalAffects, SWT.BORDER);
+		text_9.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblIntelligence = new Label(grpLocalAffects, SWT.NONE);
+		lblIntelligence.setText("Intelligence:");
+		
+		text_10 = new Text(grpLocalAffects, SWT.BORDER);
+		text_10.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblWisdom = new Label(grpLocalAffects, SWT.NONE);
+		lblWisdom.setText("Wisdom:");
+		
+		text_11 = new Text(grpLocalAffects, SWT.BORDER);
+		text_11.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblConstitution = new Label(grpLocalAffects, SWT.NONE);
+		lblConstitution.setText("Constitution:");
+		
+		text_12 = new Text(grpLocalAffects, SWT.BORDER);
+		text_12.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblCharisma = new Label(grpLocalAffects, SWT.NONE);
+		lblCharisma.setText("Charisma:");
+		
+		text_13 = new Text(grpLocalAffects, SWT.BORDER);
+		text_13.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblClass = new Label(grpLocalAffects, SWT.NONE);
+		lblClass.setText("Class:");
+		
+		text_14 = new Text(grpLocalAffects, SWT.BORDER);
+		text_14.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblLevel_1 = new Label(grpLocalAffects, SWT.NONE);
+		lblLevel_1.setText("Level:");
+		
+		text_15 = new Text(grpLocalAffects, SWT.BORDER);
+		text_15.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblAge = new Label(grpLocalAffects, SWT.NONE);
+		lblAge.setText("Age:");
+		
+		text_16 = new Text(grpLocalAffects, SWT.BORDER);
+		text_16.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblHeight = new Label(grpLocalAffects, SWT.NONE);
+		lblHeight.setText("Height:");
+		
+		text_17 = new Text(grpLocalAffects, SWT.BORDER);
+		text_17.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblWeight_1 = new Label(grpLocalAffects, SWT.NONE);
+		lblWeight_1.setText("Weight:");
+		
+		text_18 = new Text(grpLocalAffects, SWT.BORDER);
+		text_18.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblMana_1 = new Label(grpLocalAffects, SWT.NONE);
+		lblMana_1.setText("Mana:");
+		
+		text_19 = new Text(grpLocalAffects, SWT.BORDER);
+		text_19.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblHitpoints = new Label(grpLocalAffects, SWT.NONE);
+		lblHitpoints.setText("Hitpoints:");
+		
+		text_20 = new Text(grpLocalAffects, SWT.BORDER);
+		text_20.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblMovement = new Label(grpLocalAffects, SWT.NONE);
+		lblMovement.setText("Movement:");
+		
+		text_21 = new Text(grpLocalAffects, SWT.BORDER);
+		text_21.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblGold = new Label(grpLocalAffects, SWT.NONE);
+		lblGold.setText("Gold:");
+		
+		text_22 = new Text(grpLocalAffects, SWT.BORDER);
+		text_22.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblExp = new Label(grpLocalAffects, SWT.NONE);
+		lblExp.setText("Exp:");
+		
+		text_23 = new Text(grpLocalAffects, SWT.BORDER);
+		text_23.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblArmorClass = new Label(grpLocalAffects, SWT.NONE);
+		lblArmorClass.setText("Armor class:");
+		
+		text_24 = new Text(grpLocalAffects, SWT.BORDER);
+		text_24.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblHitroll = new Label(grpLocalAffects, SWT.NONE);
+		lblHitroll.setText("Hitroll:");
+		
+		text_25 = new Text(grpLocalAffects, SWT.BORDER);
+		text_25.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDamroll = new Label(grpLocalAffects, SWT.NONE);
+		lblDamroll.setText("Damroll:");
+		
+		text_26 = new Text(grpLocalAffects, SWT.BORDER);
+		text_26.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSaveVsPara = new Label(grpLocalAffects, SWT.NONE);
+		lblSaveVsPara.setText("Save vs para:");
+		
+		text_27 = new Text(grpLocalAffects, SWT.BORDER);
+		text_27.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSaveVsRod = new Label(grpLocalAffects, SWT.NONE);
+		lblSaveVsRod.setText("Save vs rod:");
+		
+		text_28 = new Text(grpLocalAffects, SWT.BORDER);
+		text_28.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSaveVsPetri = new Label(grpLocalAffects, SWT.NONE);
+		lblSaveVsPetri.setText("Save vs petri:");
+		
+		text_29 = new Text(grpLocalAffects, SWT.BORDER);
+		text_29.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSaveVsBreath = new Label(grpLocalAffects, SWT.NONE);
+		lblSaveVsBreath.setText("Save vs breath:");
+		
+		text_34 = new Text(grpLocalAffects, SWT.BORDER);
+		text_34.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSaveVsSpell = new Label(grpLocalAffects, SWT.NONE);
+		lblSaveVsSpell.setText("Save vs spell:");
+		
+		text_33 = new Text(grpLocalAffects, SWT.BORDER);
+		text_33.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSpellAffect = new Label(grpLocalAffects, SWT.NONE);
+		lblSpellAffect.setText("Spell affect:");
+		
+		text_32 = new Text(grpLocalAffects, SWT.BORDER);
+		text_32.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSize_1 = new Label(grpLocalAffects, SWT.NONE);
+		lblSize_1.setText("Size:");
+		
+		text_31 = new Text(grpLocalAffects, SWT.BORDER);
+		text_31.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSex_1 = new Label(grpLocalAffects, SWT.NONE);
+		lblSex_1.setText("Sex:");
+		
+		text_30 = new Text(grpLocalAffects, SWT.BORDER);
+		text_30.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Group grpSpecials = new Group(grpAffectsSpecials, SWT.NONE);
+		grpSpecials.setLayout(new GridLayout(4, false));
+		grpSpecials.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		grpSpecials.setText("Specials");
+		
+		Label lblProg_1 = new Label(grpSpecials, SWT.NONE);
+		lblProg_1.setText("Prog:");
+		
+		Combo combo_4 = new Combo(grpSpecials, SWT.READ_ONLY);
+		combo_4.setItems(new String[] {"fight_prog", "death_prog", "give_prog", "wear_prog", "remove_prog", "get_prog", "sac_prog"});
+		
+		Label lblFunction_1 = new Label(grpSpecials, SWT.NONE);
+		lblFunction_1.setText("Function:");
+		
+		text_35 = new Text(grpSpecials, SWT.BORDER);
+		
+		Label lblLimitations = new Label(grpSpecials, SWT.NONE);
+		lblLimitations.setText("Limitations:");
+		
+		Combo combo_5 = new Combo(grpSpecials, SWT.READ_ONLY);
+		combo_5.setItems(new String[] {"None", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+		combo_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		new Label(grpSpecials, SWT.NONE);
+		new Label(grpSpecials, SWT.NONE);
 		sashForm_2.setWeights(new int[] {1, 1, 1});
 		scrolledComposite_2.setContent(composite_14);
 		scrolledComposite_2.setMinSize(new Point(1200, 661));
@@ -4227,9 +4468,6 @@ public class VisualEditor {
 		ListViewer listViewer = new ListViewer(tabFolder, SWT.BORDER | SWT.V_SCROLL);
 		List list = listViewer.getList();
 		tbtmAreaOverview.setControl(list);
-		
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("New Item");
 		
 		CLabel lblLog = new CLabel(composite_1, SWT.NONE);
 		lblLog.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
