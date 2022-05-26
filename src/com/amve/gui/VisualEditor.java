@@ -91,6 +91,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Scale;
 
 import org.eclipse.core.databinding.*;
+import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.core.databinding.observable.Realm;
@@ -125,7 +126,6 @@ public class VisualEditor {
 	private Combo northDoorStateCombo;
 	private Composite northComposite;
 	private Text northDoorKeyCombo;
-	private Combo northDoorSizeCombo;
 	private Button northDoorFlagJCheck;
 	private Button northDoorFlagHCheck;
 	private Button northDoorFlagKCheck;
@@ -138,7 +138,6 @@ public class VisualEditor {
 	private Button northDoorFlagGCheck;
 	private Combo eastDoorStateCombo;
 	private Text eastDoorKeyCombo;
-	private Combo eastDoorSizeCombo;
 	private Button eastDoorFlagJCheck;
 	private Button eastDoorFlagACheck;
 	private Button eastDoorFlagICheck;
@@ -151,7 +150,6 @@ public class VisualEditor {
 	private Button eastDoorFlagBCheck;
 	private Text southDoorKeyCombo;
 	private Combo southDoorStateCombo;
-	private Combo southDoorSizeCombo;
 	private Button southDoorFlagICheck;
 	private Button southDoorFlagKCheck;
 	private Button southDoorFlagCCheck;
@@ -162,7 +160,6 @@ public class VisualEditor {
 	private Button southDoorFlagBCheck;
 	private Button southDoorFlagFCheck;
 	private Button southDoorFlagHCheck;
-	private Combo westDoorSizeCombo;
 	private Text westDoorKeyCombo;
 	private Combo westDoorStateCombo;
 	private Button westDoorFlagFCheck;
@@ -177,7 +174,6 @@ public class VisualEditor {
 	private Button westDoorFlagCCheck;
 	private Combo upDoorStateCombo;
 	private Text upDoorKeyCombo;
-	private Combo upDoorSizeCombo;
 	private Button upDoorFlagACheck;
 	private Button upDoorFlagKCheck;
 	private Button upDoorFlagBCheck;
@@ -190,7 +186,6 @@ public class VisualEditor {
 	private Button upDoorFlagHCheck;
 	private Text downDoorKeyCombo;
 	private Combo downDoorStateCombo;
-	private Combo downDoorSizeCombo;
 	private Button downDoorFlagACheck;
 	private Button downDoorFlagGCheck;
 	private Button downDoorFlagHCheck;
@@ -435,6 +430,24 @@ public class VisualEditor {
 	private Button upDoorCheckbox;
 	private Button downDoorCheckbox;
 	private Group grpResets;
+	private Combo mobSizeCombo;
+	private Combo mobRaceCombo;
+	private Combo combo;
+	private Combo combo_1;
+	private Combo combo_2;
+	private Button btnPoison;
+	private Button btnVanishes;
+	private Button btnOther;
+	private Button btnMagical;
+	private Button btnEdible;
+	private Button btnAnimal;
+	private Button btnSentient;
+	private Button btnUndead;
+	private Button btnConstruct;
+	private Spinner mobLvlSpinner;
+	private Text mobDamageType;
+	private Scale scale_2;
+	private Spinner spinner_2;
 
 	/**
 	 * Launch the application.
@@ -1271,6 +1284,9 @@ public class VisualEditor {
 		m_bindingContext.updateTargets();
 	}
 
+	private void updateMobPanel(String key) {
+		System.out.println(key);
+	}
 	/**
 	 * Create contents of the window.
 	 */
@@ -1339,6 +1355,26 @@ public class VisualEditor {
 	    parser.getArea().getRooms().forEach((key, value) -> {
 	    	TreeItem roomItem = new TreeItem(tree,0);
 	    	roomItem.setText("Room " + key + " - " + value.header);
+	    	value.getMobileResets().forEach((k, v) -> {
+	    		TreeItem mobItem = new TreeItem(roomItem,0);
+	    		Mobile mob  = new Mobile();
+	    		for (Mobile m: parser.getArea().getMobiles()) {
+	    			if (m.getvNum().equals(k)) {
+	    				mob = m;
+	    			}
+	    		}
+	    		mobItem.setText("Mobile " + k + " - " + mob.shortDescription);
+	    	});
+	    	value.getObjectResets().forEach((k, v) -> {
+	    		TreeItem objItem = new TreeItem(roomItem,0);
+	    		com.amve.area.Object obj  = new com.amve.area.Object();
+	    		for (com.amve.area.Object o: parser.getArea().getObjects()) {
+	    			if (o.vNum.equals(k)) {
+	    				obj = o;
+	    			}
+	    		}
+	    		objItem.setText("Object " + k + " - " + obj.shortDescription);
+	    	});
 	    });
 
 	      tree.addListener(SWT.Selection, new Listener() {
@@ -1354,6 +1390,11 @@ public class VisualEditor {
 					tmp = tmp.replaceAll("\\s.*", "");
 					updateRoomPanel(tmp);
 				}
+	            else if (tmp.startsWith("Mobile")) {
+	            	tmp = tmp.replace("Mobile ", "");
+					tmp = tmp.replaceAll("\\s.*", "");
+					updateMobPanel(tmp);
+	            }
 	          }
 	        }
 	      });
@@ -1670,14 +1711,6 @@ public class VisualEditor {
 		northDoorKeyCombo = new Text(northComposite, SWT.BORDER);
 		northDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblDoorSize = new Label(northComposite, SWT.NONE);
-		lblDoorSize.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblDoorSize.setText("Door Size");
-		
-		northDoorSizeCombo = new Combo(northComposite, SWT.READ_ONLY);
-		northDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
-		northDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
 		grpResets = new Group(northComposite, SWT.NONE);
 		grpResets.setLayout(new FillLayout(SWT.HORIZONTAL));
 		GridData gd_grpResets = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
@@ -1767,14 +1800,6 @@ public class VisualEditor {
 		
 		eastDoorKeyCombo = new Text(eastComposite, SWT.BORDER);
 		eastDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-		Label lblDoorSize_1 = new Label(eastComposite, SWT.NONE);
-		lblDoorSize_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblDoorSize_1.setText("Door Size");
-		
-		eastDoorSizeCombo = new Combo(eastComposite, SWT.READ_ONLY);
-		eastDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
-		eastDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpResets_1 = new Group(eastComposite, SWT.NONE);
 		GridData gd_grpResets_1 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
@@ -1866,14 +1891,6 @@ public class VisualEditor {
 		southDoorKeyCombo = new Text(southComposite, SWT.BORDER);
 		southDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblDoorSize_2 = new Label(southComposite, SWT.NONE);
-		lblDoorSize_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblDoorSize_2.setText("Door Size");
-		
-		southDoorSizeCombo = new Combo(southComposite, SWT.READ_ONLY);
-		southDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
-		southDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
 		Group grpResets_2 = new Group(southComposite, SWT.NONE);
 		GridData gd_grpResets_2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_grpResets_2.widthHint = 200;
@@ -1963,14 +1980,6 @@ public class VisualEditor {
 		
 		westDoorKeyCombo = new Text(westComposite, SWT.BORDER);
 		westDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-		Label lblDoorSize_3 = new Label(westComposite, SWT.NONE);
-		lblDoorSize_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblDoorSize_3.setText("Door Size");
-		
-		westDoorSizeCombo = new Combo(westComposite, SWT.READ_ONLY);
-		westDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
-		westDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpResets_3 = new Group(westComposite, SWT.NONE);
 		GridData gd_grpResets_3 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
@@ -2062,14 +2071,6 @@ public class VisualEditor {
 		upDoorKeyCombo = new Text(upComposite, SWT.BORDER);
 		upDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label lblDoorSize_4 = new Label(upComposite, SWT.NONE);
-		lblDoorSize_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblDoorSize_4.setText("Door Size");
-		
-		upDoorSizeCombo = new Combo(upComposite, SWT.READ_ONLY);
-		upDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
-		upDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
 		Group grpResets_4 = new Group(upComposite, SWT.NONE);
 		GridData gd_grpResets_4 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_grpResets_4.widthHint = 200;
@@ -2159,14 +2160,6 @@ public class VisualEditor {
 		
 		downDoorKeyCombo = new Text(downComposite, SWT.BORDER);
 		downDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
-		Label lblDoorSize_5 = new Label(downComposite, SWT.NONE);
-		lblDoorSize_5.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		lblDoorSize_5.setText("Door Size");
-		
-		downDoorSizeCombo = new Combo(downComposite, SWT.READ_ONLY);
-		downDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
-		downDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpResets_5 = new Group(downComposite, SWT.NONE);
 		GridData gd_grpResets_5 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
@@ -2295,12 +2288,12 @@ public class VisualEditor {
 		lblMaterial.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		lblMaterial.setText("Material");
 		
-		Combo mobRaceCombo = new Combo(grpAppearance, SWT.READ_ONLY);
+		mobRaceCombo = new Combo(grpAppearance, SWT.READ_ONLY);
+		mobRaceCombo.setItems(new String[] {"unknown", "human", "elf", "half-elf", "dark-elf", "rockseer", "dwarf", "svirfnebli", "duergar", "arial", "gnome", "storm giant", "cloud giant", "fire giant", "frost giant", "felar", "githyanki", "satyr", "troll", "black dragon", "blue dragon", "green dragon", "red dragon", "white dragon", "brass dragon", "gold dragon", "silver dragon", "bronze dragon", "copper dragon", "bat", "bear", "cat", "centipede", "dog", "doll", "fido", "fox", "goblin", "hobgoblin", "kobold", "lizard", "modron", "orc", "pig", "rabbit", "school monster", "snake", "song bird", "water fowl", "wolf", "wyvern", "dragon", "giant", "golem", "undead", "drow", "draconian", "sprite", "aarakocra", "beholder", "tiger", "lion", "centaur", "death knight", "dracolich", "air elemental", "earth elemental", "fire elemental", "water elemental", "fish", "gargoyle", "ghost", "ghoul", "gnoll", "harpy", "lamia", "lich", "minotaur", "ogre", "zombie", "horse", "unique"});
 		mobRaceCombo.setToolTipText("Race of the mobile");
 		mobRaceCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		mobRaceCombo.setText("TODO: add race");
 		
-		Combo mobSizeCombo = new Combo(grpAppearance, SWT.READ_ONLY);
+		mobSizeCombo = new Combo(grpAppearance, SWT.READ_ONLY);
 		mobSizeCombo.setToolTipText("Size of the mobile");
 		mobSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
 		mobSizeCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
@@ -2320,15 +2313,15 @@ public class VisualEditor {
 		Label lblSex = new Label(grpAppearance, SWT.NONE);
 		lblSex.setText("Sex");
 		
-		Combo combo = new Combo(grpAppearance, SWT.READ_ONLY);
+		combo = new Combo(grpAppearance, SWT.READ_ONLY);
 		combo.setToolTipText("Position the mobile will be loaded in");
 		combo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
-		Combo combo_1 = new Combo(grpAppearance, SWT.READ_ONLY);
+		combo_1 = new Combo(grpAppearance, SWT.READ_ONLY);
 		combo_1.setToolTipText("Position the mobile will return after a fight. Cannot go back to sleep");
 		combo_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
-		Combo combo_2 = new Combo(grpAppearance, SWT.READ_ONLY);
+		combo_2 = new Combo(grpAppearance, SWT.READ_ONLY);
 		combo_2.setToolTipText("Gender of the mobile");
 		combo_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
@@ -2346,23 +2339,23 @@ public class VisualEditor {
 		rl_grpCorpseFlags.pack = false;
 		grpCorpseFlags.setLayout(rl_grpCorpseFlags);
 		
-		Button btnEdible = new Button(grpCorpseFlags, SWT.CHECK);
+		btnEdible = new Button(grpCorpseFlags, SWT.CHECK);
 		btnEdible.setToolTipText("Mobile can be eaten");
 		btnEdible.setText("Edible");
 		
-		Button btnPoison = new Button(grpCorpseFlags, SWT.CHECK);
+		btnPoison = new Button(grpCorpseFlags, SWT.CHECK);
 		btnPoison.setToolTipText("Mobile is poisonous when eaten (should also be edible)");
 		btnPoison.setText("Poison");
 		
-		Button btnMagical = new Button(grpCorpseFlags, SWT.CHECK);
+		btnMagical = new Button(grpCorpseFlags, SWT.CHECK);
 		btnMagical.setToolTipText("Mobile's magic nature causes strange effects when eaten");
 		btnMagical.setText("Magical");
 		
-		Button btnVanishes = new Button(grpCorpseFlags, SWT.CHECK);
+		btnVanishes = new Button(grpCorpseFlags, SWT.CHECK);
 		btnVanishes.setToolTipText("Mobile vanishes after death (i.e. a wraith)");
 		btnVanishes.setText("Vanishes");
 		
-		Button btnOther = new Button(grpCorpseFlags, SWT.CHECK);
+		btnOther = new Button(grpCorpseFlags, SWT.CHECK);
 		btnOther.setToolTipText("Mobile is not flesh and blood (defined by material type)");
 		btnOther.setText("Other");
 		
@@ -2375,16 +2368,16 @@ public class VisualEditor {
 		grpFormFlags.setLayout(rl_grpFormFlags);
 		grpFormFlags.setText("Form Flags");
 		
-		Button btnAnimal = new Button(grpFormFlags, SWT.CHECK);
+		btnAnimal = new Button(grpFormFlags, SWT.CHECK);
 		btnAnimal.setText("Animal");
 		
-		Button btnSentient = new Button(grpFormFlags, SWT.CHECK);
+		btnSentient = new Button(grpFormFlags, SWT.CHECK);
 		btnSentient.setText("Sentient");
 		
-		Button btnUndead = new Button(grpFormFlags, SWT.CHECK);
+		btnUndead = new Button(grpFormFlags, SWT.CHECK);
 		btnUndead.setText("Undead");
 		
-		Button btnConstruct = new Button(grpFormFlags, SWT.CHECK);
+		btnConstruct = new Button(grpFormFlags, SWT.CHECK);
 		btnConstruct.setText("Construct");
 		
 		btnMist = new Button(grpFormFlags, SWT.CHECK);
@@ -2540,7 +2533,7 @@ public class VisualEditor {
 		Label lblLevel = new Label(composite_5, SWT.NONE);
 		lblLevel.setText("Level");
 		
-		Spinner mobLvlSpinner = new Spinner(composite_5, SWT.BORDER);
+		mobLvlSpinner = new Spinner(composite_5, SWT.BORDER);
 		
 		Composite composite_6 = new Composite(grpCore, SWT.NONE);
 		composite_6.setLayout(new GridLayout(2, false));
@@ -2577,7 +2570,7 @@ public class VisualEditor {
 		composite_7.setLayout(new GridLayout(1, false));
 		
 		Label lblPierceAc = new Label(composite_7, SWT.NONE);
-		lblPierceAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		lblPierceAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblPierceAc.setText("Pierce AC");
 		
 		mobPierceAC = new Text(composite_7, SWT.BORDER);
@@ -2589,7 +2582,7 @@ public class VisualEditor {
 		composite_7_1.setLayout(new GridLayout(1, false));
 		
 		Label lblBashAc = new Label(composite_7_1, SWT.NONE);
-		lblBashAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		lblBashAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblBashAc.setText("Bash AC");
 		
 		mobBashAC = new Text(composite_7_1, SWT.BORDER);
@@ -2601,7 +2594,7 @@ public class VisualEditor {
 		composite_7_2.setLayout(new GridLayout(1, false));
 		
 		Label lblSlashAc = new Label(composite_7_2, SWT.NONE);
-		lblSlashAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		lblSlashAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblSlashAc.setText("Slash AC");
 		
 		mobSlashAC = new Text(composite_7_2, SWT.BORDER);
@@ -2613,7 +2606,7 @@ public class VisualEditor {
 		composite_7_3.setLayout(new GridLayout(1, false));
 		
 		Label lblMagicAc = new Label(composite_7_3, SWT.NONE);
-		lblMagicAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		lblMagicAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblMagicAc.setText("Magic AC");
 		
 		mobMagicAC = new Text(composite_7_3, SWT.BORDER);
@@ -2628,22 +2621,10 @@ public class VisualEditor {
 		lblDmgType.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		lblDmgType.setText("Dmg Type");
 		
-		Combo mobDamageType = new Combo(composite_7_4, SWT.READ_ONLY);
+		mobDamageType = new Text(composite_7_4, SWT.BORDER);
 		GridData gd_mobDamageType = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_mobDamageType.widthHint = 42;
+		gd_mobDamageType.widthHint = 72;
 		mobDamageType.setLayoutData(gd_mobDamageType);
-		
-		Composite composite_7_4_1 = new Composite(grpAcValues, SWT.NONE);
-		composite_7_4_1.setLayout(new GridLayout(1, false));
-		
-		Label lblDamage = new Label(composite_7_4_1, SWT.NONE);
-		lblDamage.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
-		lblDamage.setText("Damage");
-		
-		Combo mobDamage = new Combo(composite_7_4_1, SWT.READ_ONLY);
-		GridData gd_mobDamage = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_mobDamage.widthHint = 42;
-		mobDamage.setLayoutData(gd_mobDamage);
 		
 		grpDice = new Group(grpCombatValues, SWT.NONE);
 		grpDice.setLayout(new GridLayout(6, false));
@@ -2738,11 +2719,19 @@ public class VisualEditor {
 		grpAlignment.setLayoutData(gd_grpAlignment);
 		grpAlignment.setText("Alignment");
 		
-		Scale scale_2 = new Scale(grpAlignment, SWT.NONE);
+		scale_2 = new Scale(grpAlignment, SWT.NONE);
 		scale_2.setPageIncrement(100);
 		scale_2.setMaximum(2000);
 		scale_2.setSelection(1000);
 		scale_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		spinner_2 = new Spinner(grpAlignment, SWT.BORDER);
+		spinner_2.setMaximum(1000);
+		spinner_2.setMinimum(-1000);
+		GridData gd_spinner_2 = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		gd_spinner_2.widthHint = 60;
+		spinner_2.setLayoutData(gd_spinner_2);
+		int MobAlignValToSlider = 0;
 		
 		Composite composite_13 = new Composite(grpAlignment, SWT.NONE);
 		composite_13.setLayout(new GridLayout(3, true));
@@ -4552,6 +4541,16 @@ public class VisualEditor {
 		    		}
 		    		mobItem.setText("Mobile " + k + " - " + mob.shortDescription);
 		    	});
+		    	value.getObjectResets().forEach((k, v) -> {
+		    		TreeItem objItem = new TreeItem(roomItem,0);
+		    		com.amve.area.Object obj  = new com.amve.area.Object();
+		    		for (com.amve.area.Object o: parser.getArea().getObjects()) {
+		    			if (o.vNum.equals(k)) {
+		    				obj = o;
+		    			}
+		    		}
+		    		objItem.setText("Object " + k + " - " + obj.shortDescription);
+		    	});
 		    });
 			
 		}
@@ -4772,9 +4771,6 @@ public class VisualEditor {
 	public Text getNorthDoorKeyCombo() {
 		return northDoorKeyCombo;
 	}
-	public Combo getNorthDoorSizeCombo() {
-		return northDoorSizeCombo;
-	}
 	public Button getNorthDoorFlagJCheck() {
 		return northDoorFlagJCheck;
 	}
@@ -4817,9 +4813,6 @@ public class VisualEditor {
 	public Text getEastDoorKeyCombo() {
 		return eastDoorKeyCombo;
 	}
-	public Combo getEastDoorSizeCombo() {
-		return eastDoorSizeCombo;
-	}
 	public Button getEastDoorFlagJCheck() {
 		return eastDoorFlagJCheck;
 	}
@@ -4856,9 +4849,6 @@ public class VisualEditor {
 	public Combo getSouthDoorStateCombo() {
 		return southDoorStateCombo;
 	}
-	public Combo getSouthDoorSizeCombo() {
-		return southDoorSizeCombo;
-	}
 	public Text getSouthDescText() {
 		return southDescText;
 	}
@@ -4894,9 +4884,6 @@ public class VisualEditor {
 	}
 	public Button getSouthDoorFlagHCheck() {
 		return southDoorFlagHCheck;
-	}
-	public Combo getWestDoorSizeCombo() {
-		return westDoorSizeCombo;
 	}
 	public Text getWestDoorKeyCombo() {
 		return westDoorKeyCombo;
@@ -4952,9 +4939,6 @@ public class VisualEditor {
 	public Text getUpDoorKeyCombo() {
 		return upDoorKeyCombo;
 	}
-	public Combo getUpDoorSizeCombo() {
-		return upDoorSizeCombo;
-	}
 	public Button getUpDoorFlagACheck() {
 		return upDoorFlagACheck;
 	}
@@ -4993,9 +4977,6 @@ public class VisualEditor {
 	}
 	public Combo getDownDoorStateCombo() {
 		return downDoorStateCombo;
-	}
-	public Combo getDownDoorSizeCombo() {
-		return downDoorSizeCombo;
 	}
 	public Text getDownDoorKeywordText() {
 		return downDoorKeywordText;
@@ -5179,8 +5160,235 @@ public class VisualEditor {
 	public Button getDownDoorCheckbox() {
 		return downDoorCheckbox;
 	}
+	public Text getMobLongDescText() {
+		return mobLongDescText;
+	}
+	public Text getMobNameText() {
+		return mobNameText;
+	}
+	public Text getMobShortDescText() {
+		return mobShortDescText;
+	}
+	public Text getMobMaterialText() {
+		return mobMaterialText;
+	}
+	public Combo getMobSizeCombo() {
+		return mobSizeCombo;
+	}
+	public Text getMobLookDescText() {
+		return mobLookDescText;
+	}
+	public Combo getMobRaceCombo() {
+		return mobRaceCombo;
+	}
+	public Combo getMobStartPosCombo() {
+		return combo;
+	}
+	public Combo getMobDefaultPosCombo() {
+		return combo_1;
+	}
+	public Combo getMobSexCombo() {
+		return combo_2;
+	}
+	public Button getMobCorpsePoison() {
+		return btnPoison;
+	}
+	public Button getMobCorpseVanishes() {
+		return btnVanishes;
+	}
+	public Button getMobCorpseOther() {
+		return btnOther;
+	}
+	public Button getMobCorpseMagical() {
+		return btnMagical;
+	}
+	public Button getMobCorpseEdible() {
+		return btnEdible;
+	}
+	public Button getBtnAnimal() {
+		return btnAnimal;
+	}
+	public Button getBtnSentient() {
+		return btnSentient;
+	}
+	public Button getBtnSpider() {
+		return btnSpider;
+	}
+	public Button getBtnBlob() {
+		return btnBlob;
+	}
+	public Button getBtnColdBlood() {
+		return btnColdBlood;
+	}
+	public Button getBtnSnake() {
+		return btnSnake;
+	}
+	public Button getBtnMammal() {
+		return btnMammal;
+	}
+	public Button getBtnUndead() {
+		return btnUndead;
+	}
+	public Button getBtnCrustacean() {
+		return btnCrustacean;
+	}
+	public Button getBtnConstruct() {
+		return btnConstruct;
+	}
+	public Button getBtnFish() {
+		return btnFish;
+	}
+	public Button getBtnBird() {
+		return btnBird;
+	}
+	public Button getBtnAmphibian() {
+		return btnAmphibian;
+	}
+	public Button getBtnIntangible() {
+		return btnIntangible;
+	}
+	public Button getBtnBiped() {
+		return btnBiped;
+	}
+	public Button getBtnCentaur() {
+		return btnCentaur;
+	}
+	public Button getBtnReptile() {
+		return btnReptile;
+	}
+	public Button getBtnDragon() {
+		return btnDragon;
+	}
+	public Button getBtnInsect() {
+		return btnInsect;
+	}
+	public Button getBtnMist() {
+		return btnMist;
+	}
+	public Button getBtnWorm() {
+		return btnWorm;
+	}
+	public Button getMobPartsHead() {
+		return btnHead;
+	}
+	public Button getMobPartsHorns() {
+		return btnHorns;
+	}
+	public Button getMobPartsFeet() {
+		return btnFeet;
+	}
+	public Button getMobPartsTail() {
+		return btnTail;
+	}
+	public Button getMobPartsLegs() {
+		return btnLegs;
+	}
+	public Button getMobPartsBrains() {
+		return btnBrains;
+	}
+	public Button getMobPartsHeart() {
+		return btnHeart;
+	}
+	public Button getMobPartsGuts() {
+		return btnGuts;
+	}
+	public Button getMobPartsHands() {
+		return btnHands;
+	}
+	public Button getMobPartsEye() {
+		return btnEye;
+	}
+	public Button getMobPartsFins() {
+		return btnFins;
+	}
+	public Button getMobPartsTusks() {
+		return btnTusks;
+	}
+	public Button getMobPartsWings() {
+		return btnWings;
+	}
+	public Button getMobPartsFingers() {
+		return btnFingers;
+	}
+	public Button getMobPartsEar() {
+		return btnEar;
+	}
+	public Button getMobPartsTongue() {
+		return btnTongue;
+	}
+	public Button getMobPartsFangs() {
+		return btnFangs;
+	}
+	public Button getMobPartsTentacles() {
+		return btnTentacles;
+	}
+	public Button getMobPartsScales() {
+		return btnScales;
+	}
+	public Button getMobPartsEyestalks() {
+		return btnEyestalks;
+	}
+	public Button getMobPartsArms() {
+		return btnArms;
+	}
+	public Button getMobPartsClaws() {
+		return btnClaws;
+	}
+	public Text getMobBashAC() {
+		return mobBashAC;
+	}
+	public Text getMobPierceAC() {
+		return mobPierceAC;
+	}
+	public Text getMobSlashAC() {
+		return mobSlashAC;
+	}
+	public Spinner getMobLvlSpinner() {
+		return mobLvlSpinner;
+	}
+	public Text getMobTreasure() {
+		return mobTreasure;
+	}
+	public Text getMobMagicAC() {
+		return mobMagicAC;
+	}
+	public Text getMobGroup() {
+		return mobGroup;
+	}
+	public Text getMobDamageType() {
+		return mobDamageType;
+	}
+	public Text getMobHitDice1() {
+		return mobHitDice1;
+	}
+	public Text getMobHitDice2() {
+		return mobHitDice2;
+	}
+	public Text getMobHitDice3() {
+		return mobHitDice3;
+	}
+	public Text getMobDamageDice3() {
+		return mobDamageDice3;
+	}
+	public Text getMobDamageDice1() {
+		return mobDamageDice1;
+	}
+	public Text getMobManaDice1() {
+		return mobManaDice1;
+	}
+	public Text getMobManaDice3() {
+		return mobManaDice3;
+	}
+	public Text getMobManaDice2() {
+		return mobManaDice2;
+	}
+	public Text getMobDamageDice2() {
+		return mobDamageDice2;
+	}
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
+		IConverter alignmentSpinToSlider = IConverter.create(Integer.class, Integer.class, (o1) -> ((Integer)o1 + 1000));
+		IConverter alignmentSliderToSpin = IConverter.create(Integer.class, Integer.class, (o1) -> ((Integer)o1 - 1000));
 		//
 		IObservableValue observeSelectionRoomHPScaleObserveWidget = WidgetProperties.selection().observe(roomHPScale);
 		IObservableValue observeSelectionRoomHPSpinnerObserveWidget = WidgetProperties.selection().observe(roomHPSpinner);
@@ -5205,10 +5413,6 @@ public class VisualEditor {
 		IObservableValue observeEnabledNorthDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(northDoorKeyCombo);
 		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(northDoorCheckbox);
 		bindingContext.bindValue(observeEnabledNorthDoorKeyComboObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
-		//
-		IObservableValue observeEnabledNorthDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(northDoorSizeCombo);
-		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(northDoorCheckbox);
-		bindingContext.bindValue(observeEnabledNorthDoorSizeComboObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
 		IObservableValue observeEnabledNorthDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagACheck);
 		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(northDoorCheckbox);
@@ -5250,7 +5454,6 @@ public class VisualEditor {
 		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(northDoorCheckbox);
 		bindingContext.bindValue(observeEnabledNorthDoorFlagLCheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
-		//
 		IObservableValue observeEnabledEastDescTextObserveWidget = WidgetProperties.enabled().observe(eastDescText);
 		IObservableValue observeSelectionEastDoorCheckboxObserveWidget = WidgetProperties.selection().observe(eastDoorCheckbox);
 		bindingContext.bindValue(observeEnabledEastDescTextObserveWidget, observeSelectionEastDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
@@ -5266,10 +5469,6 @@ public class VisualEditor {
 		IObservableValue observeEnabledEastDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(eastDoorKeyCombo);
 		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(eastDoorCheckbox);
 		bindingContext.bindValue(observeEnabledEastDoorKeyComboObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
-		//
-		IObservableValue observeEnabledEastDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(eastDoorSizeCombo);
-		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(eastDoorCheckbox);
-		bindingContext.bindValue(observeEnabledEastDoorSizeComboObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
 		IObservableValue observeEnabledEastDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagACheck);
 		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(eastDoorCheckbox);
@@ -5311,7 +5510,6 @@ public class VisualEditor {
 		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(eastDoorCheckbox);
 		bindingContext.bindValue(observeEnabledEastDoorFlagLCheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
-		//
 		IObservableValue observeEnabledSouthDescTextObserveWidget = WidgetProperties.enabled().observe(southDescText);
 		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget = WidgetProperties.selection().observe(southDoorCheckbox);
 		bindingContext.bindValue(observeEnabledSouthDescTextObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
@@ -5327,10 +5525,6 @@ public class VisualEditor {
 		IObservableValue observeEnabledSouthDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(southDoorKeyCombo);
 		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(southDoorCheckbox);
 		bindingContext.bindValue(observeEnabledSouthDoorKeyComboObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
-		//
-		IObservableValue observeEnabledSouthDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(southDoorSizeCombo);
-		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(southDoorCheckbox);
-		bindingContext.bindValue(observeEnabledSouthDoorSizeComboObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
 		IObservableValue observeEnabledSouthDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagACheck);
 		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(southDoorCheckbox);
@@ -5372,7 +5566,6 @@ public class VisualEditor {
 		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(southDoorCheckbox);
 		bindingContext.bindValue(observeEnabledSouthDoorFlagLCheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
-		//
 		IObservableValue observeEnabledWestDescTextObserveWidget = WidgetProperties.enabled().observe(westDescText);
 		IObservableValue observeSelectionWestDoorCheckboxObserveWidget = WidgetProperties.selection().observe(westDoorCheckbox);
 		bindingContext.bindValue(observeEnabledWestDescTextObserveWidget, observeSelectionWestDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
@@ -5388,10 +5581,6 @@ public class VisualEditor {
 		IObservableValue observeEnabledWestDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(westDoorKeyCombo);
 		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(westDoorCheckbox);
 		bindingContext.bindValue(observeEnabledWestDoorKeyComboObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
-		//
-		IObservableValue observeEnabledWestDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(westDoorSizeCombo);
-		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(westDoorCheckbox);
-		bindingContext.bindValue(observeEnabledWestDoorSizeComboObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
 		IObservableValue observeEnabledWestDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagACheck);
 		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(westDoorCheckbox);
@@ -5449,10 +5638,6 @@ public class VisualEditor {
 		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(upDoorCheckbox);
 		bindingContext.bindValue(observeEnabledUpDoorKeyComboObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
-		IObservableValue observeEnabledUpDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(upDoorSizeCombo);
-		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(upDoorCheckbox);
-		bindingContext.bindValue(observeEnabledUpDoorSizeComboObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
-		//
 		IObservableValue observeEnabledUpDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagACheck);
 		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(upDoorCheckbox);
 		bindingContext.bindValue(observeEnabledUpDoorFlagACheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_5, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
@@ -5493,7 +5678,6 @@ public class VisualEditor {
 		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(upDoorCheckbox);
 		bindingContext.bindValue(observeEnabledUpDoorFlagLCheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
-		//
 		IObservableValue observeEnabledDownDescTextObserveWidget = WidgetProperties.enabled().observe(downDescText);
 		IObservableValue observeSelectionDownDoorCheckboxObserveWidget = WidgetProperties.selection().observe(downDoorCheckbox);
 		bindingContext.bindValue(observeEnabledDownDescTextObserveWidget, observeSelectionDownDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
@@ -5509,10 +5693,6 @@ public class VisualEditor {
 		IObservableValue observeEnabledDownDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(downDoorKeyCombo);
 		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(downDoorCheckbox);
 		bindingContext.bindValue(observeEnabledDownDoorKeyComboObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
-		//
-		IObservableValue observeEnabledDownDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(downDoorSizeCombo);
-		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(downDoorCheckbox);
-		bindingContext.bindValue(observeEnabledDownDoorSizeComboObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
 		IObservableValue observeEnabledDownDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagACheck);
 		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(downDoorCheckbox);
@@ -5554,7 +5734,14 @@ public class VisualEditor {
 		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(downDoorCheckbox);
 		bindingContext.bindValue(observeEnabledDownDoorFlagLCheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
 		//
+		IObservableValue observeSelectionScale_2ObserveWidget = WidgetProperties.selection().observe(scale_2);
+		IObservableValue observeSelectionSpinner_2ObserveWidget = WidgetProperties.selection().observe(spinner_2);
+		bindingContext.bindValue(observeSelectionScale_2ObserveWidget, observeSelectionSpinner_2ObserveWidget, UpdateValueStrategy.create(alignmentSliderToSpin), UpdateValueStrategy.create(alignmentSpinToSlider));
+		//
 		return bindingContext;
+	}
+	public Spinner getMobAlignmentSpinner() {
+		return spinner_2;
 	}
 }
 

@@ -1145,6 +1145,56 @@ public abstract class GlobalVariables {
 		}
 	}
 	
+	public enum ImmResVulnFlag {
+		SUMMON(LETTER_TRANSLATIONS.get("A"), "summon"),
+		CHARM(LETTER_TRANSLATIONS.get("B"), "charm"),
+		MAGIC(LETTER_TRANSLATIONS.get("C"), "magic"),
+		WEAPONS(LETTER_TRANSLATIONS.get("D"), "weapons"),
+		BASH(LETTER_TRANSLATIONS.get("E"), "bash"),
+		PIERCE(LETTER_TRANSLATIONS.get("F"), "pierce"),
+		SLASH(LETTER_TRANSLATIONS.get("G"), "slash"),
+		FIRE(LETTER_TRANSLATIONS.get("H"), "fire"),
+		COLD(LETTER_TRANSLATIONS.get("I"), "cold"),
+		LIGHTNING(LETTER_TRANSLATIONS.get("J"), "lightning"),
+		ACID(LETTER_TRANSLATIONS.get("K"), "acid"),
+		POISON(LETTER_TRANSLATIONS.get("L"), "poison"),
+		NEGATIVE(LETTER_TRANSLATIONS.get("M"), "negative"),
+		HOLY(LETTER_TRANSLATIONS.get("N"), "holy"),
+		ENERGY(LETTER_TRANSLATIONS.get("O"), "energy"),
+		MENTAL(LETTER_TRANSLATIONS.get("P"), "mental"),
+		DISEASE(LETTER_TRANSLATIONS.get("Q"), "disease"),
+		DROWNING(LETTER_TRANSLATIONS.get("R"), "drowning"),
+		LIGHT(LETTER_TRANSLATIONS.get("S"), "light"),
+		SOUND(LETTER_TRANSLATIONS.get("T"), "sound"),
+		WOOD(LETTER_TRANSLATIONS.get("X"), "wood"),
+		SILVER(LETTER_TRANSLATIONS.get("Y"), "silver"),
+		IRON(LETTER_TRANSLATIONS.get("Z"), "iron");
+		
+		private static final Map<Integer, ImmResVulnFlag> BY_NUM = new HashMap<>();
+		private static final Map<String, ImmResVulnFlag> BY_NAME = new HashMap<>();
+		
+		static {
+			for (ImmResVulnFlag e: values()) {
+				BY_NUM.put(e.num, e);
+				BY_NAME.put(e.name, e);
+			}
+		}
+		
+		public final int num;
+		public final String name;
+		private ImmResVulnFlag(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+		
+		public static ImmResVulnFlag valueOfNum(int num) {
+			return BY_NUM.get(num);
+		}
+		public static ImmResVulnFlag valueOfName(String name) {
+			return BY_NAME.get(name);
+		}
+	}
+	
 	public enum SpecialType { // May require more specials, these are the ones listed on anatolia3.1.txt
 		BREATH_ACID(0, "spec_breath_acid"),
 		BREATH_FIRE(1, "spec_breath_fire"),
