@@ -928,9 +928,11 @@ public class AreaFileParser {
 				this.getArea().getLongName() + "~\n");
 		sb.append(this.getArea().getvNumRange(0) + " " + this.getArea().getvNumRange(1) + "\n\n");
 		
-		// Continue from here
+		this.getArea().getMobiles().forEach(mobile -> sb.append(mobile.toString()));
+		sb.append("#0\n\n\n");
+		//Continue from here
 		
-		return "";
+		return sb.toString();
 	}
 	
 	

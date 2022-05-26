@@ -32,7 +32,7 @@ public class Mobile {
 	public Dice manaDice = new Dice();
 	public Dice damageDice = new Dice();
 	public String damageType = "";
-	public int damage = 0;
+//	public int damage = 0;
 	public Map <String, Integer> armorClasses = new HashMap<>(); //pierce, bash, slash, magic
 	
 	public String offensive = "";
@@ -141,7 +141,6 @@ public class Mobile {
 	
 	@Override
 	public String toString() {
-		// Implement this
 		StringBuilder sb = new StringBuilder();
 		sb.append("#" + this.getvNum() + "\n");
 		for(int i=0; i < this.nameList.size()-1; i++) {
@@ -152,7 +151,28 @@ public class Mobile {
 		sb.append(this.longDescription + "~\n");
 		sb.append(this.lookDescription + "~\n");
 		sb.append(this.race.getRaceName() + "~\n");
-//		sb.append(this.flags.get(alignment))
-		return "";
+		sb.append(
+				this.action + " " + this.affect + " " + 
+				this.alignment + " " + this.mobileGroup + "\n");
+		sb.append(
+				this.level + " " + this.hitBonus + " " + 
+				this.hitDice + " " + this.manaDice + " " + 
+				this.damageDice + " " + this.damageType + "\n");
+		sb.append(
+				this.armorClasses.get("pierce") + " " + 
+				this.armorClasses.get("bash") + " " + 
+				this.armorClasses.get("slash") + " " +
+				this.armorClasses.get("magic") + "\n");
+		sb.append(
+				this.offensive + " " + this.immunity + " " + 
+				this.resistance + " " + this.vulnerability + "\n");
+		sb.append(
+				this.startPos.name + " " + this.defaultPos.name + " " + 
+				this.gender.name + " " + this.treasure + "\n");
+		sb.append(
+				this.form + " " + this.part + " " + 
+				this.size.name + " " + this.material + "\n");
+		
+		return sb.toString();
 	}
 }
