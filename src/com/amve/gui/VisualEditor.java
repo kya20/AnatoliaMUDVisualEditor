@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Tree;
 
+import com.amve.area.Mobile;
 import com.amve.area.Room;
 import com.amve.globals.GlobalVariables;
 import com.amve.globals.GlobalVariables.DoorFlag;
@@ -123,7 +124,7 @@ public class VisualEditor {
 	private Group grpDoors;
 	private Combo northDoorStateCombo;
 	private Composite northComposite;
-	private Combo northDoorKeyCombo;
+	private Text northDoorKeyCombo;
 	private Combo northDoorSizeCombo;
 	private Button northDoorFlagJCheck;
 	private Button northDoorFlagHCheck;
@@ -136,7 +137,7 @@ public class VisualEditor {
 	private Button northDoorFlagLCheck;
 	private Button northDoorFlagGCheck;
 	private Combo eastDoorStateCombo;
-	private Combo eastDoorKeyCombo;
+	private Text eastDoorKeyCombo;
 	private Combo eastDoorSizeCombo;
 	private Button eastDoorFlagJCheck;
 	private Button eastDoorFlagACheck;
@@ -148,7 +149,7 @@ public class VisualEditor {
 	private Button eastDoorFlagKCheck;
 	private Button eastDoorFlagLCheck;
 	private Button eastDoorFlagBCheck;
-	private Combo southDoorKeyCombo;
+	private Text southDoorKeyCombo;
 	private Combo southDoorStateCombo;
 	private Combo southDoorSizeCombo;
 	private Button southDoorFlagICheck;
@@ -162,7 +163,7 @@ public class VisualEditor {
 	private Button southDoorFlagFCheck;
 	private Button southDoorFlagHCheck;
 	private Combo westDoorSizeCombo;
-	private Combo westDoorKeyCombo;
+	private Text westDoorKeyCombo;
 	private Combo westDoorStateCombo;
 	private Button westDoorFlagFCheck;
 	private Button westDoorFlagGCheck;
@@ -175,7 +176,7 @@ public class VisualEditor {
 	private Button westDoorFlagBCheck;
 	private Button westDoorFlagCCheck;
 	private Combo upDoorStateCombo;
-	private Combo upDoorKeyCombo;
+	private Text upDoorKeyCombo;
 	private Combo upDoorSizeCombo;
 	private Button upDoorFlagACheck;
 	private Button upDoorFlagKCheck;
@@ -187,7 +188,7 @@ public class VisualEditor {
 	private Button upDoorFlagICheck;
 	private Button upDoorFlagGCheck;
 	private Button upDoorFlagHCheck;
-	private Combo downDoorKeyCombo;
+	private Text downDoorKeyCombo;
 	private Combo downDoorStateCombo;
 	private Combo downDoorSizeCombo;
 	private Button downDoorFlagACheck;
@@ -427,6 +428,13 @@ public class VisualEditor {
 	private Text text_33;
 	private Text text_34;
 	private Text text_35;
+	private Button northDoorCheckbox;
+	private Button eastDoorCheckbox;
+	private Button southDoorCheckbox;
+	private Button westDoorCheckbox;
+	private Button upDoorCheckbox;
+	private Button downDoorCheckbox;
+	private Group grpResets;
 
 	/**
 	 * Launch the application.
@@ -733,6 +741,8 @@ public class VisualEditor {
 		getNorthDescText().setText("");
 		getNorthDoorKeywordText().setText("");
 		getNorthDoorStateCombo().select(-1);
+		getNorthDoorKeyCombo().setText("");
+		getNorthDoorCheckbox().setSelection(false);
 		getNorthDoorFlagACheck().setSelection(false);
 		getNorthDoorFlagBCheck().setSelection(false);
 		getNorthDoorFlagCCheck().setSelection(false);
@@ -748,6 +758,8 @@ public class VisualEditor {
 		getEastDescText().setText("");
 		getEastDoorKeywordText().setText("");
 		getEastDoorStateCombo().select(-1);
+		getEastDoorKeyCombo().setText("");
+		getEastDoorCheckbox().setSelection(false);
 		getEastDoorFlagACheck().setSelection(false);
 		getEastDoorFlagBCheck().setSelection(false);
 		getEastDoorFlagCCheck().setSelection(false);
@@ -763,6 +775,8 @@ public class VisualEditor {
 		getSouthDescText().setText("");
 		getSouthDoorKeywordText().setText("");
 		getSouthDoorStateCombo().select(-1);
+		getSouthDoorKeyCombo().setText("");
+		getSouthDoorCheckbox().setSelection(false);
 		getSouthDoorFlagACheck().setSelection(false);
 		getSouthDoorFlagBCheck().setSelection(false);
 		getSouthDoorFlagCCheck().setSelection(false);
@@ -778,6 +792,8 @@ public class VisualEditor {
 		getWestDescText().setText("");
 		getWestDoorKeywordText().setText("");
 		getWestDoorStateCombo().select(-1);
+		getWestDoorKeyCombo().setText("");
+		getWestDoorCheckbox().setSelection(false);
 		getWestDoorFlagACheck().setSelection(false);
 		getWestDoorFlagBCheck().setSelection(false);
 		getWestDoorFlagCCheck().setSelection(false);
@@ -793,6 +809,8 @@ public class VisualEditor {
 		getUpDescText().setText("");
 		getUpDoorKeywordText().setText("");
 		getUpDoorStateCombo().select(-1);
+		getUpDoorKeyCombo().setText("");
+		getUpDoorCheckbox().setSelection(false);
 		getUpDoorFlagACheck().setSelection(false);
 		getUpDoorFlagBCheck().setSelection(false);
 		getUpDoorFlagCCheck().setSelection(false);
@@ -808,6 +826,8 @@ public class VisualEditor {
 		getDownDescText().setText("");
 		getDownDoorKeywordText().setText("");
 		getDownDoorStateCombo().select(-1);
+		getDownDoorKeyCombo().setText("");
+		getDownDoorCheckbox().setSelection(false);
 		getDownDoorFlagACheck().setSelection(false);
 		getDownDoorFlagBCheck().setSelection(false);
 		getDownDoorFlagCCheck().setSelection(false);
@@ -819,10 +839,15 @@ public class VisualEditor {
 		getDownDoorFlagJCheck().setSelection(false);
 		getDownDoorFlagKCheck().setSelection(false);
 		getDownDoorFlagLCheck().setSelection(false);
+		m_bindingContext.updateTargets();
 		for (Map.Entry<ExitDirection, Exit> ex : parser.getArea().getRooms().get(key).exits.entrySet()) {
 			int i = ex.getKey().num;
 			switch (i) {
 			case 0: //north
+				getNorthDoorCheckbox().setSelection(false);
+				getNorthDoorCheckbox().setSelection(true);
+				getNorthDoorCheckbox().setSelection(false);
+				getNorthDoorCheckbox().setSelection(true);
 				getNorthDescText().setText("");
 				getNorthDescText().setText(ex.getValue().exitDescription);
 				String kw = "";
@@ -844,6 +869,7 @@ public class VisualEditor {
 					getNorthDoorStateCombo().select(2);
 					break;
 				}
+				getNorthDoorKeyCombo().setText(ex.getValue().keyVNum);
 				if (ex.getValue().doorFlags != null) {
 					if (!ex.getValue().doorFlags.isEmpty()) {
 						//TODO: Implement door size and its GUI connection
@@ -891,6 +917,7 @@ public class VisualEditor {
 				}
 				break;
 			case 1: //east
+				getEastDoorCheckbox().setSelection(true);
 				getEastDescText().setText("");
 				getEastDescText().setText(ex.getValue().exitDescription);
 				String kw1 = "";
@@ -912,6 +939,7 @@ public class VisualEditor {
 					getEastDoorStateCombo().select(2);
 					break;
 				}
+				getEastDoorKeyCombo().setText(ex.getValue().keyVNum);
 				if (ex.getValue().doorFlags != null) {
 					if (!ex.getValue().doorFlags.isEmpty()) {
 						//TODO: Implement door size and its GUI connection
@@ -959,6 +987,7 @@ public class VisualEditor {
 				}
 				break;
 			case 2: //south
+				getSouthDoorCheckbox().setSelection(true);
 				getSouthDescText().setText("");
 				getSouthDescText().setText(ex.getValue().exitDescription);
 				String kw2 = "";
@@ -980,6 +1009,7 @@ public class VisualEditor {
 					getSouthDoorStateCombo().select(2);
 					break;
 				}
+				getSouthDoorKeyCombo().setText(ex.getValue().keyVNum);
 				if (ex.getValue().doorFlags != null) {
 					if (!ex.getValue().doorFlags.isEmpty()) {
 						//TODO: Implement door size and its GUI connection
@@ -1027,6 +1057,7 @@ public class VisualEditor {
 				}
 				break;
 			case 3: //west
+				getWestDoorCheckbox().setSelection(true);
 				getWestDescText().setText("");
 				getWestDescText().setText(ex.getValue().exitDescription);
 				String kw3 = "";
@@ -1048,6 +1079,7 @@ public class VisualEditor {
 					getWestDoorStateCombo().select(2);
 					break;
 				}
+				getWestDoorKeyCombo().setText(ex.getValue().keyVNum);
 				if (ex.getValue().doorFlags != null) {
 					if (!ex.getValue().doorFlags.isEmpty()) {
 						//TODO: Implement door size and its GUI connection
@@ -1095,6 +1127,7 @@ public class VisualEditor {
 				}
 				break;
 			case 4: //up
+				getUpDoorCheckbox().setSelection(true);
 				getUpDescText().setText("");
 				getUpDescText().setText(ex.getValue().exitDescription);
 				String kw4 = "";
@@ -1116,6 +1149,7 @@ public class VisualEditor {
 					getUpDoorStateCombo().select(2);
 					break;
 				}
+				getUpDoorKeyCombo().setText(ex.getValue().keyVNum);
 				if (ex.getValue().doorFlags != null) {
 					if (!ex.getValue().doorFlags.isEmpty()) {
 						//TODO: Implement door size and its GUI connection
@@ -1163,6 +1197,7 @@ public class VisualEditor {
 				}
 				break;
 			case 5: //down
+				getDownDoorCheckbox().setSelection(true);
 				getDownDescText().setText("");
 				getDownDescText().setText(ex.getValue().exitDescription);
 				String kw5 = "";
@@ -1184,6 +1219,7 @@ public class VisualEditor {
 					getDownDoorStateCombo().select(2);
 					break;
 				}
+				getDownDoorKeyCombo().setText(ex.getValue().keyVNum);
 				if (ex.getValue().doorFlags != null) {
 					if (!ex.getValue().doorFlags.isEmpty()) {
 						//TODO: Implement door size and its GUI connection
@@ -1232,6 +1268,7 @@ public class VisualEditor {
 				break;
 			}
 		}
+		m_bindingContext.updateTargets();
 	}
 
 	/**
@@ -1312,9 +1349,11 @@ public class VisualEditor {
 	          else {
 	            text.setText(event.item + " was selected");
 	            String tmp = tree.getSelection()[0].getText();
-	            tmp = tmp.replace("Room ", "");
-	            tmp = tmp.replaceAll("\\s.*", "");
-	            updateRoomPanel(tmp);
+	            if (tmp.startsWith("Room")) {
+					tmp = tmp.replace("Room ", "");
+					tmp = tmp.replaceAll("\\s.*", "");
+					updateRoomPanel(tmp);
+				}
 	          }
 	        }
 	      });
@@ -1601,7 +1640,7 @@ public class VisualEditor {
 		northDescText = new Text(northComposite, SWT.BORDER);
 		northDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Button northDoorCheckbox = new Button(northComposite, SWT.CHECK);
+		northDoorCheckbox = new Button(northComposite, SWT.CHECK);
 		GridData gd_northDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_northDoorCheckbox.horizontalIndent = 1;
 		northDoorCheckbox.setLayoutData(gd_northDoorCheckbox);
@@ -1628,8 +1667,7 @@ public class VisualEditor {
 		lblDoorKey.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey.setText("Door Key");
 		
-		northDoorKeyCombo = new Combo(northComposite, SWT.READ_ONLY);
-		northDoorKeyCombo.setItems(new String[] {"(None)"});
+		northDoorKeyCombo = new Text(northComposite, SWT.BORDER);
 		northDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblDoorSize = new Label(northComposite, SWT.NONE);
@@ -1640,7 +1678,7 @@ public class VisualEditor {
 		northDoorSizeCombo.setItems(new String[] {"Tiny", "Small", "Medium", "Large", "Huge", "Giant", "Gargantuan"});
 		northDoorSizeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Group grpResets = new Group(northComposite, SWT.NONE);
+		grpResets = new Group(northComposite, SWT.NONE);
 		grpResets.setLayout(new FillLayout(SWT.HORIZONTAL));
 		GridData gd_grpResets = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_grpResets.widthHint = 200;
@@ -1701,7 +1739,7 @@ public class VisualEditor {
 		eastDescText = new Text(eastComposite, SWT.BORDER);
 		eastDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Button eastDoorCheckbox = new Button(eastComposite, SWT.CHECK);
+		eastDoorCheckbox = new Button(eastComposite, SWT.CHECK);
 		GridData gd_eastDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_eastDoorCheckbox.horizontalIndent = 1;
 		eastDoorCheckbox.setLayoutData(gd_eastDoorCheckbox);
@@ -1727,8 +1765,7 @@ public class VisualEditor {
 		lblDoorKey_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_1.setText("Door Key");
 		
-		eastDoorKeyCombo = new Combo(eastComposite, SWT.READ_ONLY);
-		eastDoorKeyCombo.setItems(new String[] {"(None)"});
+		eastDoorKeyCombo = new Text(eastComposite, SWT.BORDER);
 		eastDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblDoorSize_1 = new Label(eastComposite, SWT.NONE);
@@ -1800,7 +1837,7 @@ public class VisualEditor {
 		southDescText = new Text(southComposite, SWT.BORDER);
 		southDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Button southDoorCheckbox = new Button(southComposite, SWT.CHECK);
+		southDoorCheckbox = new Button(southComposite, SWT.CHECK);
 		GridData gd_southDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_southDoorCheckbox.horizontalIndent = 1;
 		southDoorCheckbox.setLayoutData(gd_southDoorCheckbox);
@@ -1826,8 +1863,7 @@ public class VisualEditor {
 		lblDoorKey_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_2.setText("Door Key");
 		
-		southDoorKeyCombo = new Combo(southComposite, SWT.READ_ONLY);
-		southDoorKeyCombo.setItems(new String[] {"(None)"});
+		southDoorKeyCombo = new Text(southComposite, SWT.BORDER);
 		southDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblDoorSize_2 = new Label(southComposite, SWT.NONE);
@@ -1899,7 +1935,7 @@ public class VisualEditor {
 		westDescText = new Text(westComposite, SWT.BORDER);
 		westDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Button westDoorCheckbox = new Button(westComposite, SWT.CHECK);
+		westDoorCheckbox = new Button(westComposite, SWT.CHECK);
 		GridData gd_westDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_westDoorCheckbox.horizontalIndent = 1;
 		westDoorCheckbox.setLayoutData(gd_westDoorCheckbox);
@@ -1925,8 +1961,7 @@ public class VisualEditor {
 		lblDoorKey_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_3.setText("Door Key");
 		
-		westDoorKeyCombo = new Combo(westComposite, SWT.READ_ONLY);
-		westDoorKeyCombo.setItems(new String[] {"(None)"});
+		westDoorKeyCombo = new Text(westComposite, SWT.BORDER);
 		westDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblDoorSize_3 = new Label(westComposite, SWT.NONE);
@@ -1998,7 +2033,7 @@ public class VisualEditor {
 		upDescText = new Text(upComposite, SWT.BORDER);
 		upDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Button upDoorCheckbox = new Button(upComposite, SWT.CHECK);
+		upDoorCheckbox = new Button(upComposite, SWT.CHECK);
 		GridData gd_upDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_upDoorCheckbox.horizontalIndent = 1;
 		upDoorCheckbox.setLayoutData(gd_upDoorCheckbox);
@@ -2024,8 +2059,7 @@ public class VisualEditor {
 		lblDoorKey_4.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_4.setText("Door Key");
 		
-		upDoorKeyCombo = new Combo(upComposite, SWT.READ_ONLY);
-		upDoorKeyCombo.setItems(new String[] {"(None)"});
+		upDoorKeyCombo = new Text(upComposite, SWT.BORDER);
 		upDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblDoorSize_4 = new Label(upComposite, SWT.NONE);
@@ -2097,7 +2131,7 @@ public class VisualEditor {
 		downDescText = new Text(downComposite, SWT.BORDER);
 		downDescText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Button downDoorCheckbox = new Button(downComposite, SWT.CHECK);
+		downDoorCheckbox = new Button(downComposite, SWT.CHECK);
 		GridData gd_downDoorCheckbox = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_downDoorCheckbox.horizontalIndent = 1;
 		downDoorCheckbox.setLayoutData(gd_downDoorCheckbox);
@@ -2123,8 +2157,7 @@ public class VisualEditor {
 		lblDoorKey_5.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDoorKey_5.setText("Door Key");
 		
-		downDoorKeyCombo = new Combo(downComposite, SWT.READ_ONLY);
-		downDoorKeyCombo.setItems(new String[] {"(None)"});
+		downDoorKeyCombo = new Text(downComposite, SWT.BORDER);
 		downDoorKeyCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblDoorSize_5 = new Label(downComposite, SWT.NONE);
@@ -4509,6 +4542,16 @@ public class VisualEditor {
 			parser.getArea().getRooms().forEach((key, value) -> {
 		    	TreeItem roomItem = new TreeItem(tree,0);
 		    	roomItem.setText("Room " + key + " - " + value.header);
+		    	value.getMobileResets().forEach((k, v) -> {
+		    		TreeItem mobItem = new TreeItem(roomItem,0);
+		    		Mobile mob  = new Mobile();
+		    		for (Mobile m: parser.getArea().getMobiles()) {
+		    			if (m.getvNum().equals(k)) {
+		    				mob = m;
+		    			}
+		    		}
+		    		mobItem.setText("Mobile " + k + " - " + mob.shortDescription);
+		    	});
 		    });
 			
 		}
@@ -4726,7 +4769,7 @@ public class VisualEditor {
 	public Composite getNorthComposite() {
 		return northComposite;
 	}
-	public Combo getNorthDoorKeyCombo() {
+	public Text getNorthDoorKeyCombo() {
 		return northDoorKeyCombo;
 	}
 	public Combo getNorthDoorSizeCombo() {
@@ -4771,7 +4814,7 @@ public class VisualEditor {
 	public Combo getEastDoorStateCombo() {
 		return eastDoorStateCombo;
 	}
-	public Combo getEastDoorKeyCombo() {
+	public Text getEastDoorKeyCombo() {
 		return eastDoorKeyCombo;
 	}
 	public Combo getEastDoorSizeCombo() {
@@ -4807,7 +4850,7 @@ public class VisualEditor {
 	public Button getEastDoorFlagBCheck() {
 		return eastDoorFlagBCheck;
 	}
-	public Combo getSouthDoorKeyCombo() {
+	public Text getSouthDoorKeyCombo() {
 		return southDoorKeyCombo;
 	}
 	public Combo getSouthDoorStateCombo() {
@@ -4855,7 +4898,7 @@ public class VisualEditor {
 	public Combo getWestDoorSizeCombo() {
 		return westDoorSizeCombo;
 	}
-	public Combo getWestDoorKeyCombo() {
+	public Text getWestDoorKeyCombo() {
 		return westDoorKeyCombo;
 	}
 	public Text getWestDescText() {
@@ -4906,7 +4949,7 @@ public class VisualEditor {
 	public Combo getUpDoorStateCombo() {
 		return upDoorStateCombo;
 	}
-	public Combo getUpDoorKeyCombo() {
+	public Text getUpDoorKeyCombo() {
 		return upDoorKeyCombo;
 	}
 	public Combo getUpDoorSizeCombo() {
@@ -4945,7 +4988,7 @@ public class VisualEditor {
 	public Text getDownDescText() {
 		return downDescText;
 	}
-	public Combo getDownDoorKeyCombo() {
+	public Text getDownDoorKeyCombo() {
 		return downDoorKeyCombo;
 	}
 	public Combo getDownDoorStateCombo() {
@@ -4998,19 +5041,6 @@ public class VisualEditor {
 	}
 	public Spinner getRoomMPSpinner() {
 		return roomMPSpinner;
-	}
-	protected DataBindingContext initDataBindings() {
-		DataBindingContext bindingContext = new DataBindingContext();
-		//
-		IObservableValue observeSelectionRoomHPScaleObserveWidget = WidgetProperties.selection().observe(roomHPScale);
-		IObservableValue observeSelectionRoomHPSpinnerObserveWidget = WidgetProperties.selection().observe(roomHPSpinner);
-		bindingContext.bindValue(observeSelectionRoomHPScaleObserveWidget, observeSelectionRoomHPSpinnerObserveWidget, null, null);
-		//
-		IObservableValue observeSelectionRoomMPScaleObserveWidget = WidgetProperties.selection().observe(roomMPScale);
-		IObservableValue observeSelectionRoomMPSpinnerObserveWidget = WidgetProperties.selection().observe(roomMPSpinner);
-		bindingContext.bindValue(observeSelectionRoomMPScaleObserveWidget, observeSelectionRoomMPSpinnerObserveWidget, null, null);
-		//
-		return bindingContext;
 	}
 	public Button getRoomSectorMountain() {
 		return roomSectorMountain;
@@ -5131,5 +5161,400 @@ public class VisualEditor {
 		      col.addControlListener(resizer);
 		   }
 		}
+	public Button getNorthDoorCheckbox() {
+		return northDoorCheckbox;
+	}
+	public Button getEastDoorCheckbox() {
+		return eastDoorCheckbox;
+	}
+	public Button getSouthDoorCheckbox() {
+		return southDoorCheckbox;
+	}
+	public Button getWestDoorCheckbox() {
+		return westDoorCheckbox;
+	}
+	public Button getUpDoorCheckbox() {
+		return upDoorCheckbox;
+	}
+	public Button getDownDoorCheckbox() {
+		return downDoorCheckbox;
+	}
+	protected DataBindingContext initDataBindings() {
+		DataBindingContext bindingContext = new DataBindingContext();
+		//
+		IObservableValue observeSelectionRoomHPScaleObserveWidget = WidgetProperties.selection().observe(roomHPScale);
+		IObservableValue observeSelectionRoomHPSpinnerObserveWidget = WidgetProperties.selection().observe(roomHPSpinner);
+		bindingContext.bindValue(observeSelectionRoomHPScaleObserveWidget, observeSelectionRoomHPSpinnerObserveWidget, null, null);
+		//
+		IObservableValue observeSelectionRoomMPScaleObserveWidget = WidgetProperties.selection().observe(roomMPScale);
+		IObservableValue observeSelectionRoomMPSpinnerObserveWidget = WidgetProperties.selection().observe(roomMPSpinner);
+		bindingContext.bindValue(observeSelectionRoomMPScaleObserveWidget, observeSelectionRoomMPSpinnerObserveWidget, null, null);
+		//
+		IObservableValue observeEnabledNorthDescTextObserveWidget = WidgetProperties.enabled().observe(northDescText);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDescTextObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorKeywordTextObserveWidget = WidgetProperties.enabled().observe(northDoorKeywordText);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_1 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorKeywordTextObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_1, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorStateComboObserveWidget = WidgetProperties.enabled().observe(northDoorStateCombo);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_2 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorStateComboObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_2, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(northDoorKeyCombo);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorKeyComboObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(northDoorSizeCombo);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorSizeComboObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagACheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagACheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_5, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagBCheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagBCheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_6 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagBCheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_6, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagCCheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagCCheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_7 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagCCheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_7, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagFCheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagFCheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_8 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagFCheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_8, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagGCheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagGCheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_9 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagGCheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_9, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagHCheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagHCheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_10 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagHCheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_10, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagICheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagICheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_11 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagICheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_11, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagJCheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagJCheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_12 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagJCheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_12, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagKCheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagKCheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_13 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagKCheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_13, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledNorthDoorFlagLCheckObserveWidget = WidgetProperties.enabled().observe(northDoorFlagLCheck);
+		IObservableValue observeSelectionNorthDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(northDoorCheckbox);
+		bindingContext.bindValue(observeEnabledNorthDoorFlagLCheckObserveWidget, observeSelectionNorthDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		//
+		IObservableValue observeEnabledEastDescTextObserveWidget = WidgetProperties.enabled().observe(eastDescText);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDescTextObserveWidget, observeSelectionEastDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorKeywordTextObserveWidget = WidgetProperties.enabled().observe(eastDoorKeywordText);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_1 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorKeywordTextObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_1, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorStateComboObserveWidget = WidgetProperties.enabled().observe(eastDoorStateCombo);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_2 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorStateComboObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_2, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(eastDoorKeyCombo);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorKeyComboObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(eastDoorSizeCombo);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorSizeComboObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagACheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagACheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_5, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagBCheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagBCheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_6 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagBCheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_6, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagCCheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagCCheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_7 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagCCheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_7, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagFCheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagFCheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_8 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagFCheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_8, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagGCheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagGCheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_9 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagGCheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_9, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagHCheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagHCheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_10 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagHCheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_10, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagICheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagICheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_11 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagICheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_11, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagJCheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagJCheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_12 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagJCheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_12, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagKCheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagKCheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_13 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagKCheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_13, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledEastDoorFlagLCheckObserveWidget = WidgetProperties.enabled().observe(eastDoorFlagLCheck);
+		IObservableValue observeSelectionEastDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(eastDoorCheckbox);
+		bindingContext.bindValue(observeEnabledEastDoorFlagLCheckObserveWidget, observeSelectionEastDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		//
+		IObservableValue observeEnabledSouthDescTextObserveWidget = WidgetProperties.enabled().observe(southDescText);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDescTextObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorKeywordTextObserveWidget = WidgetProperties.enabled().observe(southDoorKeywordText);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_1 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorKeywordTextObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_1, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorStateComboObserveWidget = WidgetProperties.enabled().observe(southDoorStateCombo);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_2 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorStateComboObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_2, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(southDoorKeyCombo);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorKeyComboObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(southDoorSizeCombo);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorSizeComboObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagACheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagACheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_5, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagBCheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagBCheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_6 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagBCheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_6, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagCCheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagCCheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_7 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagCCheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_7, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagFCheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagFCheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_8 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagFCheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_8, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagGCheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagGCheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_9 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagGCheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_9, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagHCheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagHCheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_10 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagHCheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_10, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagICheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagICheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_11 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagICheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_11, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagJCheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagJCheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_12 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagJCheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_12, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagKCheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagKCheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_13 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagKCheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_13, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledSouthDoorFlagLCheckObserveWidget = WidgetProperties.enabled().observe(southDoorFlagLCheck);
+		IObservableValue observeSelectionSouthDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(southDoorCheckbox);
+		bindingContext.bindValue(observeEnabledSouthDoorFlagLCheckObserveWidget, observeSelectionSouthDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		//
+		IObservableValue observeEnabledWestDescTextObserveWidget = WidgetProperties.enabled().observe(westDescText);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDescTextObserveWidget, observeSelectionWestDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorKeywordTextObserveWidget = WidgetProperties.enabled().observe(westDoorKeywordText);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_1 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorKeywordTextObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_1, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorStateComboObserveWidget = WidgetProperties.enabled().observe(westDoorStateCombo);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_2 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorStateComboObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_2, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(westDoorKeyCombo);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorKeyComboObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(westDoorSizeCombo);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorSizeComboObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagACheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagACheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_5, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagBCheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagBCheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_6 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagBCheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_6, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagCCheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagCCheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_7 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagCCheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_7, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagFCheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagFCheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_8 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagFCheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_8, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagGCheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagGCheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_9 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagGCheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_9, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagHCheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagHCheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_10 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagHCheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_10, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagICheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagICheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_11 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagICheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_11, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagJCheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagJCheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_12 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagJCheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_12, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagKCheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagKCheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_13 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagKCheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_13, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledWestDoorFlagLCheckObserveWidget = WidgetProperties.enabled().observe(westDoorFlagLCheck);
+		IObservableValue observeSelectionWestDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(westDoorCheckbox);
+		bindingContext.bindValue(observeEnabledWestDoorFlagLCheckObserveWidget, observeSelectionWestDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDescTextObserveWidget = WidgetProperties.enabled().observe(upDescText);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDescTextObserveWidget, observeSelectionUpDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorKeywordTextObserveWidget = WidgetProperties.enabled().observe(upDoorKeywordText);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_1 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorKeywordTextObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_1, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorStateComboObserveWidget = WidgetProperties.enabled().observe(upDoorStateCombo);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_2 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorStateComboObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_2, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(upDoorKeyCombo);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorKeyComboObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(upDoorSizeCombo);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorSizeComboObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagACheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagACheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_5, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagBCheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagBCheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_6 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagBCheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_6, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagCCheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagCCheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_7 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagCCheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_7, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagFCheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagFCheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_8 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagFCheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_8, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagGCheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagGCheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_9 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagGCheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_9, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagHCheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagHCheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_10 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagHCheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_10, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagICheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagICheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_11 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagICheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_11, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagJCheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagJCheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_12 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagJCheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_12, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagKCheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagKCheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_13 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagKCheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_13, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledUpDoorFlagLCheckObserveWidget = WidgetProperties.enabled().observe(upDoorFlagLCheck);
+		IObservableValue observeSelectionUpDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(upDoorCheckbox);
+		bindingContext.bindValue(observeEnabledUpDoorFlagLCheckObserveWidget, observeSelectionUpDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		//
+		IObservableValue observeEnabledDownDescTextObserveWidget = WidgetProperties.enabled().observe(downDescText);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDescTextObserveWidget, observeSelectionDownDoorCheckboxObserveWidget, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorKeywordTextObserveWidget = WidgetProperties.enabled().observe(downDoorKeywordText);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_1 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorKeywordTextObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_1, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorStateComboObserveWidget = WidgetProperties.enabled().observe(downDoorStateCombo);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_2 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorStateComboObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_2, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorKeyComboObserveWidget = WidgetProperties.enabled().observe(downDoorKeyCombo);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_3 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorKeyComboObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_3, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorSizeComboObserveWidget = WidgetProperties.enabled().observe(downDoorSizeCombo);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_4 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorSizeComboObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_4, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagACheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagACheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_5 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagACheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_5, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagBCheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagBCheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_6 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagBCheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_6, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagCCheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagCCheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_7 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagCCheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_7, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagFCheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagFCheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_8 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagFCheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_8, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagGCheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagGCheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_9 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagGCheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_9, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagHCheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagHCheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_10 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagHCheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_10, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagICheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagICheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_11 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagICheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_11, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagJCheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagJCheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_12 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagJCheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_12, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagKCheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagKCheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_13 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagKCheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_13, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		IObservableValue observeEnabledDownDoorFlagLCheckObserveWidget = WidgetProperties.enabled().observe(downDoorFlagLCheck);
+		IObservableValue observeSelectionDownDoorCheckboxObserveWidget_14 = WidgetProperties.selection().observe(downDoorCheckbox);
+		bindingContext.bindValue(observeEnabledDownDoorFlagLCheckObserveWidget, observeSelectionDownDoorCheckboxObserveWidget_14, new UpdateValueStrategy(UpdateValueStrategy.POLICY_NEVER), null);
+		//
+		return bindingContext;
+	}
 }
 
