@@ -391,9 +391,9 @@ public class VisualEditor {
 	private Text text_3;
 	private Text text_4;
 	private Table roomExtrasTable;
-	private Text text_5;
-	private Text text_6;
-	private Text text_7;
+	private Text objName;
+	private Text objShortDesc;
+	private Text objLongDesc;
 	private Table objectExtrasTable;
 	private Text noneModifTxt;
 	private Text text_8;
@@ -463,6 +463,57 @@ public class VisualEditor {
 	private Button pierceImm;
 	private Button charmRes;
 	private Button weaponsRes;
+	private Text objMaterial;
+	private Spinner objWeight;
+	private Spinner objCost;
+	private Combo objStatus;
+	private Spinner objLevel;
+	private Button btnOnTorso;
+	private Button btnLegs_1;
+	private Button btnTake;
+	private Button btnNoSac;
+	private Button btnTwoHands;
+	private Button btnHead_1;
+	private Button btnNeck;
+	private Button btnHeld;
+	private Button btnWielded;
+	private Button btnAsShield;
+	private Button btnWaist;
+	private Button btnFinger;
+	private Button btnArms_1;
+	private Button btnLeftWrist;
+	private Button btnHands_1;
+	private Button btnFeet_1;
+	private Button btnAboutBody;
+	private Button btnFloatingNearby;
+	private Button btnTattoo;
+	private Button btnDark;
+	private Button btnBless;
+	private Button btnNoLocate;
+	private Button btnGlowing;
+	private Button btnBurnproof;
+	private Button btnHumming;
+	private Button btnInventory;
+	private Button btnNoSacrifice;
+	private Button btnHadTimer;
+	private Button btnSellExtract;
+	private Button btnMeltDrop;
+	private Button btnAntievil;
+	private Button btnVisRot;
+	private Button btnNoRemove;
+	private Button btnAntineutral;
+	private Button btnRotDeath;
+	private Button btnEvil;
+	private Button btnMagic;
+	private Button btnNoSell;
+	private Button btnAntigood;
+	private Button btnVisDeeath;
+	private Button btnInvisible_1;
+	private Button btnNoDrop;
+	private Button btnNoPurge_1;
+	private Button btnNoUncurse;
+	private Button btnNonmetal;
+	private Button btnLock;
 
 	/**
 	 * Launch the application.
@@ -3926,22 +3977,22 @@ public class VisualEditor {
 		Label lblObjectName = new Label(grpDescription_2, SWT.NONE);
 		lblObjectName.setText("Object Name");
 		
-		text_5 = new Text(grpDescription_2, SWT.BORDER);
-		text_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		objName = new Text(grpDescription_2, SWT.BORDER);
+		objName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblShortDescription_1 = new Label(grpDescription_2, SWT.NONE);
 		lblShortDescription_1.setText("Short Description");
 		
-		text_6 = new Text(grpDescription_2, SWT.BORDER);
-		text_6.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		objShortDesc = new Text(grpDescription_2, SWT.BORDER);
+		objShortDesc.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblLongDescription_1 = new Label(grpDescription_2, SWT.NONE);
 		lblLongDescription_1.setText("Long Description");
 		
-		text_7 = new Text(grpDescription_2, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
-		GridData gd_text_7 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_text_7.heightHint = 72;
-		text_7.setLayoutData(gd_text_7);
+		objLongDesc = new Text(grpDescription_2, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
+		GridData gd_objLongDesc = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_objLongDesc.heightHint = 72;
+		objLongDesc.setLayoutData(gd_objLongDesc);
 		
 		Label lblExtras = new Label(grpDescription_2, SWT.NONE);
 		lblExtras.setText("Extras");
@@ -3973,8 +4024,8 @@ public class VisualEditor {
 		Label lblMaterial_1 = new Label(composite_17, SWT.NONE);
 		lblMaterial_1.setText("Material");
 		
-		Combo objMaterialCombo = new Combo(composite_17, SWT.READ_ONLY);
-		objMaterialCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		objMaterial = new Text(composite_17, SWT.BORDER);
+		objMaterial.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Composite composite_17_1 = new Composite(grpType, SWT.NONE);
 		composite_17_1.setLayout(new GridLayout(1, false));
@@ -3982,7 +4033,7 @@ public class VisualEditor {
 		Label lbLevel = new Label(composite_17_1, SWT.NONE);
 		lbLevel.setText("Level");
 		
-		Spinner spinner = new Spinner(composite_17_1, SWT.BORDER);
+		objLevel = new Spinner(composite_17_1, SWT.BORDER);
 		
 		Composite composite_17_1_1 = new Composite(grpType, SWT.NONE);
 		composite_17_1_1.setLayout(new GridLayout(1, false));
@@ -3990,8 +4041,8 @@ public class VisualEditor {
 		Label lblWeight = new Label(composite_17_1_1, SWT.NONE);
 		lblWeight.setText("Weight");
 		
-		Spinner spinner_1 = new Spinner(composite_17_1_1, SWT.BORDER);
-		spinner_1.setMaximum(9999);
+		objWeight = new Spinner(composite_17_1_1, SWT.BORDER);
+		objWeight.setMaximum(9999);
 		
 		Composite composite_17_1_1_1 = new Composite(grpType, SWT.NONE);
 		composite_17_1_1_1.setLayout(new GridLayout(1, false));
@@ -3999,8 +4050,8 @@ public class VisualEditor {
 		Label lblCost = new Label(composite_17_1_1_1, SWT.NONE);
 		lblCost.setText("Cost");
 		
-		Spinner spinner_1_1 = new Spinner(composite_17_1_1_1, SWT.BORDER);
-		spinner_1_1.setMaximum(9999);
+		objCost = new Spinner(composite_17_1_1_1, SWT.BORDER);
+		objCost.setMaximum(9999);
 		
 		Composite composite_17_2 = new Composite(grpType, SWT.NONE);
 		composite_17_2.setLayout(new GridLayout(1, false));
@@ -4008,7 +4059,7 @@ public class VisualEditor {
 		Label lbStatus = new Label(composite_17_2, SWT.NONE);
 		lbStatus.setText("Status");
 		
-		Combo objStatus = new Combo(composite_17_2, SWT.READ_ONLY);
+		objStatus = new Combo(composite_17_2, SWT.READ_ONLY);
 		objStatus.setItems(new String[] {"excellent", "good", "fine", "average", "poor", "fragile", "broken"});
 		objStatus.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -4019,6 +4070,7 @@ public class VisualEditor {
 		lblType.setText("Type");
 		
 		Combo objStatus_1 = new Combo(composite_17_2_1, SWT.READ_ONLY);
+		objStatus_1.setItems(new String[] {"none", "light", "scroll", "wand", "staff", "weapon", "treasure", "armor", "potion", "clothing", "furniture", "trash", "container", "drink_con", "key", "food", "money", "boat", "corpse_npc", "corpse_pc", "fountain", "pill", "protect", "map", "portal", "warp_stone", "room_key", "gem", "jewelry", "jukebox", "tattoo"});
 		objStatus_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpTypeProperties = new Group(grpGeneralProperties, SWT.NONE);
@@ -4036,85 +4088,85 @@ public class VisualEditor {
 		rl_grpExtraFlags.pack = false;
 		grpExtraFlags.setLayout(rl_grpExtraFlags);
 		
-		Button btnGlowing = new Button(grpExtraFlags, SWT.CHECK);
+		btnGlowing = new Button(grpExtraFlags, SWT.CHECK);
 		btnGlowing.setText("Glowing");
 		
-		Button btnHumming = new Button(grpExtraFlags, SWT.CHECK);
+		btnHumming = new Button(grpExtraFlags, SWT.CHECK);
 		btnHumming.setText("Humming");
 		
-		Button btnDark = new Button(grpExtraFlags, SWT.CHECK);
+		btnDark = new Button(grpExtraFlags, SWT.CHECK);
 		btnDark.setText("Dark");
 		
-		Button btnLock = new Button(grpExtraFlags, SWT.CHECK);
+		btnLock = new Button(grpExtraFlags, SWT.CHECK);
 		btnLock.setText("Lock");
 		
-		Button btnEvil = new Button(grpExtraFlags, SWT.CHECK);
+		btnEvil = new Button(grpExtraFlags, SWT.CHECK);
 		btnEvil.setText("Evil");
 		
-		Button btnInvisible_1 = new Button(grpExtraFlags, SWT.CHECK);
+		btnInvisible_1 = new Button(grpExtraFlags, SWT.CHECK);
 		btnInvisible_1.setText("Invisible");
 		
-		Button btnMagic = new Button(grpExtraFlags, SWT.CHECK);
+		btnMagic = new Button(grpExtraFlags, SWT.CHECK);
 		btnMagic.setText("Magic");
 		
-		Button btnNoDrop = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoDrop = new Button(grpExtraFlags, SWT.CHECK);
 		btnNoDrop.setText("No drop");
 		
-		Button btnBless = new Button(grpExtraFlags, SWT.CHECK);
+		btnBless = new Button(grpExtraFlags, SWT.CHECK);
 		btnBless.setText("Bless");
 		
-		Button btnAntigood = new Button(grpExtraFlags, SWT.CHECK);
+		btnAntigood = new Button(grpExtraFlags, SWT.CHECK);
 		btnAntigood.setText("Anti-good");
 		
-		Button btnAntievil = new Button(grpExtraFlags, SWT.CHECK);
+		btnAntievil = new Button(grpExtraFlags, SWT.CHECK);
 		btnAntievil.setText("Anti-evil");
 		
-		Button btnAntineutral = new Button(grpExtraFlags, SWT.CHECK);
+		btnAntineutral = new Button(grpExtraFlags, SWT.CHECK);
 		btnAntineutral.setText("Anti-neutral");
 		
-		Button btnNoRemove = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoRemove = new Button(grpExtraFlags, SWT.CHECK);
 		btnNoRemove.setText("No remove");
 		
-		Button btnInventory = new Button(grpExtraFlags, SWT.CHECK);
+		btnInventory = new Button(grpExtraFlags, SWT.CHECK);
 		btnInventory.setText("Inventory");
 		
-		Button btnNoPurge_1 = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoPurge_1 = new Button(grpExtraFlags, SWT.CHECK);
 		btnNoPurge_1.setText("No purge");
 		
-		Button btnRotDeath = new Button(grpExtraFlags, SWT.CHECK);
+		btnRotDeath = new Button(grpExtraFlags, SWT.CHECK);
 		btnRotDeath.setText("Rot death");
 		
-		Button btnVisDeeath = new Button(grpExtraFlags, SWT.CHECK);
+		btnVisDeeath = new Button(grpExtraFlags, SWT.CHECK);
 		btnVisDeeath.setText("Vis deeath");
 		
-		Button btnNoSacrifice = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoSacrifice = new Button(grpExtraFlags, SWT.CHECK);
 		btnNoSacrifice.setText("No sacrifice");
 		
-		Button btnNonmetal = new Button(grpExtraFlags, SWT.CHECK);
+		btnNonmetal = new Button(grpExtraFlags, SWT.CHECK);
 		btnNonmetal.setText("Non-metal");
 		
-		Button btnNoLocate = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoLocate = new Button(grpExtraFlags, SWT.CHECK);
 		btnNoLocate.setText("No locate");
 		
-		Button btnMeltDrop = new Button(grpExtraFlags, SWT.CHECK);
+		btnMeltDrop = new Button(grpExtraFlags, SWT.CHECK);
 		btnMeltDrop.setText("Melt drop");
 		
-		Button btnHadTimer = new Button(grpExtraFlags, SWT.CHECK);
+		btnHadTimer = new Button(grpExtraFlags, SWT.CHECK);
 		btnHadTimer.setText("Had timer");
 		
-		Button btnSellExtract = new Button(grpExtraFlags, SWT.CHECK);
+		btnSellExtract = new Button(grpExtraFlags, SWT.CHECK);
 		btnSellExtract.setText("Sell extract");
 		
-		Button btnBurnproof = new Button(grpExtraFlags, SWT.CHECK);
+		btnBurnproof = new Button(grpExtraFlags, SWT.CHECK);
 		btnBurnproof.setText("Burn-proof");
 		
-		Button btnNoUncurse = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoUncurse = new Button(grpExtraFlags, SWT.CHECK);
 		btnNoUncurse.setText("No uncurse");
 		
-		Button btnNoSell = new Button(grpExtraFlags, SWT.CHECK);
+		btnNoSell = new Button(grpExtraFlags, SWT.CHECK);
 		btnNoSell.setText("No sell");
 		
-		Button btnVisRot = new Button(grpExtraFlags, SWT.CHECK);
+		btnVisRot = new Button(grpExtraFlags, SWT.CHECK);
 		btnVisRot.setText("Vis rot");
 		
 		Group grpWearFlags = new Group(grpFlags_1, SWT.NONE);
@@ -4124,61 +4176,61 @@ public class VisualEditor {
 		rl_grpWearFlags.pack = false;
 		grpWearFlags.setLayout(rl_grpWearFlags);
 		
-		Button btnTake = new Button(grpWearFlags, SWT.CHECK);
+		btnTake = new Button(grpWearFlags, SWT.CHECK);
 		btnTake.setText("Take");
 		
-		Button btnFinger = new Button(grpWearFlags, SWT.RADIO);
+		btnFinger = new Button(grpWearFlags, SWT.RADIO);
 		btnFinger.setText("Finger");
 		
-		Button btnNeck = new Button(grpWearFlags, SWT.RADIO);
+		btnNeck = new Button(grpWearFlags, SWT.RADIO);
 		btnNeck.setText("Neck");
 		
-		Button btnOnTorso = new Button(grpWearFlags, SWT.RADIO);
+		btnOnTorso = new Button(grpWearFlags, SWT.RADIO);
 		btnOnTorso.setText("On torso");
 		
-		Button btnHead_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnHead_1 = new Button(grpWearFlags, SWT.RADIO);
 		btnHead_1.setText("Head");
 		
-		Button btnLegs_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnLegs_1 = new Button(grpWearFlags, SWT.RADIO);
 		btnLegs_1.setText("Legs");
 		
-		Button btnFeet_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnFeet_1 = new Button(grpWearFlags, SWT.RADIO);
 		btnFeet_1.setText("Feet");
 		
-		Button btnHands_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnHands_1 = new Button(grpWearFlags, SWT.RADIO);
 		btnHands_1.setText("Hands");
 		
-		Button btnArms_1 = new Button(grpWearFlags, SWT.RADIO);
+		btnArms_1 = new Button(grpWearFlags, SWT.RADIO);
 		btnArms_1.setText("Arms");
 		
-		Button btnAsShield = new Button(grpWearFlags, SWT.RADIO);
+		btnAsShield = new Button(grpWearFlags, SWT.RADIO);
 		btnAsShield.setText("As shield");
 		
-		Button btnAboutBody = new Button(grpWearFlags, SWT.RADIO);
+		btnAboutBody = new Button(grpWearFlags, SWT.RADIO);
 		btnAboutBody.setText("About body");
 		
-		Button btnWaist = new Button(grpWearFlags, SWT.RADIO);
+		btnWaist = new Button(grpWearFlags, SWT.RADIO);
 		btnWaist.setText("Waist");
 		
-		Button btnLeftWrist = new Button(grpWearFlags, SWT.RADIO);
+		btnLeftWrist = new Button(grpWearFlags, SWT.RADIO);
 		btnLeftWrist.setText("Left wrist");
 		
-		Button btnWielded = new Button(grpWearFlags, SWT.RADIO);
+		btnWielded = new Button(grpWearFlags, SWT.RADIO);
 		btnWielded.setText("Wielded");
 		
-		Button btnHeld = new Button(grpWearFlags, SWT.RADIO);
+		btnHeld = new Button(grpWearFlags, SWT.RADIO);
 		btnHeld.setText("Held");
 		
-		Button btnNoSac = new Button(grpWearFlags, SWT.RADIO);
+		btnNoSac = new Button(grpWearFlags, SWT.RADIO);
 		btnNoSac.setText("No sac");
 		
-		Button btnFloatingNearby = new Button(grpWearFlags, SWT.RADIO);
+		btnFloatingNearby = new Button(grpWearFlags, SWT.RADIO);
 		btnFloatingNearby.setText("Floating nearby");
 		
-		Button btnTattoo = new Button(grpWearFlags, SWT.RADIO);
+		btnTattoo = new Button(grpWearFlags, SWT.RADIO);
 		btnTattoo.setText("Tattoo");
 		
-		Button btnTwoHands = new Button(grpWearFlags, SWT.RADIO);
+		btnTwoHands = new Button(grpWearFlags, SWT.RADIO);
 		btnTwoHands.setText("Two hands");
 		
 		Group grpImmresvuln_1 = new Group(grpFlags_1, SWT.NONE);
@@ -6323,6 +6375,171 @@ public class VisualEditor {
 	}
 	public Button getSoundVuln() {
 		return soundVuln;
+	}
+	public Table getObjectExtrasTable() {
+		return objectExtrasTable;
+	}
+	public Text getObjShortDesc() {
+		return objShortDesc;
+	}
+	public Text getObjName() {
+		return objName;
+	}
+	public Text getObjLongDesc() {
+		return objLongDesc;
+	}
+	public Text getObjMaterial() {
+		return objMaterial;
+	}
+	public Spinner getObjWeight() {
+		return objWeight;
+	}
+	public Spinner getObjCost() {
+		return objCost;
+	}
+	public Combo getObjStatus() {
+		return objStatus;
+	}
+	public Spinner getObjLevel() {
+		return objLevel;
+	}
+	public Button getOnTorso() {
+		return btnOnTorso;
+	}
+	public Button getLegs() {
+		return btnLegs_1;
+	}
+	public Button getTake() {
+		return btnTake;
+	}
+	public Button getNoSac() {
+		return btnNoSac;
+	}
+	public Button getTwoHands() {
+		return btnTwoHands;
+	}
+	public Button getHead() {
+		return btnHead_1;
+	}
+	public Button getNeck() {
+		return btnNeck;
+	}
+	public Button getHeld() {
+		return btnHeld;
+	}
+	public Button getWielded() {
+		return btnWielded;
+	}
+	public Button getAsShield() {
+		return btnAsShield;
+	}
+	public Button getWaist() {
+		return btnWaist;
+	}
+	public Button getFinger() {
+		return btnFinger;
+	}
+	public Button getArms() {
+		return btnArms_1;
+	}
+	public Button getLeftWrist() {
+		return btnLeftWrist;
+	}
+	public Button getHands() {
+		return btnHands_1;
+	}
+	public Button getFeet() {
+		return btnFeet_1;
+	}
+	public Button getAboutBody() {
+		return btnAboutBody;
+	}
+	public Button getFloatingNearby() {
+		return btnFloatingNearby;
+	}
+	public Button getTattoo() {
+		return btnTattoo;
+	}
+	public Button getBtnDark() {
+		return btnDark;
+	}
+	public Button getBtnBless() {
+		return btnBless;
+	}
+	public Button getBtnNoLocate() {
+		return btnNoLocate;
+	}
+	public Button getBtnGlowing() {
+		return btnGlowing;
+	}
+	public Button getBtnBurnproof() {
+		return btnBurnproof;
+	}
+	public Button getBtnHumming() {
+		return btnHumming;
+	}
+	public Button getBtnInventory() {
+		return btnInventory;
+	}
+	public Button getBtnNoSacrifice() {
+		return btnNoSacrifice;
+	}
+	public Button getBtnHadTimer() {
+		return btnHadTimer;
+	}
+	public Button getBtnSellExtract() {
+		return btnSellExtract;
+	}
+	public Button getBtnMeltDrop() {
+		return btnMeltDrop;
+	}
+	public Button getBtnAntievil() {
+		return btnAntievil;
+	}
+	public Button getBtnVisRot() {
+		return btnVisRot;
+	}
+	public Button getBtnNoRemove() {
+		return btnNoRemove;
+	}
+	public Button getBtnAntineutral() {
+		return btnAntineutral;
+	}
+	public Button getBtnRotDeath() {
+		return btnRotDeath;
+	}
+	public Button getBtnEvil() {
+		return btnEvil;
+	}
+	public Button getBtnMagic() {
+		return btnMagic;
+	}
+	public Button getBtnNoSell() {
+		return btnNoSell;
+	}
+	public Button getBtnAntigood() {
+		return btnAntigood;
+	}
+	public Button getBtnVisDeeath() {
+		return btnVisDeeath;
+	}
+	public Button getBtnInvisible() {
+		return btnInvisible_1;
+	}
+	public Button getBtnNoDrop() {
+		return btnNoDrop;
+	}
+	public Button getBtnNoPurge() {
+		return btnNoPurge_1;
+	}
+	public Button getBtnNoUncurse() {
+		return btnNoUncurse;
+	}
+	public Button getBtnNonmetal() {
+		return btnNonmetal;
+	}
+	public Button getBtnLock() {
+		return btnLock;
 	}
 }
 
