@@ -14,4 +14,8 @@ public class EquipReset {
 		this.mobileVNum = mobileVNum;
 	}
 
+	@Override
+	public String toString() {
+		return "E 0 " + this.objectVNum + " 0 " + this.equipSlot.num + "\n";
+	}
 }

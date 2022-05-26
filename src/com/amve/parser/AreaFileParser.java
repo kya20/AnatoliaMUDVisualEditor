@@ -2,10 +2,12 @@ package com.amve.parser;
 
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.amve.area.Area;
 import com.amve.area.Mobile;
@@ -937,9 +939,14 @@ public class AreaFileParser {
 		sb.append("#ROOMS\n");
 //		this.getArea().getRooms().forEach((s, room) -> sb.append(room.toString())); 
 		Map<String, Room> rooms = this.getArea().getRooms();
-		rooms.keySet().stream().sorted().forEach(key -> sb.append(rooms.get(key).toString()));
+		List<String> roomVNumSorted = rooms.keySet().stream().sorted().collect(Collectors.toList());
+		roomVNumSorted.forEach(key -> sb.append(rooms.get(key).toString()));
 		sb.append("#0\n\n");
 		sb.append("#RESETS\n");
+		roomVNumSorted.forEach(key -> sb.append(rooms.get(key).mobileResetToString()));
+		roomVNumSorted.forEach(key -> sb.append(rooms.get(key).objectResetToString()));
+		roomVNumSorted.forEach(key -> sb.append(rooms.get(key).doorResetToString()));
+		sb.append("S\n\n");
 		
 		
 		return sb.toString();

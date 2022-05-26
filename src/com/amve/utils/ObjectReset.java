@@ -27,6 +27,15 @@ public class ObjectReset {
 	
 	@Override
 	public String toString() {
-		return "O 0 " + this.objectVNum + " 0 " + this.roomVNum + "\n";
+		StringBuilder sb = new StringBuilder();
+		sb.append("O 0 " + this.objectVNum + " 0 " + this.roomVNum + "\n");
+		sb.append(putResetToString());
+		return sb.toString();
+	}
+	
+	public String putResetToString() {
+		StringBuilder sb = new StringBuilder();
+		this.listContains.forEach(pr -> sb.append(pr.toString()));
+		return sb.toString();
 	}
 }

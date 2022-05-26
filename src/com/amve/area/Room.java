@@ -155,13 +155,23 @@ public class Room {
 	
 	public String mobileResetToString() {
 		StringBuilder sb = new StringBuilder();
-		this.mobileResets.forEach((key, mobRes) -> sb.append(mobRes.toString()));
+		for(List<MobileReset> listMobileReset : this.mobileResets.values())
+			for( MobileReset mobRes : listMobileReset)
+				sb.append(mobRes.toString());
 		return sb.toString();
 	}
 	
 	public String objectResetToString() {
 		StringBuilder sb = new StringBuilder();
-		this.objectResets.forEach((key, objRes) -> sb.append(objRes.toString()));
+		for(List<ObjectReset> listObjectReset : this.objectResets.values())
+			for( ObjectReset objRes : listObjectReset)
+				sb.append(objRes.toString());
+		return sb.toString();
+	}
+	
+	public String doorResetToString() {
+		StringBuilder sb = new StringBuilder();
+		this.exits.forEach((key, exit) -> sb.append(exit.doorResetToString(this.vNum)));
 		return sb.toString();
 	}
 }

@@ -40,9 +40,30 @@ public class MobileReset {
 		equipResets.add(equipReset);
 	}
 	
+	public String giveResetToString() {
+		StringBuilder sb = new StringBuilder();
+		if(this.giveResets == null)
+			return "";
+		this.giveResets.forEach(gr -> sb.append(gr.toString()));
+		return sb.toString();
+	}
+	
+	public String equipResetToString() {
+		StringBuilder sb = new StringBuilder();
+		if(this.equipResets == null)
+			return "";
+		this.equipResets.forEach(er -> sb.append(er.toString()));
+		return sb.toString();
+	}
+	
 	@Override
 	public String toString() {
-		return "M 0 " + this.mobileVNum + " " + this.roomVNum + " " + 
-		this.globalMobileNumLimit + " " + this.localMobileNumLimit + "\n";
+		StringBuilder sb = new StringBuilder();
+		sb.append("M 0 " + this.mobileVNum + " " + this.roomVNum + " " + 
+				this.globalMobileNumLimit + " " + this.localMobileNumLimit + "\n");
+		sb.append(giveResetToString());
+		sb.append(equipResetToString());
+		
+		return sb.toString();
 	}
 }

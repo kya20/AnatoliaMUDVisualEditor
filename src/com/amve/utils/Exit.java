@@ -45,6 +45,15 @@ public class Exit {
 		this.doorFlags.add(DoorFlag.valueOfNum(Integer.parseInt(doorFlags)));
 	}
 	
+	public String doorResetToString(String vNum) {
+		String res = "D 0 " + vNum + " " + this.exitDirection.num + " ";
+		if (this.doorFlags == null)
+			res = res + "0";
+		else
+			res = res + this.doorFlags.get(0).num;
+		return res + "\n";
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

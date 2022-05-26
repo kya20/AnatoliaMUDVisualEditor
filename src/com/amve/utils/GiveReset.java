@@ -10,4 +10,8 @@ public class GiveReset {
 		this.mobileVNum = mobileVNum;
 	}
 
+	@Override
+	public String toString() {
+		return "G 0 " + this.objectVNum + " 0\n";
+	}
 }

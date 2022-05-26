@@ -12,4 +12,8 @@ public class PutReset {
 		this.containedNumber = containedNumber;
 	}
 
+	@Override
+	public String toString() {
+		return "P 0 " + this.containedVNum + " 0 " + this.containerVNum + " " + this.containedNumber + "\n";
+	}
 }
