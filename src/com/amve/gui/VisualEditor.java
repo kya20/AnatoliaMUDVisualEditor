@@ -4074,6 +4074,7 @@ public class VisualEditor {
 		objStatus_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Group grpTypeProperties = new Group(grpGeneralProperties, SWT.NONE);
+		grpTypeProperties.setLayout(new GridLayout(1, false));
 		grpTypeProperties.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		grpTypeProperties.setText("Type Properties");
 		
