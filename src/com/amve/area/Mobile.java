@@ -18,9 +18,14 @@ public class Mobile {
 	public String lookDescription = "";
 //	public int race = -1;
 	public Race race;
-	public List<Flag> flags = new ArrayList<>(); //action, affect, offensive, immunity, resistance, vulnerability, detection, corpse, form, parts
+//	public List<Flag> flags = new ArrayList<>(); // Eliminated, flags are added into Mobile.
+	
+	public String action = "";
+	public String affect = "";
 	public int alignment = 0;
 	public int mobileGroup = 0;
+	
+	
 	public int level = 1;
 	public int hitBonus = 0;
 	public Dice hitDice = new Dice();
@@ -29,26 +34,38 @@ public class Mobile {
 	public String damageType = "";
 	public int damage = 0;
 	public Map <String, Integer> armorClasses = new HashMap<>(); //pierce, bash, slash, magic
+	
+	public String offensive = "";
+	public String immunity = "";
+	public String resistance = "";
+	public String vulnerability = "";
+	
 	public Position startPos;
 	public Position defaultPos;
 	public Sex gender;
 	public int treasure = 0;
+	
+	public String form = "";
+	public String part = "";
+	
 	public Size size;
 	public String material = "";
 	public String special = "";
 	
+	//MOVED TO AREA SHOPS AND PRACTICER
+	
 	//Shop stuff, might be moved later
-	public boolean isShopkeeper = false;
-	public int itemsSoldNum = 0;
-	public ArrayList<Integer> itemSold = new ArrayList<Integer>();
-	public int profitBuy = 100;
-	public int profitSell = 100;
-	public int hourOpen = 0;
-	public int hourClose = 23;
+//	public boolean isShopkeeper = false;
+//	public int itemsSoldNum = 0;
+//	public ArrayList<Integer> itemSold = new ArrayList<Integer>();
+//	public int profitBuy = 100;
+//	public int profitSell = 100;
+//	public int hourOpen = 0;
+//	public int hourClose = 23;
 	
 	//DONE: implement practicer here or in its own class
-	public boolean practicer = false;
-	public String practicerGroup = "";
+//	public boolean practicer = false;
+//	public String practicerGroup = "";
 	
 	static private class RaceTable {
 		Map<String, Integer> map = (Map<String, Integer>)IntStream.range(0, name.length).boxed().collect(Collectors.toMap(i->name[i],i->i));
@@ -122,5 +139,20 @@ public class Mobile {
 		this.vNum = vNum;
 	}
 	
-	//TODO: implement toString function or something similar for writing to .are files
+	@Override
+	public String toString() {
+		// Implement this
+		StringBuilder sb = new StringBuilder();
+		sb.append("#" + this.getvNum() + "\n");
+		for(int i=0; i < this.nameList.size()-1; i++) {
+			sb.append(this.nameList.get(i) + " ");
+		}
+		sb.append(this.nameList.get(this.nameList.size()-1) + "~\n");
+		sb.append(this.shortDescription + "~\n");
+		sb.append(this.longDescription + "~\n");
+		sb.append(this.lookDescription + "~\n");
+		sb.append(this.race.getRaceName() + "~\n");
+//		sb.append(this.flags.get(alignment))
+		return "";
+	}
 }

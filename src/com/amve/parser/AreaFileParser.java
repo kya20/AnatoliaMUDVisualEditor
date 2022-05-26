@@ -219,8 +219,13 @@ public class AreaFileParser {
 				file.deleteCharAt(0);
 			index = file.indexOf("\n");
 			String [] tmp = file.substring(0, index).split(" ");
-			mobile.flags.add(new Flag("action", tmp[0]));
-			mobile.flags.add(new Flag("affect", tmp[1]));
+			
+//			mobile.flags.add(new Flag("action", tmp[0]));
+//			mobile.flags.add(new Flag("affect", tmp[1]));
+			
+			mobile.action = tmp[0];
+			mobile.affect = tmp[1];
+			
 			mobile.alignment = Integer.parseInt(tmp[2]);
 			mobile.mobileGroup = Integer.parseInt(tmp[3]);
 			file.delete(0, index);
@@ -248,10 +253,16 @@ public class AreaFileParser {
 				file.deleteCharAt(0);
 			index = file.indexOf("\n");
 			tmp = file.substring(0, index).split(" ");
-			mobile.flags.add(new Flag("offensive", tmp[0]));
-			mobile.flags.add(new Flag("immunity", tmp[1]));
-			mobile.flags.add(new Flag("resistance", tmp[2]));
-			mobile.flags.add(new Flag("vulnerability", tmp[3]));
+			
+			mobile.offensive = tmp[0];
+			mobile.immunity = tmp[1];
+			mobile.resistance = tmp[2];
+			mobile.vulnerability = tmp[3];
+			
+//			mobile.flags.add(new Flag("offensive", tmp[0]));
+//			mobile.flags.add(new Flag("immunity", tmp[1]));
+//			mobile.flags.add(new Flag("resistance", tmp[2]));
+//			mobile.flags.add(new Flag("vulnerability", tmp[3]));
 			file.delete(0, index);
 			while(Character.isWhitespace(file.charAt(0)))
 				file.deleteCharAt(0);
@@ -266,8 +277,12 @@ public class AreaFileParser {
 				file.deleteCharAt(0);
 			index = file.indexOf("\n");
 			tmp = file.substring(0, index).split(" ");
-			mobile.flags.add(new Flag("form", tmp[0]));
-			mobile.flags.add(new Flag("part", tmp[1]));
+			
+			mobile.form = tmp[0];
+			mobile.part = tmp[1];
+			
+//			mobile.flags.add(new Flag("form", tmp[0]));
+//			mobile.flags.add(new Flag("part", tmp[1]));
 			mobile.size = Size.valueOfName(tmp[2]);
 			mobile.material = tmp[3];
 			file.delete(0, index);
@@ -899,4 +914,24 @@ public class AreaFileParser {
 	public Area getArea() {
 		return area;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("#AREA\n");
+		sb.append(this.getArea().getAreaFileName() + "~\n");
+		sb.append(this.getArea().getName() + "~\n");
+		sb.append(
+				"{" + this.getArea().getLevelRange(0) + " " + 
+				this.getArea().getLevelRange(1) + "} " + 
+				this.getArea().getBuilder() + " " + 
+				this.getArea().getLongName() + "~\n");
+		sb.append(this.getArea().getvNumRange(0) + " " + this.getArea().getvNumRange(1) + "\n\n");
+		
+		// Continue from here
+		
+		return "";
+	}
+	
+	
 }
