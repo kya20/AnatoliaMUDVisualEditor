@@ -33,4 +33,7 @@ public class Container extends Item {
 		this.weightMultiplier = Integer.parseInt(v4);
 	}
 
+	public String vParamsToString() {
+		return this.maxTotalWeight + " 0 0 " + this.maxItemWeight + " " + this.weightMultiplier + "\n";
+	}
 }

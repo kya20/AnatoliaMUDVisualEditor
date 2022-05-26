@@ -33,4 +33,9 @@ public class Armor extends Item {
 		this.bulk = v4;
 	}
 
+	public String vParamsToString() {
+		return this.pierce + " " + this.bash + " " + 
+				this.slash + " " + this.exotic + " " + 
+				this.bulk + "\n";
+	}
 }

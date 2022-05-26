@@ -100,5 +100,55 @@ public abstract class Item {
 			
 			
 	}
+	
+	public String vParamsToString() {
+		return "0 0 0 0 0\n";
+	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.itemType.name + " ");
+		String s = "";
+		if(this.extraFlags.isEmpty())
+			s = "0";
+		else
+			for(ItemExtra flag : this.extraFlags)
+				s = s + GlobalVariables.LETTER_TRANSLATIONS_REVERSE.get(flag.num);
+			
+		sb.append(s + " ");
+		s = "";
+		if(this.wearFlags.isEmpty())
+			s = "0";
+		else
+			for (ItemWear flag : this.wearFlags)
+				s = s + GlobalVariables.LETTER_TRANSLATIONS_REVERSE.get(flag.num);
+		
+		sb.append(s + "\n");
+		sb.append(vParamsToString());
+		sb.append(this.level + " " + this.weight + " " + this.cost + " " + this.cond + "\n");
+		
+		for (List<String> applyList : this.apply) {
+			sb.append("A\n" + applyList.get(0) + " " + applyList.get(1) + "\n");
+		}
+		
+		for (List<String> flagLine : this.flags) {
+			sb.append(
+					"F " + flagLine.get(0) + " " + flagLine.get(1) + " " + 
+					flagLine.get(2) + " " + flagLine.get(3) + " " + flagLine.get(4) + "\n");
+		}
+		
+		this.extraDescriptions.forEach(ed -> sb.append(ed.toString()));
+		
+//		for (ExtraDescription extraDescription : this.extraDescriptions) {
+//			sb.append("E\n");
+//			for(int i=0; i < extraDescription.extraDesciptionKeyword.size() ; i++) {
+//				sb.append(extraDescription.extraDesciptionKeyword.get(i) + " ");
+//			}
+//			sb.append(extraDescription.extraDesciptionKeyword.get(extraDescription.extraDesciptionKeyword.size()) + "~\n");
+//			sb.append(extraDescription.extraDescriptionText + "~\n");
+//		}
+		
+		return sb.toString();
+	}
 }

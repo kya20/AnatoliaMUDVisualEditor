@@ -27,4 +27,7 @@ public class Money extends Item {
 		this.goldValue = Integer.parseInt(v1);
 	}
 
+	public String vParamsToString() {
+		return this.silverValue + " " + this.goldValue + " 0 0 0\n";
+	}
 }

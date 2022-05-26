@@ -39,4 +39,10 @@ public class MobileReset {
 			equipResets = new ArrayList<>();
 		equipResets.add(equipReset);
 	}
+	
+	@Override
+	public String toString() {
+		return "M 0 " + this.mobileVNum + " " + this.roomVNum + " " + 
+		this.globalMobileNumLimit + " " + this.localMobileNumLimit + "\n";
+	}
 }

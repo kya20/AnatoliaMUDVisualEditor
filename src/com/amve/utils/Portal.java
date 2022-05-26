@@ -37,8 +37,20 @@ public class Portal extends Item {
 		for (int i = 0; i < v2.length() ; i++) {
 			this.gateFlags.add(GateFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(v2.substring(i, i+1))));
 		}
-		this.destinationVNum = Integer.parseInt(v3);
-		
+		this.destinationVNum = Integer.parseInt(v3);		
 	}
 
+	public String vParamsToString() {
+		String res = this.maxCharges + " 0 ";
+		if (this.gateFlags.isEmpty())
+			res = res + "0 ";
+		else {
+			String s = "";
+			for (GateFlag flag : this.gateFlags)
+				s = s + GlobalVariables.LETTER_TRANSLATIONS_REVERSE.get(flag.num);
+			res = res + s + " ";
+		}
+		res = res + this.destinationVNum + " 0\n";
+		return  res;
+	}
 }

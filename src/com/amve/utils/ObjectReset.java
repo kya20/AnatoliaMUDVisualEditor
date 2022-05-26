@@ -24,4 +24,9 @@ public class ObjectReset {
 			this.listContains = new ArrayList<>();
 		this.listContains.add(object);
 	}
+	
+	@Override
+	public String toString() {
+		return "O 0 " + this.objectVNum + " 0 " + this.roomVNum + "\n";
+	}
 }

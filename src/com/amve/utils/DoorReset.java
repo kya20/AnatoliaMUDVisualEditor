@@ -1,7 +1,6 @@
 package com.amve.utils;
 
 import com.amve.globals.GlobalVariables.ExitDirection;
-import com.amve.globals.GlobalVariables.ItemExtra;
 import com.amve.globals.GlobalVariables;
 import com.amve.globals.GlobalVariables.DoorFlag;
 

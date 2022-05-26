@@ -12,4 +12,15 @@ public class ExtraDescription {
 		this.extraDescriptionText = extraDescriptionText;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("E\n");
+		for(int i=0; i < this.extraDesciptionKeyword.size()-1 ; i++) {
+			sb.append(this.extraDesciptionKeyword.get(i) + " ");
+		}
+		sb.append(this.extraDesciptionKeyword.get(this.extraDesciptionKeyword.size()-1) + "~\n");
+		sb.append(this.extraDescriptionText + "~\n");
+		return sb.toString();
+	}
 }

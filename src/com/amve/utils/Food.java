@@ -32,4 +32,7 @@ public class Food extends Item {
 			this.isPoisoned = false;
 	}
 
+	public String vParamsToString() {
+		return this.hoursFull + " " + this.hoursNormal + " 0 " + (this.isPoisoned?"1":"0") + " 0\n";
+	}
 }

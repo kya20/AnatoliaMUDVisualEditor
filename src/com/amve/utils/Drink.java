@@ -32,7 +32,10 @@ public class Drink extends Item {
 			this.isPoisoned = true;
 		else
 			this.isPoisoned = false;
-		
 	}
 
+	public String vParamsToString() {
+		return this.containerSize + " " + this.currentAmount + " " + 
+				this.liquidType + " " + (this.isPoisoned?"1":"0") + " 0\n";
+	}
 }
