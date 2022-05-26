@@ -7,7 +7,6 @@ import com.amve.globals.GlobalVariables.DoorState;
 import com.amve.globals.GlobalVariables.ExitDirection;
 import com.amve.globals.GlobalVariables.RoomFlag;
 import com.amve.globals.GlobalVariables.RoomSector;
-import com.amve.globals.GlobalVariables.WeaponFlag;
 import com.amve.utils.Exit;
 import com.amve.utils.ExtraDescription;
 import com.amve.utils.MobileReset;
@@ -120,12 +119,6 @@ public class Room {
 		list.add(objectReset);
 		this.objectResets.put(objectReset.objectVNum, list);
 	}
-	
-	//function that returns a string output in normal area file format for the room
-	public String toString() {
-		//TODO: implement the function
-		return("");
-	}
 
 	public String getHeader() {
 		return header;
@@ -137,5 +130,38 @@ public class Room {
 
 	public void setvNum(String vNum) {
 		this.vNum = vNum;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("#" + this.getvNum() + "\n");
+		sb.append(this.header + "~\n");
+		sb.append(this.description + "~\n");
+		sb.append("0 ");
+		String s = "";
+		for (RoomFlag flag : this.roomFlags)
+			s = s + GlobalVariables.LETTER_TRANSLATIONS_REVERSE.get(flag.num);
+		sb.append(s + " " + this.roomSector.num + "\n");
+		this.exits.keySet().stream().sorted().forEach(key -> sb.append(this.exits.get(key).toString()));
+//		this.exits.forEach((direction, exit) -> sb.append(exit.toString()));
+		this.extras.forEach(ed -> sb.append(ed.toString()));
+		sb.append("M " + this.manaAdjust + " H " + this.healingAdjust + "\n");
+		if(this.clan != null)
+			sb.append("clan " + this.clan + "~\n");
+		sb.append("S\n");
+		
+		return sb.toString();
+	}
+	
+	public String mobileResetToString() {
+		StringBuilder sb = new StringBuilder();
+		this.mobileResets.forEach((key, mobRes) -> sb.append(mobRes.toString()));
+		return sb.toString();
+	}
+	
+	public String objectResetToString() {
+		StringBuilder sb = new StringBuilder();
+		this.objectResets.forEach((key, objRes) -> sb.append(objRes.toString()));
+		return sb.toString();
 	}
 }

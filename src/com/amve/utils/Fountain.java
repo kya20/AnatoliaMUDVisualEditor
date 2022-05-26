@@ -30,4 +30,7 @@ public class Fountain extends Item {
 		
 	}
 
+	public String vParamsToString() {
+		return this.containerSize + " " + this.currentAmount + " " + this.liquidType + " 0 0\n";
+	}
 }

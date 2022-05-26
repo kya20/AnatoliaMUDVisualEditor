@@ -2,6 +2,7 @@ package com.amve.parser;
 
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +27,6 @@ import com.amve.utils.Dice;
 import com.amve.utils.Drink;
 import com.amve.utils.EquipReset;
 import com.amve.utils.Exit;
-import com.amve.utils.Flag;
 import com.amve.utils.Food;
 import com.amve.utils.Fountain;
 import com.amve.utils.Furniture;
@@ -928,9 +928,19 @@ public class AreaFileParser {
 				this.getArea().getLongName() + "~\n");
 		sb.append(this.getArea().getvNumRange(0) + " " + this.getArea().getvNumRange(1) + "\n\n");
 		
+		sb.append("#MOBILES\n");
 		this.getArea().getMobiles().forEach(mobile -> sb.append(mobile.toString()));
-		sb.append("#0\n\n\n");
-		//Continue from here
+		sb.append("#0\n\n");
+		sb.append("#OBJECTS\n");
+		this.getArea().getObjects().forEach(object -> sb.append(object.toString()));
+		sb.append("#0\n\n");
+		sb.append("#ROOMS\n");
+//		this.getArea().getRooms().forEach((s, room) -> sb.append(room.toString())); 
+		Map<String, Room> rooms = this.getArea().getRooms();
+		rooms.keySet().stream().sorted().forEach(key -> sb.append(rooms.get(key).toString()));
+		sb.append("#0\n\n");
+		sb.append("#RESETS\n");
+		
 		
 		return sb.toString();
 	}

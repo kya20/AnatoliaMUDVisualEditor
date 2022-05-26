@@ -49,5 +49,21 @@ public class Weapon extends Item {
 		
 		
 	}
+	
+	public String vParamsToString() {
+		String res = 
+				this.weaponClass.name + " " + this.dice.diceNo + " " + 
+				this.dice.diceFaces + " " + this.damageMessage + " ";
+		if (this.weaponFlags.isEmpty())
+			res = res + "0\n";
+		else {
+			String s = "";
+			for (WeaponFlag flag : this.weaponFlags)
+				s = s + GlobalVariables.LETTER_TRANSLATIONS_REVERSE.get(flag.num);
+			res = res + s + "\n";
+		}
+		
+		return  res;
+	}
 
 }

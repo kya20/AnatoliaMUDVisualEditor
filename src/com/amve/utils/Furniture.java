@@ -41,4 +41,17 @@ public class Furniture extends Item {
 		
 	}
 
+	public String vParamsToString() {
+		String res = this.numUsers + " " + this.maxWeight + " ";
+		if (this.furnitureFlags.isEmpty())
+			res = res + "0 ";
+		else {
+			String s = "";
+			for (FurnitureFlag flag : this.furnitureFlags)
+				s = s + GlobalVariables.LETTER_TRANSLATIONS_REVERSE.get(flag.num);
+			res = res + s + " ";
+		}
+		res = res + this.healingBonus + " " + this.manaBonus + "\n";
+		return  res;
+	}
 }

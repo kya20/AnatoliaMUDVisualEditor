@@ -29,4 +29,7 @@ public class Light extends Item {
 		return this.lightDuration == -1;
 	}
 	
+	public String vParamsToString() {
+		return "0 0 " + this.lightDuration + " 0 0\n";
+	}
 }

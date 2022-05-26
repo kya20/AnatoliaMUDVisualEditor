@@ -30,4 +30,7 @@ public class Wand extends Item {
 		this.spellName = v3;
 	}
 
+	public String vParamsToString() {
+		return this.spellLevel + " " + this.maxCharges + " " + this.curCharges + " '" + this.spellName + "' 0\n";
+	}
 }

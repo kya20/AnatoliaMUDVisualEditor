@@ -36,4 +36,19 @@ public class Potion extends Item {
 			this.spellList.add(v4);
 	}
 
+	public String vParamsToString() {
+		String res = this.spellLevel + " ";
+		for(int i=0 ; i < 4 ; i++) {
+			if(i < this.spellList.size())
+				res = res + "'" + this.spellList.get(i);
+			else
+				res = res + "'";
+			
+			if (i == 3)
+				res = res + "'\n";
+			else 
+				res = res + "' ";
+		}
+		return res;
+	}
 }
