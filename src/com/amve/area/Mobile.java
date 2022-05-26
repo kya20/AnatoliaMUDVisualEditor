@@ -129,6 +129,10 @@ public class Mobile {
 		public String getRaceName() {
 			return RaceTable.name[this.raceNumber];
 		}
+		
+		public int getRaceNumber() {
+			return this.raceNumber;
+		}
 	}
 
 	public String getvNum() {

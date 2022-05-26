@@ -54,6 +54,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
@@ -366,12 +367,12 @@ public class VisualEditor {
 	private Button ironImm;
 	private Button ironRes;
 	private Button ironVuln;
-	private Text mobTreasure;
-	private Text mobGroup;
-	private Text mobPierceAC;
-	private Text mobBashAC;
-	private Text mobSlashAC;
-	private Text mobMagicAC;
+	private Spinner mobTreasure;
+	private Spinner mobGroup;
+	private Spinner mobPierceAC;
+	private Spinner mobBashAC;
+	private Spinner mobSlashAC;
+	private Spinner mobMagicAC;
 	private Group grpDice;
 	private Label lblHit;
 	private Label lblMana;
@@ -448,6 +449,20 @@ public class VisualEditor {
 	private Text mobDamageType;
 	private Scale scale_2;
 	private Spinner spinner_2;
+	private Button summonVuln;
+	private Button magicRes;
+	private Button weaponsVuln;
+	private Button charmVuln;
+	private Button weaponsImm;
+	private Button bashRes;
+	private Button magicImm;
+	private Button magicVuln;
+	private Button bashVuln;
+	private Button bashImm;
+	private Button charmImm;
+	private Button pierceImm;
+	private Button charmRes;
+	private Button weaponsRes;
 
 	/**
 	 * Launch the application.
@@ -1286,6 +1301,350 @@ public class VisualEditor {
 
 	private void updateMobPanel(String key) {
 		System.out.println(key);
+		Mobile mob = new Mobile();
+		for (Mobile m: parser.getArea().getMobiles()) {
+			if (m.getvNum().equals(key)) {
+				mob = m;
+			}
+		}
+		String name = "";
+		for (String s: mob.nameList) {
+			name = name + " " + s;
+		}
+		name = name.stripLeading();
+		getMobNameText().setText(name);
+		getMobShortDescText().setText(mob.shortDescription);
+		getMobLongDescText().setText(mob.longDescription);
+		getMobLookDescText().setText(mob.lookDescription);
+		getMobRaceCombo().select(mob.race.getRaceNumber());
+		getMobSizeCombo().select(mob.size.num);
+		getMobMaterialText().setText(mob.material);
+		getMobStartPosCombo().select(mob.startPos.num);
+		getMobDefaultPosCombo().select(mob.defaultPos.num);
+		getMobSexCombo().select(mob.gender.num);
+		
+		getMobLvlSpinner().setSelection(mob.level);
+		getMobTreasure().setSelection(mob.treasure);
+		getMobGroup().setSelection(mob.mobileGroup);
+		
+		getMobPierceAC().setSelection(mob.armorClasses.get("pierce"));
+		getMobBashAC().setSelection(mob.armorClasses.get("bash"));
+		getMobSlashAC().setSelection(mob.armorClasses.get("slash"));
+		getMobMagicAC().setSelection(mob.armorClasses.get("magic"));
+		getMobDamageType().setText(mob.damageType);
+		
+		getMobHitDice1().setText(Integer.toString(mob.hitDice.diceNo));
+		getMobHitDice2().setText(Integer.toString(mob.hitDice.diceFaces));
+		getMobHitDice3().setText(Integer.toString(mob.hitDice.diceBonus));
+		
+		getMobDamageDice1().setText(Integer.toString(mob.damageDice.diceNo));
+		getMobDamageDice2().setText(Integer.toString(mob.damageDice.diceFaces));
+		getMobDamageDice3().setText(Integer.toString(mob.damageDice.diceBonus));
+		
+		getMobManaDice1().setText(Integer.toString(mob.manaDice.diceNo));
+		getMobManaDice2().setText(Integer.toString(mob.manaDice.diceFaces));
+		getMobManaDice3().setText(Integer.toString(mob.manaDice.diceBonus));
+		
+		getMobAlignmentSpinner().setSelection(mob.alignment);
+		
+
+		getSummonImm().setSelection(false);
+		getCharmImm().setSelection(false);
+		getMagicImm().setSelection(false);
+		getWeaponsImm().setSelection(false);
+		getBashImm().setSelection(false);
+		getPierceImm().setSelection(false);
+		getSlashImm().setSelection(false);
+		getFireImm().setSelection(false);
+		getColdImm().setSelection(false);
+		getLightningImm().setSelection(false);
+		getAcidImm().setSelection(false);
+		getPoisonImm().setSelection(false);
+		getNegativeImm().setSelection(false);
+		getHolyImm().setSelection(false);
+		getEnergyImm().setSelection(false);
+		getMentalImm().setSelection(false);
+		getDiseaseImm().setSelection(false);
+		getDrowningImm().setSelection(false);
+		getLightImm().setSelection(false);
+		getSoundImm().setSelection(false);
+		getWoodImm().setSelection(false);
+		getSilverImm().setSelection(false);
+		getIronImm().setSelection(false);
+		getSummonRes().setSelection(false);
+		getCharmRes().setSelection(false);
+		getMagicRes().setSelection(false);
+		getWeaponsRes().setSelection(false);
+		getBashRes().setSelection(false);
+		getPierceRes().setSelection(false);
+		getSlashRes().setSelection(false);
+		getFireRes().setSelection(false);
+		getColdRes().setSelection(false);
+		getLightningRes().setSelection(false);
+		getAcidRes().setSelection(false);
+		getPoisonRes().setSelection(false);
+		getNegativeRes().setSelection(false);
+		getHolyRes().setSelection(false);
+		getEnergyRes().setSelection(false);
+		getMentalRes().setSelection(false);
+		getDiseaseRes().setSelection(false);
+		getDrowningRes().setSelection(false);
+		getLightRes().setSelection(false);
+		getSoundRes().setSelection(false);
+		getWoodRes().setSelection(false);
+		getSilverRes().setSelection(false);
+		getIronRes().setSelection(false);
+		getSummonVuln().setSelection(false);
+		getCharmVuln().setSelection(false);
+		getMagicVuln().setSelection(false);
+		getWeaponsVuln().setSelection(false);
+		getBashVuln().setSelection(false);
+		getPierceVuln().setSelection(false);
+		getSlashVuln().setSelection(false);
+		getFireVuln().setSelection(false);
+		getColdVuln().setSelection(false);
+		getLightningVuln().setSelection(false);
+		getAcidVuln().setSelection(false);
+		getPoisonVuln().setSelection(false);
+		getNegativeVuln().setSelection(false);
+		getHolyVuln().setSelection(false);
+		getEnergyVuln().setSelection(false);
+		getMentalVuln().setSelection(false);
+		getDiseaseVuln().setSelection(false);
+		getDrowningVuln().setSelection(false);
+		getLightVuln().setSelection(false);
+		getSoundVuln().setSelection(false);
+		getWoodVuln().setSelection(false);
+		getSilverVuln().setSelection(false);
+		getIronVuln().setSelection(false);
+		
+		java.util.List<String> imms = new ArrayList<String>(Arrays.asList(mob.immunity.split("")));
+		java.util.List<String> ress = new ArrayList<String>(Arrays.asList(mob.resistance.split("")));
+		java.util.List<String> vuls = new ArrayList<String>(Arrays.asList(mob.vulnerability.split("")));
+		
+		
+		for (String s: imms) {
+			switch (s) {
+			case "A": //summon
+				getSummonImm().setSelection(true);
+				break;
+			case "B": //charm
+				getCharmImm().setSelection(true);
+				break;
+			case "C": //magic
+				getMagicImm().setSelection(true);
+				break;
+			case "D": //weapons
+				getWeaponsImm().setSelection(true);
+				break;
+			case "E": //bash
+				getBashImm().setSelection(true);
+				break;
+			case "F": //pierce
+				getPierceImm().setSelection(true);
+				break;
+			case "G": //slash
+				getSlashImm().setSelection(true);
+				break;
+			case "H": //fire
+				getFireImm().setSelection(true);
+				break;
+			case "I": //cold
+				getColdImm().setSelection(true);
+				break;
+			case "J": //lightning
+				getLightningImm().setSelection(true);
+				break;
+			case "K": //acid
+				getAcidImm().setSelection(true);
+				break;
+			case "L": //poison
+				getPoisonImm().setSelection(true);
+				break;
+			case "M": //negative
+				getNegativeImm().setSelection(true);
+				break;
+			case "N": //holy
+				getHolyImm().setSelection(true);
+				break;
+			case "O": //energy
+				getEnergyImm().setSelection(true);
+				break;
+			case "P": //mental
+				getMentalImm().setSelection(true);
+				break;
+			case "Q": //disease
+				getDiseaseImm().setSelection(true);
+				break;
+			case "R": //drowning
+				getDrowningImm().setSelection(true);
+				break;
+			case "S": //light
+				getLightImm().setSelection(true);
+				break;
+			case "T": //sound
+				getSoundImm().setSelection(true);
+				break;
+			case "X": //wood
+				getWoodImm().setSelection(true);
+				break;
+			case "Y": //silver
+				getSilverImm().setSelection(true);
+				break;
+			case "Z": //iron"
+				getIronImm().setSelection(true);
+				break;
+			}
+		}
+		
+		for (String s: ress) {
+			switch (s) {
+			case "A": //summon
+				getSummonRes().setSelection(true);
+				break;
+			case "B": //charm
+				getCharmRes().setSelection(true);
+				break;
+			case "C": //magic
+				getMagicRes().setSelection(true);
+				break;
+			case "D": //weapons
+				getWeaponsRes().setSelection(true);
+				break;
+			case "E": //bash
+				getBashRes().setSelection(true);
+				break;
+			case "F": //pierce
+				getPierceRes().setSelection(true);
+				break;
+			case "G": //slash
+				getSlashRes().setSelection(true);
+				break;
+			case "H": //fire
+				getFireRes().setSelection(true);
+				break;
+			case "I": //cold
+				getColdRes().setSelection(true);
+				break;
+			case "J": //lightning
+				getLightningRes().setSelection(true);
+				break;
+			case "K": //acid
+				getAcidRes().setSelection(true);
+				break;
+			case "L": //poison
+				getPoisonRes().setSelection(true);
+				break;
+			case "M": //negative
+				getNegativeRes().setSelection(true);
+				break;
+			case "N": //holy
+				getHolyRes().setSelection(true);
+				break;
+			case "O": //energy
+				getEnergyRes().setSelection(true);
+				break;
+			case "P": //mental
+				getMentalRes().setSelection(true);
+				break;
+			case "Q": //disease
+				getDiseaseRes().setSelection(true);
+				break;
+			case "R": //drowning
+				getDrowningRes().setSelection(true);
+				break;
+			case "S": //light
+				getLightRes().setSelection(true);
+				break;
+			case "T": //sound
+				getSoundRes().setSelection(true);
+				break;
+			case "X": //wood
+				getWoodRes().setSelection(true);
+				break;
+			case "Y": //silver
+				getSilverRes().setSelection(true);
+				break;
+			case "Z": //iron"
+				getIronRes().setSelection(true);
+				break;
+			}
+		}
+		
+		for (String s: vuls) {
+			switch (s) {
+			case "A": //summon
+				getSummonVuln().setSelection(true);
+				break;
+			case "B": //charm
+				getCharmVuln().setSelection(true);
+				break;
+			case "C": //magic
+				getMagicVuln().setSelection(true);
+				break;
+			case "D": //weapons
+				getWeaponsVuln().setSelection(true);
+				break;
+			case "E": //bash
+				getBashVuln().setSelection(true);
+				break;
+			case "F": //pierce
+				getPierceVuln().setSelection(true);
+				break;
+			case "G": //slash
+				getSlashVuln().setSelection(true);
+				break;
+			case "H": //fire
+				getFireVuln().setSelection(true);
+				break;
+			case "I": //cold
+				getColdVuln().setSelection(true);
+				break;
+			case "J": //lightning
+				getLightningVuln().setSelection(true);
+				break;
+			case "K": //acid
+				getAcidVuln().setSelection(true);
+				break;
+			case "L": //poison
+				getPoisonVuln().setSelection(true);
+				break;
+			case "M": //negative
+				getNegativeVuln().setSelection(true);
+				break;
+			case "N": //holy
+				getHolyVuln().setSelection(true);
+				break;
+			case "O": //energy
+				getEnergyVuln().setSelection(true);
+				break;
+			case "P": //mental
+				getMentalVuln().setSelection(true);
+				break;
+			case "Q": //disease
+				getDiseaseVuln().setSelection(true);
+				break;
+			case "R": //drowning
+				getDrowningVuln().setSelection(true);
+				break;
+			case "S": //light
+				getLightVuln().setSelection(true);
+				break;
+			case "T": //sound
+				getSoundVuln().setSelection(true);
+				break;
+			case "X": //wood
+				getWoodVuln().setSelection(true);
+				break;
+			case "Y": //silver
+				getSilverVuln().setSelection(true);
+				break;
+			case "Z": //iron"
+				getIronVuln().setSelection(true);
+				break;
+			}
+		}
+			
 	}
 	/**
 	 * Create contents of the window.
@@ -2291,7 +2650,9 @@ public class VisualEditor {
 		mobRaceCombo = new Combo(grpAppearance, SWT.READ_ONLY);
 		mobRaceCombo.setItems(new String[] {"unknown", "human", "elf", "half-elf", "dark-elf", "rockseer", "dwarf", "svirfnebli", "duergar", "arial", "gnome", "storm giant", "cloud giant", "fire giant", "frost giant", "felar", "githyanki", "satyr", "troll", "black dragon", "blue dragon", "green dragon", "red dragon", "white dragon", "brass dragon", "gold dragon", "silver dragon", "bronze dragon", "copper dragon", "bat", "bear", "cat", "centipede", "dog", "doll", "fido", "fox", "goblin", "hobgoblin", "kobold", "lizard", "modron", "orc", "pig", "rabbit", "school monster", "snake", "song bird", "water fowl", "wolf", "wyvern", "dragon", "giant", "golem", "undead", "drow", "draconian", "sprite", "aarakocra", "beholder", "tiger", "lion", "centaur", "death knight", "dracolich", "air elemental", "earth elemental", "fire elemental", "water elemental", "fish", "gargoyle", "ghost", "ghoul", "gnoll", "harpy", "lamia", "lich", "minotaur", "ogre", "zombie", "horse", "unique"});
 		mobRaceCombo.setToolTipText("Race of the mobile");
-		mobRaceCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		GridData gd_mobRaceCombo = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		gd_mobRaceCombo.widthHint = 130;
+		mobRaceCombo.setLayoutData(gd_mobRaceCombo);
 		
 		mobSizeCombo = new Combo(grpAppearance, SWT.READ_ONLY);
 		mobSizeCombo.setToolTipText("Size of the mobile");
@@ -2314,14 +2675,17 @@ public class VisualEditor {
 		lblSex.setText("Sex");
 		
 		combo = new Combo(grpAppearance, SWT.READ_ONLY);
+		combo.setItems(new String[] {"stand", "sit", "rest", "sleep"});
 		combo.setToolTipText("Position the mobile will be loaded in");
-		combo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		combo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		combo_1 = new Combo(grpAppearance, SWT.READ_ONLY);
+		combo_1.setItems(new String[] {"stand", "sit", "rest", "sleep"});
 		combo_1.setToolTipText("Position the mobile will return after a fight. Cannot go back to sleep");
-		combo_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		combo_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		combo_2 = new Combo(grpAppearance, SWT.READ_ONLY);
+		combo_2.setItems(new String[] {"none", "male", "female", "either"});
 		combo_2.setToolTipText("Gender of the mobile");
 		combo_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
@@ -2542,7 +2906,8 @@ public class VisualEditor {
 		lblTreasure.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblTreasure.setText("Treasure");
 		
-		mobTreasure = new Text(composite_6, SWT.BORDER);
+		mobTreasure = new Spinner(composite_6, SWT.BORDER);
+		mobTreasure.setMaximum(9999);
 		mobTreasure.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Composite composite_6_1 = new Composite(grpCore, SWT.NONE);
@@ -2552,7 +2917,8 @@ public class VisualEditor {
 		lblMobGrp.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblMobGrp.setText("Mob Group");
 		
-		mobGroup = new Text(composite_6_1, SWT.BORDER);
+		mobGroup = new Spinner(composite_6_1, SWT.BORDER);
+		mobGroup.setMaximum(9999);
 		mobGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Group grpAcValues = new Group(grpCombatValues, SWT.NONE);
@@ -2573,7 +2939,9 @@ public class VisualEditor {
 		lblPierceAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblPierceAc.setText("Pierce AC");
 		
-		mobPierceAC = new Text(composite_7, SWT.BORDER);
+		mobPierceAC = new Spinner(composite_7, SWT.BORDER);
+		mobPierceAC.setMaximum(9999);
+		mobPierceAC.setMinimum(-9999);
 		GridData gd_mobPierceAC = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_mobPierceAC.widthHint = 51;
 		mobPierceAC.setLayoutData(gd_mobPierceAC);
@@ -2585,7 +2953,9 @@ public class VisualEditor {
 		lblBashAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblBashAc.setText("Bash AC");
 		
-		mobBashAC = new Text(composite_7_1, SWT.BORDER);
+		mobBashAC = new Spinner(composite_7_1, SWT.BORDER);
+		mobBashAC.setMaximum(9999);
+		mobBashAC.setMinimum(-9999);
 		GridData gd_mobBashAC = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_mobBashAC.widthHint = 51;
 		mobBashAC.setLayoutData(gd_mobBashAC);
@@ -2597,7 +2967,9 @@ public class VisualEditor {
 		lblSlashAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblSlashAc.setText("Slash AC");
 		
-		mobSlashAC = new Text(composite_7_2, SWT.BORDER);
+		mobSlashAC = new Spinner(composite_7_2, SWT.BORDER);
+		mobSlashAC.setMaximum(9999);
+		mobSlashAC.setMinimum(-9999);
 		GridData gd_mobSlashAC = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_mobSlashAC.widthHint = 51;
 		mobSlashAC.setLayoutData(gd_mobSlashAC);
@@ -2609,7 +2981,9 @@ public class VisualEditor {
 		lblMagicAc.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblMagicAc.setText("Magic AC");
 		
-		mobMagicAC = new Text(composite_7_3, SWT.BORDER);
+		mobMagicAC = new Spinner(composite_7_3, SWT.BORDER);
+		mobMagicAC.setMaximum(9999);
+		mobMagicAC.setMinimum(-9999);
 		GridData gd_mobMagicAC = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
 		gd_mobMagicAC.widthHint = 51;
 		mobMagicAC.setLayoutData(gd_mobMagicAC);
@@ -2993,66 +3367,66 @@ public class VisualEditor {
 		summonRes = new Button(grpImmresvuln, SWT.CHECK);
 		summonRes.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
-		Button summonVuln = new Button(grpImmresvuln, SWT.CHECK);
+		summonVuln = new Button(grpImmresvuln, SWT.CHECK);
 		summonVuln.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
 		lblCharm = new Label(grpImmresvuln, SWT.NONE);
 		lblCharm.setText("Charm");
 		new Label(grpImmresvuln, SWT.NONE);
 		
-		Button charmImm = new Button(grpImmresvuln, SWT.CHECK);
+		charmImm = new Button(grpImmresvuln, SWT.CHECK);
 		charmImm.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
-		Button charmRes = new Button(grpImmresvuln, SWT.CHECK);
+		charmRes = new Button(grpImmresvuln, SWT.CHECK);
 		charmRes.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
-		Button charmVuln = new Button(grpImmresvuln, SWT.CHECK);
+		charmVuln = new Button(grpImmresvuln, SWT.CHECK);
 		charmVuln.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
 		lblMagic = new Label(grpImmresvuln, SWT.NONE);
 		lblMagic.setText("Magic");
 		new Label(grpImmresvuln, SWT.NONE);
 		
-		Button magicImm = new Button(grpImmresvuln, SWT.CHECK);
+		magicImm = new Button(grpImmresvuln, SWT.CHECK);
 		magicImm.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
-		Button magicRes = new Button(grpImmresvuln, SWT.CHECK);
+		magicRes = new Button(grpImmresvuln, SWT.CHECK);
 		magicRes.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
-		Button magicVuln = new Button(grpImmresvuln, SWT.CHECK);
+		magicVuln = new Button(grpImmresvuln, SWT.CHECK);
 		magicVuln.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
 		lblWeapons = new Label(grpImmresvuln, SWT.NONE);
 		lblWeapons.setText("Weapons");
 		new Label(grpImmresvuln, SWT.NONE);
 		
-		Button weaponsImm = new Button(grpImmresvuln, SWT.CHECK);
+		weaponsImm = new Button(grpImmresvuln, SWT.CHECK);
 		weaponsImm.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
-		Button weaponsRes = new Button(grpImmresvuln, SWT.CHECK);
+		weaponsRes = new Button(grpImmresvuln, SWT.CHECK);
 		weaponsRes.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
-		Button weaponsVuln = new Button(grpImmresvuln, SWT.CHECK);
+		weaponsVuln = new Button(grpImmresvuln, SWT.CHECK);
 		weaponsVuln.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
 		lblBash = new Label(grpImmresvuln, SWT.NONE);
 		lblBash.setText("Bash");
 		new Label(grpImmresvuln, SWT.NONE);
 		
-		Button bashImm = new Button(grpImmresvuln, SWT.CHECK);
+		bashImm = new Button(grpImmresvuln, SWT.CHECK);
 		bashImm.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
-		Button bashRes = new Button(grpImmresvuln, SWT.CHECK);
+		bashRes = new Button(grpImmresvuln, SWT.CHECK);
 		bashRes.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
-		Button bashVuln = new Button(grpImmresvuln, SWT.CHECK);
+		bashVuln = new Button(grpImmresvuln, SWT.CHECK);
 		bashVuln.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
 		lblPierce = new Label(grpImmresvuln, SWT.NONE);
 		lblPierce.setText("Pierce");
 		new Label(grpImmresvuln, SWT.NONE);
 		
-		Button pierceImm = new Button(grpImmresvuln, SWT.CHECK);
+		pierceImm = new Button(grpImmresvuln, SWT.CHECK);
 		pierceImm.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		
 		pierceRes = new Button(grpImmresvuln, SWT.CHECK);
@@ -5334,25 +5708,25 @@ public class VisualEditor {
 	public Button getMobPartsClaws() {
 		return btnClaws;
 	}
-	public Text getMobBashAC() {
+	public Spinner getMobBashAC() {
 		return mobBashAC;
 	}
-	public Text getMobPierceAC() {
+	public Spinner getMobPierceAC() {
 		return mobPierceAC;
 	}
-	public Text getMobSlashAC() {
+	public Spinner getMobSlashAC() {
 		return mobSlashAC;
 	}
 	public Spinner getMobLvlSpinner() {
 		return mobLvlSpinner;
 	}
-	public Text getMobTreasure() {
+	public Spinner getMobTreasure() {
 		return mobTreasure;
 	}
-	public Text getMobMagicAC() {
+	public Spinner getMobMagicAC() {
 		return mobMagicAC;
 	}
-	public Text getMobGroup() {
+	public Spinner getMobGroup() {
 		return mobGroup;
 	}
 	public Text getMobDamageType() {
@@ -5742,6 +6116,213 @@ public class VisualEditor {
 	}
 	public Spinner getMobAlignmentSpinner() {
 		return spinner_2;
+	}
+	public Button getLightningRes() {
+		return lightningRes;
+	}
+	public Button getAcidRes() {
+		return acidRes;
+	}
+	public Button getDrowningRes() {
+		return drowningRes;
+	}
+	public Button getSoundRes() {
+		return soundRes;
+	}
+	public Button getPoisonRes() {
+		return poisonRes;
+	}
+	public Button getDiseaseRes() {
+		return diseaseRes;
+	}
+	public Button getSlashVuln() {
+		return slashVuln;
+	}
+	public Button getFireRes() {
+		return fireRes;
+	}
+	public Button getIronVuln() {
+		return ironVuln;
+	}
+	public Button getSummonVuln() {
+		return summonVuln;
+	}
+	public Button getLightRes() {
+		return lightRes;
+	}
+	public Button getMagicRes() {
+		return magicRes;
+	}
+	public Button getHolyVuln() {
+		return holyVuln;
+	}
+	public Button getDiseaseImm() {
+		return diseaseImm;
+	}
+	public Button getAcidVuln() {
+		return acidVuln;
+	}
+	public Button getWeaponsVuln() {
+		return weaponsVuln;
+	}
+	public Button getIronRes() {
+		return ironRes;
+	}
+	public Button getLightVuln() {
+		return lightVuln;
+	}
+	public Button getSoundImm() {
+		return soundImm;
+	}
+	public Button getCharmVuln() {
+		return charmVuln;
+	}
+	public Button getSilverRes() {
+		return silverRes;
+	}
+	public Button getWeaponsImm() {
+		return weaponsImm;
+	}
+	public Button getEnergyVuln() {
+		return energyVuln;
+	}
+	public Button getPierceVuln() {
+		return pierceVuln;
+	}
+	public Button getDrowningVuln() {
+		return drowningVuln;
+	}
+	public Button getBashRes() {
+		return bashRes;
+	}
+	public Button getDiseaseVuln() {
+		return diseaseVuln;
+	}
+	public Button getFireVuln() {
+		return fireVuln;
+	}
+	public Button getColdRes() {
+		return coldRes;
+	}
+	public Button getMagicImm() {
+		return magicImm;
+	}
+	public Button getColdImm() {
+		return coldImm;
+	}
+	public Button getSummonImm() {
+		return summonImm;
+	}
+	public Button getSlashRes() {
+		return slashRes;
+	}
+	public Button getSilverImm() {
+		return silverImm;
+	}
+	public Button getLightningVuln() {
+		return lightningVuln;
+	}
+	public Button getIronImm() {
+		return ironImm;
+	}
+	public Button getEnergyRes() {
+		return energyRes;
+	}
+	public Button getHolyRes() {
+		return holyRes;
+	}
+	public Button getWoodRes() {
+		return woodRes;
+	}
+	public Button getLightImm() {
+		return lightImm;
+	}
+	public Button getMagicVuln() {
+		return magicVuln;
+	}
+	public Button getHolyImm() {
+		return holyImm;
+	}
+	public Button getNegativeVuln() {
+		return negativeVuln;
+	}
+	public Button getSummonRes() {
+		return summonRes;
+	}
+	public Button getBashVuln() {
+		return bashVuln;
+	}
+	public Button getNegativeRes() {
+		return negativeRes;
+	}
+	public Button getBashImm() {
+		return bashImm;
+	}
+	public Button getWoodVuln() {
+		return woodVuln;
+	}
+	public Button getMentalRes() {
+		return mentalRes;
+	}
+	public Button getCharmImm() {
+		return charmImm;
+	}
+	public Button getAcidImm() {
+		return acidImm;
+	}
+	public Button getMentalVuln() {
+		return mentalVuln;
+	}
+	public Button getSilverVuln() {
+		return silverVuln;
+	}
+	public Button getPierceImm() {
+		return pierceImm;
+	}
+	public Button getCharmRes() {
+		return charmRes;
+	}
+	public Button getSlashImm() {
+		return slashImm;
+	}
+	public Button getDrowningImm() {
+		return drowningImm;
+	}
+	public Button getMentalImm() {
+		return mentalImm;
+	}
+	public Button getPoisonVuln() {
+		return poisonVuln;
+	}
+	public Button getWoodImm() {
+		return woodImm;
+	}
+	public Button getColdVuln() {
+		return coldVuln;
+	}
+	public Button getNegativeImm() {
+		return negativeImm;
+	}
+	public Button getPierceRes() {
+		return pierceRes;
+	}
+	public Button getPoisonImm() {
+		return poisonImm;
+	}
+	public Button getEnergyImm() {
+		return energyImm;
+	}
+	public Button getLightningImm() {
+		return lightningImm;
+	}
+	public Button getFireImm() {
+		return fireImm;
+	}
+	public Button getWeaponsRes() {
+		return weaponsRes;
+	}
+	public Button getSoundVuln() {
+		return soundVuln;
 	}
 }
 
