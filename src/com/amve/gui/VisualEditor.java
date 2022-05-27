@@ -68,8 +68,12 @@ import org.eclipse.jface.viewers.ListViewer;
 import java.awt.Frame;
 import org.eclipse.swt.awt.SWT_AWT;
 import java.awt.Panel;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -7277,10 +7281,43 @@ public class VisualEditor {
 		@Override
 		public void widgetSelected(SelectionEvent event) {
 			System.out.println("Save clicked");
+			FileDialog fd = new FileDialog(shell, SWT.SAVE);
+			fd.setText("Save");
+			String[] filterExt = { "*.are", "*.*" };
+			fd.setFilterExtensions(filterExt);
+			filePath = fd.open();
+			String name = fd.getFilterPath() + "\\" + fd.getFileName();
+			System.out.println("file: " + name);
+
+		    try {
+		    	BufferedWriter writer = new BufferedWriter(new FileWriter(name));
+				writer.write(parser.toString());
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    
+		    
 		}
 		@Override
 		public void widgetDefaultSelected(SelectionEvent event) {
 			System.out.println("Save clicked");
+			FileDialog fd = new FileDialog(shell, SWT.SAVE);
+			fd.setText("Save");
+			String[] filterExt = { "*.are", "*.*" };
+			fd.setFilterExtensions(filterExt);
+			filePath = fd.open();
+			String name = fd.getFilterPath() + "\\" + fd.getFileName();
+			System.out.println("file: " + name);
+		    try {
+		    	BufferedWriter writer = new BufferedWriter(new FileWriter(name));
+				writer.write(parser.toString());
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

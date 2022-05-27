@@ -11,5 +11,4 @@ module AnatoliaMUDVisualEditor {
 	requires org.eclipse.core.databinding;
 	requires org.eclipse.jface.databinding;
 	requires org.eclipse.core.databinding.observable;
-	requires jdk.internal.vm.compiler;
 }

@@ -16,16 +16,16 @@ public class Main {
 		String areaFilePath = "under2.are";
 		
 		AreaFileParser parser = new AreaFileParser(areaFilePath);
+		System.out.println(parser.toString());
 		
-		
-		try {
-			VisualEditor window = new VisualEditor();
-//			window.setBlockOnOpen(true);
-			window.open();
-			Display.getCurrent().dispose();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			VisualEditor window = new VisualEditor();
+////			window.setBlockOnOpen(true);
+//			window.open();
+//			Display.getCurrent().dispose();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 }
