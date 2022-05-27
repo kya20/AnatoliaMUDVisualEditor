@@ -98,6 +98,7 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.swt.widgets.Slider;
 
 public class VisualEditor {
 	private DataBindingContext m_bindingContext;
@@ -532,6 +533,18 @@ public class VisualEditor {
 	private Text affFlagsText;
 	private Text offFlagsText;
 	private TabFolder tabFolder_1;
+	private Text armorPierce;
+	private Text armorBash;
+	private Text armorSlash;
+	private Text armorMagic;
+	private Text armorBulk;
+	private Text text_5;
+	private Text text_6;
+	private Text text_7;
+	private Text text_36;
+	private Text text_37;
+	private Text text_38;
+	private Text text_39;
 
 	/**
 	 * Launch the application.
@@ -1872,7 +1885,7 @@ public class VisualEditor {
 	            else if (tmp.startsWith("Object")) {
 	            	tmp = tmp.replace("Object ", "");
 					tmp = tmp.replaceAll("\\s.*", "");
-					//updateMobPanel(tmp);
+					//updateObjPanel(tmp);
 					getTabFolder1().setSelection(2);
 	            }
 	          }
@@ -4097,7 +4110,7 @@ public class VisualEditor {
 		
 		objectExtrasTable = new Table(grpDescription_2, SWT.BORDER | SWT.FULL_SELECTION);
 		GridData gd_objectExtrasTable = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_objectExtrasTable.heightHint = 200;
+		gd_objectExtrasTable.heightHint = 100;
 		objectExtrasTable.setLayoutData(gd_objectExtrasTable);
 		objectExtrasTable.setHeaderVisible(true);
 		objectExtrasTable.setLinesVisible(true);
@@ -4175,6 +4188,269 @@ public class VisualEditor {
 		grpTypeProperties.setLayout(new GridLayout(1, false));
 		grpTypeProperties.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		grpTypeProperties.setText("Type Properties");
+		
+		Composite armorTypeComp = new Composite(grpTypeProperties, SWT.NONE);
+		armorTypeComp.setLayout(new GridLayout(6, false));
+		armorTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblBash_2 = new Label(armorTypeComp, SWT.NONE);
+		lblBash_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblBash_2.setText("Pierce:");
+		
+		armorPierce = new Text(armorTypeComp, SWT.BORDER);
+		armorPierce.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblBash_3 = new Label(armorTypeComp, SWT.NONE);
+		lblBash_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblBash_3.setText("Bash:");
+		
+		armorBash = new Text(armorTypeComp, SWT.BORDER);
+		armorBash.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSlash_2 = new Label(armorTypeComp, SWT.NONE);
+		lblSlash_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblSlash_2.setText("Slash:");
+		
+		armorSlash = new Text(armorTypeComp, SWT.BORDER);
+		armorSlash.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblMagic_2 = new Label(armorTypeComp, SWT.NONE);
+		lblMagic_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblMagic_2.setText("Magic:");
+		
+		armorMagic = new Text(armorTypeComp, SWT.BORDER);
+		armorMagic.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblBulk = new Label(armorTypeComp, SWT.NONE);
+		lblBulk.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblBulk.setText("Bulk:");
+		
+		armorBulk = new Text(armorTypeComp, SWT.BORDER);
+		armorBulk.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		new Label(armorTypeComp, SWT.NONE);
+		new Label(armorTypeComp, SWT.NONE);
+		
+		Composite wandStaffTypeComp = new Composite(grpTypeProperties, SWT.NONE);
+		GridLayout gl_wandStaffTypeComp = new GridLayout(4, false);
+		wandStaffTypeComp.setLayout(gl_wandStaffTypeComp);
+		wandStaffTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSpell = new Label(wandStaffTypeComp, SWT.NONE);
+		lblSpell.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblSpell.setText("Spell:");
+		
+		text_5 = new Text(wandStaffTypeComp, SWT.BORDER);
+		text_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSpellLevel = new Label(wandStaffTypeComp, SWT.NONE);
+		lblSpellLevel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblSpellLevel.setText("Spell level:");
+		
+		Spinner spinner = new Spinner(wandStaffTypeComp, SWT.BORDER);
+		spinner.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblMaxCharges = new Label(wandStaffTypeComp, SWT.NONE);
+		lblMaxCharges.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblMaxCharges.setText("Max. charges:");
+		
+		Spinner spinner_1 = new Spinner(wandStaffTypeComp, SWT.BORDER);
+		spinner_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblCurrentCharges = new Label(wandStaffTypeComp, SWT.NONE);
+		lblCurrentCharges.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblCurrentCharges.setText("Current charges:");
+		
+		Spinner spinner_3 = new Spinner(wandStaffTypeComp, SWT.BORDER);
+		spinner_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		
+		Composite magicItemTypeComp = new Composite(grpTypeProperties, SWT.NONE);
+		magicItemTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		magicItemTypeComp.setLayout(new GridLayout(6, false));
+		
+		Label lblPotionLevel = new Label(magicItemTypeComp, SWT.NONE);
+		lblPotionLevel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPotionLevel.setText("Effect level:");
+		
+		Spinner spinner_4 = new Spinner(magicItemTypeComp, SWT.BORDER);
+		GridData gd_spinner_4 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_spinner_4.widthHint = 50;
+		spinner_4.setLayoutData(gd_spinner_4);
+		
+		Label lblSpellNo = new Label(magicItemTypeComp, SWT.NONE);
+		lblSpellNo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblSpellNo.setText("Spell no:");
+		
+		Combo combo_6 = new Combo(magicItemTypeComp, SWT.READ_ONLY);
+		GridData gd_combo_6 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_combo_6.widthHint = 50;
+		combo_6.setLayoutData(gd_combo_6);
+		combo_6.setVisibleItemCount(5);
+		combo_6.setItems(new String[] {"0", "1", "2", "3", "4"});
+		combo_6.select(0);
+		
+		Label lblSpell_1 = new Label(magicItemTypeComp, SWT.NONE);
+		lblSpell_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblSpell_1.setText("Spell 1:");
+		
+		text_6 = new Text(magicItemTypeComp, SWT.BORDER);
+		text_6.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSpell_2 = new Label(magicItemTypeComp, SWT.NONE);
+		lblSpell_2.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblSpell_2.setText("Spell 2:");
+		
+		text_7 = new Text(magicItemTypeComp, SWT.BORDER);
+		text_7.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSpell_3 = new Label(magicItemTypeComp, SWT.NONE);
+		lblSpell_3.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblSpell_3.setText("Spell 3:");
+		
+		text_36 = new Text(magicItemTypeComp, SWT.BORDER);
+		text_36.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblSpell_4 = new Label(magicItemTypeComp, SWT.NONE);
+		lblSpell_4.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblSpell_4.setText("Spell 4:");
+		
+		text_37 = new Text(magicItemTypeComp, SWT.BORDER);
+		text_37.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Composite weaponTypeComp = new Composite(grpTypeProperties, SWT.NONE);
+		weaponTypeComp.setLayout(new GridLayout(4, false));
+		weaponTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblWeaponClass = new Label(weaponTypeComp, SWT.NONE);
+		lblWeaponClass.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblWeaponClass.setText("Weapon class:");
+		
+		Combo combo_7 = new Combo(weaponTypeComp, SWT.READ_ONLY);
+		combo_7.setItems(new String[] {"exotic", "sword", "dagger", "spear", "mace", "axe", "flail", "whip", "polearm", "bow", "arrow", "lance"});
+		combo_7.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDamageType = new Label(weaponTypeComp, SWT.NONE);
+		lblDamageType.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblDamageType.setText("Damage type:");
+		
+		text_38 = new Text(weaponTypeComp, SWT.BORDER);
+		text_38.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblDiceNo = new Label(weaponTypeComp, SWT.NONE);
+		lblDiceNo.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblDiceNo.setText("Dice no:");
+		
+		Spinner spinner_5 = new Spinner(weaponTypeComp, SWT.BORDER);
+		spinner_5.setMaximum(1000);
+		
+		Label lblDiceFaces = new Label(weaponTypeComp, SWT.NONE);
+		lblDiceFaces.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblDiceFaces.setText("Dice faces:");
+		
+		Spinner spinner_6 = new Spinner(weaponTypeComp, SWT.BORDER);
+		spinner_6.setMaximum(1000);
+		
+		Composite foodTypeComp = new Composite(grpTypeProperties, SWT.NONE);
+		foodTypeComp.setLayout(new GridLayout(6, false));
+		foodTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblFullHours = new Label(foodTypeComp, SWT.NONE);
+		lblFullHours.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblFullHours.setText("Full hours:");
+		
+		Spinner spinner_7 = new Spinner(foodTypeComp, SWT.BORDER);
+		
+		Label lblNormalHours = new Label(foodTypeComp, SWT.NONE);
+		lblNormalHours.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblNormalHours.setText("Normal hours:");
+		
+		Spinner spinner_8 = new Spinner(foodTypeComp, SWT.BORDER);
+		
+		Label lblPoisoned = new Label(foodTypeComp, SWT.NONE);
+		lblPoisoned.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPoisoned.setText("Poisoned?");
+		
+		Button button = new Button(foodTypeComp, SWT.CHECK);
+		
+		Composite lightTypeComp = new Composite(grpTypeProperties, SWT.NONE);
+		lightTypeComp.setLayout(new GridLayout(4, false));
+		lightTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblItemLevel = new Label(lightTypeComp, SWT.NONE);
+		lblItemLevel.setText("Item level:");
+		
+		Spinner spinner_9 = new Spinner(lightTypeComp, SWT.BORDER);
+		
+		Label lblLightDuration = new Label(lightTypeComp, SWT.NONE);
+		lblLightDuration.setText("Light duration:");
+		
+		Spinner spinner_10 = new Spinner(lightTypeComp, SWT.BORDER);
+		spinner_10.setMaximum(9999);
+		spinner_10.setMinimum(-1);
+		
+		Composite containerTypeComp = new Composite(grpTypeProperties, SWT.NONE);
+		containerTypeComp.setLayout(new GridLayout(6, false));
+		containerTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblMaxItemWeight = new Label(containerTypeComp, SWT.NONE);
+		lblMaxItemWeight.setText("Max. item weight:");
+		
+		Spinner spinner_11 = new Spinner(containerTypeComp, SWT.BORDER);
+		
+		Label lblMaxTotalWeight = new Label(containerTypeComp, SWT.NONE);
+		lblMaxTotalWeight.setText("Max. total weight:");
+		
+		Spinner spinner_12 = new Spinner(containerTypeComp, SWT.BORDER);
+		
+		Label lblWeightMultiplier = new Label(containerTypeComp, SWT.NONE);
+		lblWeightMultiplier.setText("Weight multiplier:");
+		
+		Spinner spinner_13 = new Spinner(containerTypeComp, SWT.BORDER);
+		spinner_13.setMaximum(200);
+		
+		Composite moneyTypeComp = new Composite(grpTypeProperties, SWT.NONE);
+		moneyTypeComp.setLayout(new GridLayout(4, false));
+		moneyTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblGoldValue = new Label(moneyTypeComp, SWT.NONE);
+		lblGoldValue.setText("Gold value:");
+		
+		Spinner spinner_14 = new Spinner(moneyTypeComp, SWT.BORDER);
+		spinner_14.setMaximum(9999);
+		
+		Label lblSilverValue = new Label(moneyTypeComp, SWT.NONE);
+		lblSilverValue.setText("Silver value:");
+		
+		Spinner spinner_15 = new Spinner(moneyTypeComp, SWT.BORDER);
+		spinner_15.setMaximum(9999);
+		
+		Composite drinkTypeComp = new Composite(grpTypeProperties, SWT.NONE);
+		drinkTypeComp.setLayout(new GridLayout(6, false));
+		drinkTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label lblContainerSize = new Label(drinkTypeComp, SWT.NONE);
+		lblContainerSize.setText("Container size:");
+		
+		Spinner spinner_16 = new Spinner(drinkTypeComp, SWT.BORDER);
+		
+		Label lblCurrentAmount = new Label(drinkTypeComp, SWT.NONE);
+		lblCurrentAmount.setText("Current amount:");
+		
+		Spinner spinner_17 = new Spinner(drinkTypeComp, SWT.BORDER);
+		
+		Label lblLiquidType = new Label(drinkTypeComp, SWT.NONE);
+		lblLiquidType.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblLiquidType.setText("Liquid type:");
+		
+		text_39 = new Text(drinkTypeComp, SWT.BORDER);
+		text_39.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Button btnPoisoned = new Button(drinkTypeComp, SWT.CHECK);
+		btnPoisoned.setText("Poisoned?");
+		new Label(drinkTypeComp, SWT.NONE);
+		new Label(drinkTypeComp, SWT.NONE);
+		new Label(drinkTypeComp, SWT.NONE);
+		new Label(drinkTypeComp, SWT.NONE);
+		new Label(drinkTypeComp, SWT.NONE);
 		
 		Group grpFlags_1 = new Group(sashForm_2, SWT.NONE);
 		grpFlags_1.setText("Flags");
@@ -4333,7 +4609,9 @@ public class VisualEditor {
 		btnTwoHands.setText("Two hands");
 		
 		Group grpImmresvuln_1 = new Group(grpFlags_1, SWT.NONE);
-		grpImmresvuln_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpImmresvuln_1 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpImmresvuln_1.exclude = true;
+		grpImmresvuln_1.setLayoutData(gd_grpImmresvuln_1);
 		grpImmresvuln_1.setText("Imm/Res/Vuln");
 		grpImmresvuln_1.setLayout(new GridLayout(5, false));
 		new Label(grpImmresvuln_1, SWT.NONE);
@@ -4660,7 +4938,9 @@ public class VisualEditor {
 		RowLayout rl_grpGeneralAffects = new RowLayout(SWT.HORIZONTAL);
 		rl_grpGeneralAffects.pack = false;
 		grpGeneralAffects.setLayout(rl_grpGeneralAffects);
-		grpGeneralAffects.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpGeneralAffects = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpGeneralAffects.exclude = true;
+		grpGeneralAffects.setLayoutData(gd_grpGeneralAffects);
 		grpGeneralAffects.setText("General Affects");
 		
 		Button btnBlind_1 = new Button(grpGeneralAffects, SWT.CHECK);
@@ -4769,7 +5049,9 @@ public class VisualEditor {
 		btnParalysis.setText("Paralysis");
 		
 		Group grpDetectionAffects = new Group(grpAffectsSpecials, SWT.NONE);
-		grpDetectionAffects.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		GridData gd_grpDetectionAffects = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpDetectionAffects.exclude = true;
+		grpDetectionAffects.setLayoutData(gd_grpDetectionAffects);
 		grpDetectionAffects.setText("Detection Affects");
 		RowLayout rl_grpDetectionAffects = new RowLayout(SWT.HORIZONTAL);
 		rl_grpDetectionAffects.pack = false;
