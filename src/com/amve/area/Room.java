@@ -68,6 +68,7 @@ public class Room {
 				this.roomFlags.add(RoomFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(flags.substring(i, i+1))));
 			}
 		}
+		
 		else if(flags.matches("\\d+(\\|\\d+)*")) {
 			List<String> splitted = List.of(flags.split("\\|"));
 			splitted.forEach(f -> {
