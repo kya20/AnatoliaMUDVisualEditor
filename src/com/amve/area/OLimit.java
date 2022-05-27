@@ -17,4 +17,9 @@ public class OLimit {
 	public void setLimit(int limit) {
 		this.limit = limit;
 	}
+	
+	@Override
+	public String toString() {
+		return "O " + this.vNum + " " + this.limit + "\n";
+	}
 }

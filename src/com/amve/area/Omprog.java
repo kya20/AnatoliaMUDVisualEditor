@@ -40,5 +40,12 @@ public class Omprog {
 		this.functionName = functionName;
 	}
 	
-	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if(type) sb.append("O ");  //Object
+		else sb.append("M "); //Mobile
+		sb.append(this.vNum + " " + this.progType + " " + this.functionName + "\n");
+		return sb.toString();
+	}
 }

@@ -48,4 +48,20 @@ public class Shop {
 		this.closeHour = closeHour;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.mobileVNum + " ");
+		for(int i=0 ; i < 5 ; i++) {
+			if(i < this.buyItemTypes.size())
+				sb.append(this.buyItemTypes.get(i) + " ");
+			else
+				sb.append("0 ");
+		}
+		sb.append(this.buyMultiplier + " " + this.sellMultiplier + " " + 
+				this.openHour + " " + this.closeHour + "\n");
+		
+		return sb.toString();
+	}
+	
 }

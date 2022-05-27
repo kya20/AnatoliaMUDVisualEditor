@@ -921,15 +921,7 @@ public class AreaFileParser {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("#AREA\n");
-		sb.append(this.getArea().getAreaFileName() + "~\n");
-		sb.append(this.getArea().getName() + "~\n");
-		sb.append(
-				"{" + this.getArea().getLevelRange(0) + " " + 
-				this.getArea().getLevelRange(1) + "} " + 
-				this.getArea().getBuilder() + " " + 
-				this.getArea().getLongName() + "~\n");
-		sb.append(this.getArea().getvNumRange(0) + " " + this.getArea().getvNumRange(1) + "\n\n");
-		
+		sb.append(this.getArea().toString());
 		sb.append("#MOBILES\n");
 		this.getArea().getMobiles().forEach(mobile -> sb.append(mobile.toString()));
 		sb.append("#0\n\n");
@@ -947,6 +939,21 @@ public class AreaFileParser {
 		roomVNumSorted.forEach(key -> sb.append(rooms.get(key).objectResetToString()));
 		roomVNumSorted.forEach(key -> sb.append(rooms.get(key).doorResetToString()));
 		sb.append("S\n\n");
+		sb.append("#SHOPS\n");
+		sb.append(this.getArea().shopsToString());
+		sb.append("0\n\n");
+		sb.append("#SPECIALS\n");
+		sb.append(this.getArea().specialsToString());
+		sb.append("S\n\n");
+		sb.append("#OMPROGS\n");
+		sb.append(this.getArea().omprogsToString());
+		sb.append("S\n\n");
+		sb.append("#OLIMITS\n");
+		sb.append(this.getArea().oLimitsToString());
+		sb.append("S\n\n");
+		sb.append("#PRACTICERS\n");
+		sb.append(this.getArea().practicersToString());
+		sb.append("S\n\n#$\n");
 		
 		
 		return sb.toString();

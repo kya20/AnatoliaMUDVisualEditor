@@ -18,4 +18,9 @@ public class Special {
 	public void setSpecial(SpecialType special) {
 		this.special = special;
 	}
+	
+	@Override
+	public String toString() {
+		return "M " + this.mobVNum + " " + this.special.name + "\n";
+	}
 }

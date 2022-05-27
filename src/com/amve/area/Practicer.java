@@ -18,4 +18,9 @@ public class Practicer {
 	public void setPracticeGroup(PracticeGroup practiceGroup) {
 		this.practiceGroup = practiceGroup;
 	}
+	
+	@Override
+	public String toString() {
+		return "M " + this.vNum + " " + this.practiceGroup + "\n";
+	}
 }

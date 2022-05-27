@@ -87,5 +87,49 @@ public class Area {
 	public Map<String, Room> getRooms() {
 		return rooms;
 	}
+	
+	public String shopsToString() {
+		StringBuilder sb = new StringBuilder();
+		this.shops.forEach(shop -> sb.append(shop.toString()));
+		return sb.toString();
+	}
+	
+	public String specialsToString() {
+		StringBuilder sb = new StringBuilder();
+		this.specials.forEach(special -> sb.append(special.toString()));
+		return sb.toString();
+	}
+	
+	public String omprogsToString() {
+		StringBuilder sb = new StringBuilder();
+		this.objMobProgs.forEach(omprog -> sb.append(omprog.toString()));
+		return sb.toString();
+	}
+	
+	public String oLimitsToString() {
+		StringBuilder sb = new StringBuilder();
+		this.objMobProgs.forEach(olimit -> sb.append(olimit.toString()));
+		return sb.toString();
+	}
+	
+	public String practicersToString() {
+		StringBuilder sb = new StringBuilder();
+		this.practicers.forEach(practicer -> sb.append(practicer.toString()));
+		return sb.toString();
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.getAreaFileName() + "~\n");
+		sb.append(this.getName() + "~\n");
+		sb.append(
+				"{" + this.getLevelRange(0) + " " + 
+				this.getLevelRange(1) + "} " + 
+				this.getBuilder() + " " + 
+				this.getLongName() + "~\n");
+		sb.append(this.getvNumRange(0) + " " + this.getvNumRange(1) + "\n\n");
+		return sb.toString();
+	}
 
 }
