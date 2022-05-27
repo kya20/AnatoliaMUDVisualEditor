@@ -2834,6 +2834,7 @@ public class VisualEditor {
 				m.affect = getAffFlagsText().getText();
 				m.offensive = getOffFlagsText().getText();
 
+				
 				/*
 				 * for (String s: imms) {
 			switch (s) {
