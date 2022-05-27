@@ -504,6 +504,10 @@ public class AreaFileParser {
 				item = new Jewelry(line6[0], line6[1], line6[2], line8[0], 
 						line8[1], line8[2],line8[3], line9, line11, line12);
 				break;
+			case "trash":
+				item = new Jewelry(line6[0], line6[1], line6[2], line8[0], 
+						line8[1], line8[2],line8[3], line9, line11, line12);
+				break;
 				
 			}
 			if (item != null)

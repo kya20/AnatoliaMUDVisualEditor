@@ -1,5 +1,6 @@
 package com.amve.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.amve.globals.GlobalVariables;
@@ -9,7 +10,7 @@ public class Furniture extends Item {
 	
 	public int numUsers;
 	public int maxWeight;
-	public List<FurnitureFlag> furnitureFlags;
+	public List<FurnitureFlag> furnitureFlags = new ArrayList<>();
 	public int healingBonus;
 	public int manaBonus;
 
@@ -33,9 +34,9 @@ public class Furniture extends Item {
 		super(itemType, extraFlags, wearFlags, level, weight, cost, cond, apply, flags, extraDescriptions);
 		this.numUsers = Integer.parseInt(v0);
 		this.maxWeight = Integer.parseInt(v1);
-		for (int i = 0; i < v2.length() ; i++) {
-			this.furnitureFlags.add(FurnitureFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(v2.substring(i, i+1))));
-		}
+		if(!"0".equals(v2))
+			for (int i = 0; i < v2.length() ; i++)
+				this.furnitureFlags.add(FurnitureFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(v2.substring(i, i+1))));
 		this.healingBonus = Integer.parseInt(v3);
 		this.manaBonus = Integer.parseInt(v4);
 		

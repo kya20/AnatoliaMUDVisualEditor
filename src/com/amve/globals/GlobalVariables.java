@@ -553,7 +553,8 @@ public abstract class GlobalVariables {
 		GEM(32, "gem"),
 		JEWELRY(33, "jewelry"),
 		JUKEBOX(34, "jukebox"),
-		TATTOO(35, "tattoo");
+		TATTOO(35, "tattoo"),
+		DRINK(36, "drink");
 		
 		private static final Map<Integer, ItemType> BY_NUM = new HashMap<>();
 		private static final Map<String, ItemType> BY_NAME = new HashMap<>();
@@ -934,6 +935,7 @@ public abstract class GlobalVariables {
 //	public static final Integer ROOM_FLAG_RANDOM = 18;
 	
 	public enum RoomFlag {
+		NONE(0, "none"),
 		DARK(LETTER_TRANSLATIONS.get("A"), "dark"),
 		NO_MOB(LETTER_TRANSLATIONS.get("C"), "no mob"),
 		INDOORS(LETTER_TRANSLATIONS.get("D"), "indoors"),
@@ -1252,7 +1254,9 @@ public abstract class GlobalVariables {
 		THIEF(16, "spec_thief"),
 		NASTY_THIEF(17, "spec_nasty_thief"),
 		// the ones below are added later from example area files.
-		CAST_BEHOLDER(18, "spec_cast_beholder");
+		CAST_BEHOLDER(18, "spec_cast_beholder"),
+		CAST_CABAL(19, "spec_cast_cabal"),
+		FIGHT_SENESCHAL(20, "spec_fight_seneschal");
 		
 		private static final Map<Integer, SpecialType> BY_NUM = new HashMap<>();
 		private static final Map<String, SpecialType> BY_NAME = new HashMap<>();
