@@ -1,0 +1,177 @@
+---
+title: Anatolia MUD Visual Area Editor
+description: An easy to use GUI App for editing area files.
+---
+<section class="hero">
+	<div class="text-container">
+		<h1 class="editable">Anatolia MUD <strong>Visual Area Editor</strong></h1>
+		<p class="subtext editable">An easy to use GUI App for editing area files.</p>
+		<div>
+			<img src="{{ site.baseurl }}/images/screenshot1.jpg" alt="Screenshot" class="screenshot editable" />
+		</div>
+	</div>
+</section>
+
+<div class="content">
+	<section>
+		<div class="container flex">
+			<div class="text editable">
+				<h2>What is <strong>MUD</strong>?</h2>
+				<p> Multi-User Dungeon (MUD) is a computer-based text game which several players play at the same time, interacting with each other as well as with characters controlled by the computer.</p>
+			</div>
+			<div class="image">
+				<img src="{{ site.baseurl }}/images/mud1.png" alt="Screenshot" class="screenshot editable" />
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="container flex">
+			<div class="text editable">
+				<h2>What is Anatolia MUD Editor?</h2>
+				<p>Anatolia MUD Editor is a a GUI editor for the area files of a Multi-User Dungeon (MUD) game called AnatoliaMUD.</p>
+			</div>
+			<div class="image">
+				<img src="{{ site.baseurl }}/images/screenshot2.png" alt="Screenshot" class="screenshot editable" />
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="container flex">
+			<div class="text editable">
+				<h2>About Our Project</h2>
+				<p>Our aim was to create a modern and user-friendly graphical editor specifically designed for AnatoliaMUD to make creating, browsing and updating area files as easy and accessible as possible. </p>
+			</div>
+			<div class="image">
+				<img src="{{ site.baseurl }}/images/screenshot3.png" alt="Screenshot" class="screenshot editable" />
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="container flex">
+			<div class="text editable">
+				<h2>Problem Definition</h2>
+				<ul>
+					<li><p> Our problem is how a GUI program should be programmed and designed to allow for the editing of MUD area files, which have unique and hard to grasp layouts or object relations; in an easy to grasp, intuitive and comprehensive way </p></li>
+					<li><p> An area file has 11 sections which represent the various entities and features within an area such as rooms or mobiles; however these are not implemented in an object-oriented way where each instance of a mob is declared:
+						A feature called resets handles almost everything related to “instance” management and initialization of these entities. This makes it very hard to read as a result, and can cause increased amounts of human error. </p></li>
+					<li><p> In order to create an intuitive GUI editing system for such files, all rooms and entities in them have to be shown in an “instance” based hierarchy where the user can clearly see which room contains which entities.
+					</p>
+					</li>
+				  </ul>
+				
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="container flex">
+			<div class="text editable">
+				<h2>Proposed Solution
+				</h2>
+				<p> Our proposed solution for this problem is to create an IDE-like native interface application where the user can see and edit the hierarchical layout of the area file, and edit any specific elements within this hierarchy such as rooms, mobs, objects and all the variables within these elements through the GUI. </p>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="container flex">
+			<div class="text editable">
+				<h2>Methodology</h2>
+				<ol>
+					<li><p> Understanding of .are files, how to read them/edit them. </p></li>
+					<li><p> Implement the parser and convert text fields to java objects and variables. </p></li>
+					<li><p> Design a GUI interface for easy user interaction. </p></li>
+					<li><p> Building the connections between parser and GUI interface. </p></li>
+				</ol>
+				<div class="image">
+					<img src="{{ site.baseurl }}/images/hierarchy.png" alt="Screenshot" class="screenshot editable" />
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="container flex">
+			<div class="text editable">
+				<h2>Project Details</h2>
+				<p>
+					The Anatolia MUD Editor consists of multiple packages and classes organized in accordance to the package by feature paradigm. 
+					There are 5 main packages in Anatolia MUD Editor.
+				</p>
+				<ul>
+					<li>
+						<p>com.amve.area: This package consist of classes that stores parsed data. </p>
+					</li>
+					<li>
+						<p>com.amve.globals: This package consist of Global Variables and Enum Tables. </p>
+					</li>
+					<li>
+						<p>com.amve.gui: This package has the Main GUI component. </p>
+					</li>
+					<li>
+						<p>com.amve.parser: Parser package is responsible for reading the area files and structuring them. </p>
+					</li>
+					<li>
+						<p>com.amve.utils: Various helper/utility classes. </p>
+					</li>
+				</ul>
+				
+			</div>
+		</div>
+	</section>
+
+	
+	<section>
+		<div class="container flex">
+			<div class="text editable">
+				<h2>GUI Design</h2>
+				<p>
+					The GUI was designed with simplicity and familiarity in mind, achieved through native OS application styling and common IDE/editor UI parts such as SashForms.
+				</p>
+			</div>
+			<div class="image">
+				<img src="{{ site.baseurl }}/images/screenshot4.png" alt="Screenshot" class="screenshot editable" />
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="container flex">
+			<div class="text editable">
+				<h2>The Results</h2>
+				<ul>
+					<li>
+						<p> There are no others MUD area editors that work with our AnatoliaMUD version. </p>
+					</li>
+					<li>
+						<p>With the use of our editor, the AnatoliaMUD community can contribute to the editing and creation of new area files with the help of an easy to use and intuitive GUI.</p>
+					</li>
+					<li> <p> New additions such as custom maps could possibly contribute to a wider audience. </p></li>
+					<li> 
+						<p> This project could be improved by adding other viewing/data altering methods to itself: </p> 
+						<ul>
+							<li><p> A graph that shows connections between rooms. </p></li>
+							<li><p> Drag and drop altering of objects. </p></li>
+						</ul>
+						<p>etc.</p>
+
+					</li>
+					<li>
+						<p> There are several shortcomings about this project: </p>
+						<ul>
+							<li><p> Original area file order is not preserved. </p></li>
+							<li><p> Parser implementation can return incorrect values. </p></li>
+							<li><p> Not every flag has been properly mapped to checkboxes/buttons. </p></li>
+						</ul>
+						<p> These must be rectified in order to bring the product to a higher level of completeness. </p>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+	</section>
+	
+</div>
