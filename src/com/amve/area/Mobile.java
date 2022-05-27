@@ -126,12 +126,21 @@ public class Mobile {
 			this.raceNumber = rT.map.get(raceName);
 		}
 		
+		public Race(int number) {
+			RaceTable rT = new RaceTable();
+			this.raceNumber = number;
+		}
+		
 		public String getRaceName() {
 			return RaceTable.name[this.raceNumber];
 		}
 		
 		public int getRaceNumber() {
 			return this.raceNumber;
+		}
+		
+		public void setRaceNumber(int num) {
+			this.raceNumber = num;
 		}
 	}
 

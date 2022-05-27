@@ -27,17 +27,29 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Tree;
 
 import com.amve.area.Mobile;
+import com.amve.area.Mobile.Race;
 import com.amve.area.Room;
 import com.amve.area.Shop;
 import com.amve.globals.GlobalVariables;
 import com.amve.globals.GlobalVariables.DoorFlag;
+import com.amve.globals.GlobalVariables.DoorState;
 import com.amve.globals.GlobalVariables.ExitDirection;
 import com.amve.globals.GlobalVariables.RoomFlag;
+import com.amve.globals.GlobalVariables.RoomSector;
 import com.amve.parser.AreaFileParser;
+import com.amve.utils.Armor;
+import com.amve.utils.EquipReset;
 import com.amve.utils.Exit;
 import com.amve.utils.ExtraDescription;
+import com.amve.utils.Item;
+import com.amve.utils.Light;
 import com.amve.utils.MobileReset;
 import com.amve.utils.ObjectReset;
+import com.amve.utils.Potion;
+import com.amve.utils.Scroll;
+import com.amve.utils.Staff;
+import com.amve.utils.Wand;
+import com.amve.utils.Weapon;
 
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.TabItem;
@@ -83,6 +95,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.TreeItem;
+
 import org.eclipse.core.resources.*;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -570,6 +583,7 @@ public class VisualEditor {
 	private Spinner wandStaffCurrCharge;
 	private Combo objProg;
 	private Combo objLimit;
+	private Combo objType;
 
 	/**
 	 * Launch the application.
@@ -1804,9 +1818,1377 @@ public class VisualEditor {
 				obj = o;
 			}
 		}
+		String name = "";
+		for (String s: obj.nameList) {
+			name = name + " " + s;
+		}
+		getObjName().setText(name);
+		getObjShortDesc().setText(obj.shortDescription);
+		getObjLongDesc().setText(obj.longDescription);
 		
+		for (ExtraDescription extra : obj.item.extraDescriptions) {
+			TableItem extrasItem = new TableItem(objectExtrasTable, SWT.NONE);
+			String ss = "";
+			for (String s : extra.extraDesciptionKeyword) {
+				ss += s + ", ";
+				
+			}
+			if (ss.endsWith(", ")) {
+				ss = ss.substring(0, ss.length() - 2);
+			};
+			extrasItem.setText(0, ss);
+			extrasItem.setText(1, extra.extraDescriptionText);
+		}
+		getObjMaterial().setText(obj.material);
+		getObjLevel().setSelection(Integer.parseInt(obj.item.level));
+		getObjWeight().setSelection(Integer.parseInt(obj.item.weight));
+		getObjCost().setSelection(Integer.parseInt(obj.item.weight));
+		getObjStatus().select(0);
+		getObjType().select(0);
+		//getMoneyTypeComp().exclude = true;
+		GridData gd1 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		//gd1.exclude = true;
+		getMoneyTypeComp().setLayoutData(gd1);
+		getLightTypeComp().setLayoutData(gd1);
+		getFoodTypeComp().setLayoutData(gd1);
+		getMagicItemTypeComp().setLayoutData(gd1);
+		getContainerTypeComp().setLayoutData(gd1);
+		getWeaponTypeComp().setLayoutData(gd1);
+		getDrinkTypeComp().setLayoutData(gd1);
+		getArmorTypeComp().setLayoutData(gd1);
+		getWandStaffTypeComp().setLayoutData(gd1);
+		GridData gd2 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		//gd2.exclude = false;
+		switch (obj.item.itemType.name) {
+		case "light":
+			Item i = obj.item;
+			Light l = (Light) i;
+			getObjType().select(1);
+			getLightTypeComp().setLayoutData(gd2);
+			getLightLevel().setSelection(Integer.parseInt(obj.item.level));
+			getLightDuration().setSelection((l.lightDuration));
+			break;
+		case "scroll":
+			Item ii = obj.item;
+			Scroll s = (Scroll) ii;
+			getObjType().select(2);
+			getMagicItemTypeComp().setLayoutData(gd2);
+			getMagicItemLevel().setSelection(s.spellLevel);
+			getMagicItemSpellCount().select(s.spellList.size());
+			if (s.spellList.size() >= 1) {
+				getMagicItemSpell1().setText(s.spellList.get(0));
+			}
+			if (s.spellList.size() >= 2) {
+				getMagicItemSpell2().setText(s.spellList.get(1));
+			}
+			if (s.spellList.size() >= 3) {
+				getMagicItemSpell3().setText(s.spellList.get(2));
+			}
+			if (s.spellList.size() >= 4) {
+				getMagicItemSpell4().setText(s.spellList.get(3));
+			}
+			break;
+		case "wand":
+			Item iw = obj.item;
+			Wand w = (Wand) iw;
+			getObjType().select(3);
+			getWandStaffTypeComp().setLayoutData(gd2);
+			getWandStaffSpell().setText(w.spellName);
+			getWandStaffSpellLevel().setSelection(w.spellLevel);
+			getWandStaffMaxCharge().setSelection(w.maxCharges);
+			getWandStaffCurrCharge().setSelection(w.curCharges);
+			break;
+		case "staff":
+			Item is = obj.item;
+			Staff st = (Staff) is;
+			getObjType().select(4);
+			getWandStaffTypeComp().setLayoutData(gd2);
+			getWandStaffSpell().setText(st.spellName);
+			getWandStaffSpellLevel().setSelection(st.spellLevel);
+			getWandStaffMaxCharge().setSelection(st.maxCharges);
+			getWandStaffCurrCharge().setSelection(st.curCharges);
+			break;
+		case "weapon":
+			Item iww = obj.item;
+			Weapon ww = (Weapon) iww;
+			getObjType().select(5);
+			getWeaponTypeComp().setLayoutData(gd2);
+			getWeaponClass().setText(ww.weaponClass.name);
+			getWeaponDmgType().setText(ww.damageMessage);
+			getWeaponDiceNo().setSelection(ww.dice.diceNo);
+			getWeaponDiceFaces().setSelection(ww.dice.diceFaces);
+			break;
+		case "armor":
+			Item ia = obj.item;
+			Armor aa = (Armor) ia;
+			getObjType().setText("armor");
+			getArmorTypeComp().setLayoutData(gd2);
+			getArmorPierce().setText(aa.pierce);
+			getArmorBash().setText(aa.bash);
+			getArmorSlash().setText(aa.slash);
+			getArmorMagic().setText("");
+			getArmorBulk().setText(aa.bulk);
+			break;
+		case "potion":
+			Item iii = obj.item;
+			Potion p = (Potion) iii;
+			getObjType().select(2);
+			getMagicItemTypeComp().setLayoutData(gd2);
+			getMagicItemLevel().setSelection(p.spellLevel);
+			getMagicItemSpellCount().select(p.spellList.size());
+			if (p.spellList.size() >= 1) {
+				getMagicItemSpell1().setText(p.spellList.get(0));
+			}
+			if (p.spellList.size() >= 2) {
+				getMagicItemSpell2().setText(p.spellList.get(1));
+			}
+			if (p.spellList.size() >= 3) {
+				getMagicItemSpell3().setText(p.spellList.get(2));
+			}
+			if (p.spellList.size() >= 4) {
+				getMagicItemSpell4().setText(p.spellList.get(3));
+			}
+			break;
+		default: 
+			getObjType().setText(obj.item.itemType.name);
+		}
 	}
 	
+	private void saveRoom(String key) {
+		//parser.getArea().getRooms().get(key).setvNum(RoomVnumSpinner.setSelection(Integer.parseInt(key)));
+		parser.getArea().getRooms().get(key);
+		parser.getArea().getRooms().get(key).setHeader(getRoomNameText().getText()); 
+		parser.getArea().getRooms().get(key).description = getRoomDescText().getText();
+		//extras skip
+		
+		parser.getArea().getRooms().get(key).healingAdjust = Integer.toString(getRoomHPSpinner().getSelection());
+		parser.getArea().getRooms().get(key).manaAdjust = Integer.toString(getRoomMPSpinner().getSelection());
+		
+			/*
+			getBtnRoomDark().setSelection(false);
+			getBtnRoomNoMob().setSelection(false);
+			getBtnRoomIndoors().setSelection(false);
+			getBtnRoomPrivate().setSelection(false);
+			getBtnRoomSafe().setSelection(false);
+			getBtnRoomSolitary().setSelection(false);
+			getBtnRoomPetShop().setSelection(false);
+			getBtnRoomNoRecall().setSelection(false);
+			getBtnRoomImpOnly().setSelection(false);
+			getBtnRoomGodsOnly().setSelection(false);
+			getBtnRoomHeroesOnly().setSelection(false);
+			getBtnRoomNewbiesOnly().setSelection(false);
+			getBtnRoomLaw().setSelection(false);
+			getBtnRoomNowhere().setSelection(false);
+			getBtnRoomBank().setSelection(false);
+			getBtnRoomNoMagic().setSelection(false);
+			getBtnRoomNoSummon().setSelection(false);
+			getBtnRoomRegistry().setSelection(false);
+			*/
+		//this.roomFlags.add(RoomFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(flags.substring(i, i+1))));
+		if (getBtnRoomDark().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.DARK)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.DARK);
+			}
+		}
+		if (getBtnRoomNoMob().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.NO_MOB)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.NO_MOB);
+			}
+		}
+		if (getBtnRoomIndoors().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.INDOORS)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.INDOORS);
+			}
+		}
+		if (getBtnRoomPrivate().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.PRIVATE)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.PRIVATE);
+			}
+		}
+		if (getBtnRoomSafe().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.SAFE)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.SAFE);
+			}
+		}
+		if (getBtnRoomSolitary().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.SOLITARY)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.SOLITARY);
+			}
+		}
+		if (getBtnRoomPetShop().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.PET_SHOP)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.PET_SHOP);
+			}
+		}
+		if (getBtnRoomNoRecall().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.NO_RECALL)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.NO_RECALL);
+			}
+		}
+		if (getBtnRoomImpOnly().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.IMP_ONLY)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.IMP_ONLY);
+			}
+		}
+		if (getBtnRoomGodsOnly().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.GODS_ONLY)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.GODS_ONLY);
+			}
+		}
+		if (getBtnRoomHeroesOnly().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.HEROES_ONLY)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.HEROES_ONLY);
+			}
+		}
+		if (getBtnRoomNewbiesOnly().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.NEWBIES_ONLY)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.NEWBIES_ONLY);
+			}
+		}
+		if (getBtnRoomLaw().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.LAW)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.LAW);
+			}
+		}
+		if (getBtnRoomNowhere().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.NOWHERE)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.NOWHERE);
+			}
+		}
+		if (getBtnRoomBank().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.BANK)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.BANK);
+			}
+		}
+		if (getBtnRoomNoMagic().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.NO_MAGIC)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.NO_MAGIC);
+			}
+		}
+		if (getBtnRoomNoSummon().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.NOSUMMON)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.NOSUMMON);
+			}
+		}
+		if (getBtnRoomRegistry().getSelection()) {
+			if (!parser.getArea().getRooms().get(key).roomFlags.contains(RoomFlag.REGISTRY)) {
+				parser.getArea().getRooms().get(key).roomFlags.add(RoomFlag.REGISTRY);
+			}
+		}
+		/*
+		 * getRoomSectorInside().setSelection(true);
+			getRoomSectorCity().setSelection(false);
+			getRoomSectorField().setSelection(false);
+			getRoomSectorForest().setSelection(false);
+			getRoomSectorHill().setSelection(false);
+			getRoomSectorMountain().setSelection(false);
+			getRoomSectorWater().setSelection(false);
+			getRoomSectorDeepWater().setSelection(false);
+			getRoomSectorUnused().setSelection(false);
+			getRoomSectorAir().setSelection(false);
+			getRoomSectorDesert().setSelection(false);
+		 */
+		if (getRoomSectorInside().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.INSIDE;
+		}
+		if (getRoomSectorCity().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.CITY;
+		}
+		if (getRoomSectorField().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.FIELD;
+		}
+		if (getRoomSectorForest().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.FOREST;
+		}
+		if (getRoomSectorHill().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.HILL;
+		}
+		if (getRoomSectorMountain().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.MOUNTAIN;
+		}
+		if (getRoomSectorWater().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.WATER;
+		}
+		if (getRoomSectorDeepWater().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.DEEPWATER;
+		}
+		if (getRoomSectorUnused().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.UNUSED;
+		}
+		if (getRoomSectorAir().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.AIR;
+		}
+		if (getRoomSectorDesert().getSelection()) {
+			parser.getArea().getRooms().get(key).roomSector = RoomSector.DESERT;
+		}
+		parser.getArea().getRooms().get(key).healingAdjust = Integer.toString(getRoomHPSpinner().getSelection());
+		parser.getArea().getRooms().get(key).manaAdjust = Integer.toString(getRoomMPSpinner().getSelection());
+		
+		for (Map.Entry<ExitDirection, Exit> ex : parser.getArea().getRooms().get(key).exits.entrySet()) {
+			int i = ex.getKey().num;
+			switch (i) {
+			case 0:
+				if (getNorthDoorCheckbox().getSelection()) {
+					ex.getValue().exitDescription = getNorthDescText().getText();
+					ex.getValue().keyWords.clear();
+					ex.getValue().keyWords.add(getNorthDoorKeywordText().getText());
+					ex.getValue().doorState = DoorState.valueOfNum(getNorthDoorStateCombo().getSelectionIndex());
+					ex.getValue().keyVNum = getNorthDoorKeyCombo().getSelectionText();
+					
+					if (getNorthDoorFlagACheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (getNorthDoorFlagBCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (getNorthDoorFlagCCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (getNorthDoorFlagFCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (getNorthDoorFlagGCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (getNorthDoorFlagHCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (getNorthDoorFlagICheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (getNorthDoorFlagJCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (getNorthDoorFlagKCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (getNorthDoorFlagLCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+					
+					if (!getNorthDoorFlagACheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (!getNorthDoorFlagBCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (!getNorthDoorFlagCCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (!getNorthDoorFlagFCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (!getNorthDoorFlagGCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (!getNorthDoorFlagHCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (!getNorthDoorFlagICheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (!getNorthDoorFlagJCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (!getNorthDoorFlagKCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (!getNorthDoorFlagLCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+				}
+				break;
+			case 1:
+				if (getEastDoorCheckbox().getSelection()) {
+					ex.getValue().exitDescription = getEastDescText().getText();
+					ex.getValue().keyWords.clear();
+					ex.getValue().keyWords.add(getEastDoorKeywordText().getText());
+					ex.getValue().doorState = DoorState.valueOfNum(getEastDoorStateCombo().getSelectionIndex());
+					ex.getValue().keyVNum = getEastDoorKeyCombo().getSelectionText();
+					
+					if (getEastDoorFlagACheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (getEastDoorFlagBCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (getEastDoorFlagCCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (getEastDoorFlagFCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (getEastDoorFlagGCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (getEastDoorFlagHCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (getEastDoorFlagICheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (getEastDoorFlagJCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (getEastDoorFlagKCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (getEastDoorFlagLCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+					
+					if (!getEastDoorFlagACheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (!getEastDoorFlagBCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (!getEastDoorFlagCCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (!getEastDoorFlagFCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (!getEastDoorFlagGCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (!getEastDoorFlagHCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (!getEastDoorFlagICheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (!getEastDoorFlagJCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (!getEastDoorFlagKCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (!getEastDoorFlagLCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+				}
+				break;
+			case 2:
+				if (getSouthDoorCheckbox().getSelection()) {
+					ex.getValue().exitDescription = getSouthDescText().getText();
+					ex.getValue().keyWords.clear();
+					ex.getValue().keyWords.add(getSouthDoorKeywordText().getText());
+					ex.getValue().doorState = DoorState.valueOfNum(getSouthDoorStateCombo().getSelectionIndex());
+					ex.getValue().keyVNum = getSouthDoorKeyCombo().getSelectionText();
+					
+					if (getSouthDoorFlagACheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (getSouthDoorFlagBCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (getSouthDoorFlagCCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (getSouthDoorFlagFCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (getSouthDoorFlagGCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (getSouthDoorFlagHCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (getSouthDoorFlagICheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (getSouthDoorFlagJCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (getSouthDoorFlagKCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (getSouthDoorFlagLCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+					
+					if (!getSouthDoorFlagACheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (!getSouthDoorFlagBCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (!getSouthDoorFlagCCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (!getSouthDoorFlagFCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (!getSouthDoorFlagGCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (!getSouthDoorFlagHCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (!getSouthDoorFlagICheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (!getSouthDoorFlagJCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (!getSouthDoorFlagKCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (!getSouthDoorFlagLCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+				}
+				break;
+			case 3:
+				if (getWestDoorCheckbox().getSelection()) {
+					ex.getValue().exitDescription = getWestDescText().getText();
+					ex.getValue().keyWords.clear();
+					ex.getValue().keyWords.add(getWestDoorKeywordText().getText());
+					ex.getValue().doorState = DoorState.valueOfNum(getWestDoorStateCombo().getSelectionIndex());
+					ex.getValue().keyVNum = getWestDoorKeyCombo().getSelectionText();
+					
+					if (getWestDoorFlagACheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (getWestDoorFlagBCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (getWestDoorFlagCCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (getWestDoorFlagFCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (getWestDoorFlagGCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (getWestDoorFlagHCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (getWestDoorFlagICheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (getWestDoorFlagJCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (getWestDoorFlagKCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (getWestDoorFlagLCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+					
+					if (!getWestDoorFlagACheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (!getWestDoorFlagBCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (!getWestDoorFlagCCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (!getWestDoorFlagFCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (!getWestDoorFlagGCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (!getWestDoorFlagHCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (!getWestDoorFlagICheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (!getWestDoorFlagJCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (!getWestDoorFlagKCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (!getWestDoorFlagLCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+				}
+				break;
+			case 4:
+				if (getUpDoorCheckbox().getSelection()) {
+					ex.getValue().exitDescription = getUpDescText().getText();
+					ex.getValue().keyWords.clear();
+					ex.getValue().keyWords.add(getUpDoorKeywordText().getText());
+					ex.getValue().doorState = DoorState.valueOfNum(getUpDoorStateCombo().getSelectionIndex());
+					ex.getValue().keyVNum = getUpDoorKeyCombo().getSelectionText();
+					
+					if (getUpDoorFlagACheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (getUpDoorFlagBCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (getUpDoorFlagCCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (getUpDoorFlagFCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (getUpDoorFlagGCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (getUpDoorFlagHCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (getUpDoorFlagICheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (getUpDoorFlagJCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (getUpDoorFlagKCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (getUpDoorFlagLCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+					
+					if (!getUpDoorFlagACheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (!getUpDoorFlagBCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (!getUpDoorFlagCCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (!getUpDoorFlagFCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (!getUpDoorFlagGCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (!getUpDoorFlagHCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (!getUpDoorFlagICheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (!getUpDoorFlagJCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (!getUpDoorFlagKCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (!getUpDoorFlagLCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+				}
+				break;
+			case 5:
+				if (getDownDoorCheckbox().getSelection()) {
+					ex.getValue().exitDescription = getDownDescText().getText();
+					ex.getValue().keyWords.clear();
+					ex.getValue().keyWords.add(getDownDoorKeywordText().getText());
+					ex.getValue().doorState = DoorState.valueOfNum(getDownDoorStateCombo().getSelectionIndex());
+					ex.getValue().keyVNum = getDownDoorKeyCombo().getSelectionText();
+					
+					if (getDownDoorFlagACheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (getDownDoorFlagBCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (getDownDoorFlagCCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (getDownDoorFlagFCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (getDownDoorFlagGCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (getDownDoorFlagHCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (getDownDoorFlagICheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (getDownDoorFlagJCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (getDownDoorFlagKCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (getDownDoorFlagLCheck().getSelection()) {
+						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+					
+					if (!getDownDoorFlagACheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+						}
+					}
+					if (!getDownDoorFlagBCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+						}
+					}
+					if (!getDownDoorFlagCCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+						}
+					}
+					if (!getDownDoorFlagFCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+						}
+					}
+					if (!getDownDoorFlagGCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+						}
+					}
+					if (!getDownDoorFlagHCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+						}
+					}
+					if (!getDownDoorFlagICheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+						}
+					}
+					if (!getDownDoorFlagJCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+						}
+					}
+					if (!getDownDoorFlagKCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+						}
+					}
+					if (!getDownDoorFlagLCheck().getSelection()) {
+						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
+	
+	private void saveMob(String key) {
+		for (Mobile m: parser.getArea().getMobiles()) {
+			if (m.getvNum().equals(key)) {
+				m.nameList.clear();
+				m.nameList.add(getMobNameText().getText());
+				
+				m.shortDescription = getMobShortDescText().getText();
+				m.longDescription = getMobLongDescText().getText();
+				m.lookDescription = getMobLookDescText().getText();
+				
+				m.race.setRaceNumber(getMobRaceCombo().getSelectionIndex());
+				m.size = GlobalVariables.Size.valueOfName(getMobSizeCombo().getText());
+				m.material = getMobMaterialText().getText();
+				m.startPos = GlobalVariables.Position.valueOfNum(getMobStartPosCombo().getSelectionIndex());
+				m.defaultPos = GlobalVariables.Position.valueOfNum(getMobDefaultPosCombo().getSelectionIndex());
+				m.gender = GlobalVariables.Sex.valueOfNum(getMobSexCombo().getSelectionIndex());
+				m.level = getMobLvlSpinner().getSelection();
+				m.treasure = getMobTreasure().getSelection();
+				m.mobileGroup = getMobGroup().getSelection();
+				m.armorClasses.put("pierce", getMobPierceAC().getSelection());
+				m.armorClasses.put("bash", getMobBashAC().getSelection());
+				m.armorClasses.put("slash", getMobSlashAC().getSelection());
+				m.armorClasses.put("magic", getMobMagicAC().getSelection());
+				m.hitDice.diceNo = Integer.parseInt(getMobHitDice1().getText());
+				m.hitDice.diceFaces = Integer.parseInt(getMobHitDice2().getText());
+				m.hitDice.diceBonus = Integer.parseInt(getMobHitDice3().getText());
+				m.manaDice.diceNo = Integer.parseInt(getMobManaDice1().getText());
+				m.manaDice.diceFaces = Integer.parseInt(getMobManaDice2().getText());
+				m.manaDice.diceBonus = Integer.parseInt(getMobManaDice3().getText());
+				m.damageDice.diceNo = Integer.parseInt(getMobDamageDice1().getText());
+				m.damageDice.diceFaces = Integer.parseInt(getMobDamageDice2().getText());
+				m.damageDice.diceBonus = Integer.parseInt(getMobDamageDice3().getText());
+				m.alignment = getMobAlignmentSpinner().getSelection();
+				m.action = getActFlagsText().getText();
+				m.affect = getAffFlagsText().getText();
+				m.offensive = getOffFlagsText().getText();
+
+				/*
+				 * for (String s: imms) {
+			switch (s) {
+			case "A": //summon
+				getSummonImm().setSelection(true);
+				break;
+			case "B": //charm
+				getCharmImm().setSelection(true);
+				break;
+			case "C": //magic
+				getMagicImm().setSelection(true);
+				break;
+			case "D": //weapons
+				getWeaponsImm().setSelection(true);
+				break;
+			case "E": //bash
+				getBashImm().setSelection(true);
+				break;
+			case "F": //pierce
+				getPierceImm().setSelection(true);
+				break;
+			case "G": //slash
+				getSlashImm().setSelection(true);
+				break;
+			case "H": //fire
+				getFireImm().setSelection(true);
+				break;
+			case "I": //cold
+				getColdImm().setSelection(true);
+				break;
+			case "J": //lightning
+				getLightningImm().setSelection(true);
+				break;
+			case "K": //acid
+				getAcidImm().setSelection(true);
+				break;
+			case "L": //poison
+				getPoisonImm().setSelection(true);
+				break;
+			case "M": //negative
+				getNegativeImm().setSelection(true);
+				break;
+			case "N": //holy
+				getHolyImm().setSelection(true);
+				break;
+			case "O": //energy
+				getEnergyImm().setSelection(true);
+				break;
+			case "P": //mental
+				getMentalImm().setSelection(true);
+				break;
+			case "Q": //disease
+				getDiseaseImm().setSelection(true);
+				break;
+			case "R": //drowning
+				getDrowningImm().setSelection(true);
+				break;
+			case "S": //light
+				getLightImm().setSelection(true);
+				break;
+			case "T": //sound
+				getSoundImm().setSelection(true);
+				break;
+			case "X": //wood
+				getWoodImm().setSelection(true);
+				break;
+			case "Y": //silver
+				getSilverImm().setSelection(true);
+				break;
+			case "Z": //iron"
+				getIronImm().setSelection(true);
+				break;
+				 */
+				String imm = "";
+				String res = "";
+				String vul = "";
+
+				if (getSummonImm().getSelection()) {
+				imm += "A";
+				}
+			
+				if (getCharmImm().getSelection()) {
+				imm += "B";
+				}
+			
+				if (getMagicImm().getSelection()) {
+				imm += "C";
+				}
+			
+				if (getWeaponsImm().getSelection()) {
+				imm += "D";
+				}
+			
+				if (getBashImm().getSelection()) {
+				imm += "E";
+				}
+			
+				if (getPierceImm().getSelection()) {
+				imm += "F";
+				}
+			
+				if (getSlashImm().getSelection()) {
+				imm += "G";
+				}
+			
+				if (getFireImm().getSelection()) {
+				imm += "H";
+				}
+			
+				if (getColdImm().getSelection()) {
+				imm += "I";
+				}
+			
+				if (getLightningImm().getSelection()) {
+				imm += "J";
+				}
+			
+				if (getAcidImm().getSelection()) {
+				imm += "K";
+				}
+			
+				if (getPoisonImm().getSelection()) {
+				imm += "L";
+				}
+			
+				if (getNegativeImm().getSelection()) {
+				imm += "M";
+				}
+			
+				if (getHolyImm().getSelection()) {
+				imm += "N";
+				}
+			
+				if (getEnergyImm().getSelection()) {
+				imm += "O";
+				}
+			
+				if (getMentalImm().getSelection()) {
+				imm += "P";
+				}
+			
+				if (getDiseaseImm().getSelection()) {
+				imm += "Q";
+				}
+			
+				if (getDrowningImm().getSelection()) {
+				imm += "R";
+				}
+			
+				if (getLightImm().getSelection()) {
+				imm += "S";
+				}
+			
+				if (getSoundImm().getSelection()) {
+				imm += "T";
+				}
+			
+				if (getWoodImm().getSelection()) {
+				imm += "X";
+				}
+			
+				if (getSilverImm().getSelection()) {
+				imm += "Y";
+				}
+			
+				if (getIronImm().getSelection()) {
+				imm += "Z";
+				}
+				
+				if (getSummonRes().getSelection()) {
+					res += "A";
+					}
+				
+					if (getCharmRes().getSelection()) {
+					res += "B";
+					}
+				
+					if (getMagicRes().getSelection()) {
+					res += "C";
+					}
+				
+					if (getWeaponsRes().getSelection()) {
+					res += "D";
+					}
+				
+					if (getBashRes().getSelection()) {
+					res += "E";
+					}
+				
+					if (getPierceRes().getSelection()) {
+					res += "F";
+					}
+				
+					if (getSlashRes().getSelection()) {
+					res += "G";
+					}
+				
+					if (getFireRes().getSelection()) {
+					res += "H";
+					}
+				
+					if (getColdRes().getSelection()) {
+					res += "I";
+					}
+				
+					if (getLightningRes().getSelection()) {
+					res += "J";
+					}
+				
+					if (getAcidRes().getSelection()) {
+					res += "K";
+					}
+				
+					if (getPoisonRes().getSelection()) {
+					res += "L";
+					}
+				
+					if (getNegativeRes().getSelection()) {
+					res += "M";
+					}
+				
+					if (getHolyRes().getSelection()) {
+					res += "N";
+					}
+				
+					if (getEnergyRes().getSelection()) {
+					res += "O";
+					}
+				
+					if (getMentalRes().getSelection()) {
+					res += "P";
+					}
+				
+					if (getDiseaseRes().getSelection()) {
+					res += "Q";
+					}
+				
+					if (getDrowningRes().getSelection()) {
+					res += "R";
+					}
+				
+					if (getLightRes().getSelection()) {
+					res += "S";
+					}
+				
+					if (getSoundRes().getSelection()) {
+					res += "T";
+					}
+				
+					if (getWoodRes().getSelection()) {
+					res += "X";
+					}
+				
+					if (getSilverRes().getSelection()) {
+					res += "Y";
+					}
+				
+					if (getIronRes().getSelection()) {
+					res += "Z";
+					}
+				
+					if (getSummonVuln().getSelection()) {
+						vul += "A";
+						}
+					
+						if (getCharmVuln().getSelection()) {
+						vul += "B";
+						}
+					
+						if (getMagicVuln().getSelection()) {
+						vul += "C";
+						}
+					
+						if (getWeaponsVuln().getSelection()) {
+						vul += "D";
+						}
+					
+						if (getBashVuln().getSelection()) {
+						vul += "E";
+						}
+					
+						if (getPierceVuln().getSelection()) {
+						vul += "F";
+						}
+					
+						if (getSlashVuln().getSelection()) {
+						vul += "G";
+						}
+					
+						if (getFireVuln().getSelection()) {
+						vul += "H";
+						}
+					
+						if (getColdVuln().getSelection()) {
+						vul += "I";
+						}
+					
+						if (getLightningVuln().getSelection()) {
+						vul += "J";
+						}
+					
+						if (getAcidVuln().getSelection()) {
+						vul += "K";
+						}
+					
+						if (getPoisonVuln().getSelection()) {
+						vul += "L";
+						}
+					
+						if (getNegativeVuln().getSelection()) {
+						vul += "M";
+						}
+					
+						if (getHolyVuln().getSelection()) {
+						vul += "N";
+						}
+					
+						if (getEnergyVuln().getSelection()) {
+						vul += "O";
+						}
+					
+						if (getMentalVuln().getSelection()) {
+						vul += "P";
+						}
+					
+						if (getDiseaseVuln().getSelection()) {
+						vul += "Q";
+						}
+					
+						if (getDrowningVuln().getSelection()) {
+						vul += "R";
+						}
+					
+						if (getLightVuln().getSelection()) {
+						vul += "S";
+						}
+					
+						if (getSoundVuln().getSelection()) {
+						vul += "T";
+						}
+					
+						if (getWoodVuln().getSelection()) {
+						vul += "X";
+						}
+					
+						if (getSilverVuln().getSelection()) {
+						vul += "Y";
+						}
+					
+						if (getIronVuln().getSelection()) {
+						vul += "Z";
+						}
+			}
+		}
+	}
 	/**
 	 * Create contents of the window.
 	 */
@@ -1884,6 +3266,22 @@ public class VisualEditor {
 	    			}
 	    		}
 	    		mobItem.setText("Mobile " + k + " - " + mob.shortDescription);
+	    		for (MobileReset r: v) {
+		    		if (r.equipResets != null) {	
+	    				if (!r.equipResets.isEmpty()) {
+		    				for (EquipReset er: r.equipResets) {
+		    					com.amve.area.Object obj  = new com.amve.area.Object();
+		    					TreeItem objItem = new TreeItem(mobItem,0);
+		    					for (com.amve.area.Object o: parser.getArea().getObjects()) {
+		    		    			if (o.vNum.equals(er.objectVNum)) {
+		    		    				obj = o;
+		    		    			}
+		    		    		}
+		    					objItem.setText("Object " + k + " - " + obj.shortDescription);
+		    				}
+		    			}
+		    		}
+	    		}
 	    	});
 	    	value.getObjectResets().forEach((k, v) -> {
 	    		TreeItem objItem = new TreeItem(roomItem,0);
@@ -1920,7 +3318,7 @@ public class VisualEditor {
 	            else if (tmp.startsWith("Object")) {
 	            	tmp = tmp.replace("Object ", "");
 					tmp = tmp.replaceAll("\\s.*", "");
-					//updateObjPanel(tmp);
+					updateObjPanel(tmp);
 					getTabFolder1().setSelection(2);
 	            }
 	          }
@@ -4215,9 +5613,9 @@ public class VisualEditor {
 		Label lblType = new Label(composite_17_2_1, SWT.NONE);
 		lblType.setText("Type");
 		
-		Combo objStatus_1 = new Combo(composite_17_2_1, SWT.READ_ONLY);
-		objStatus_1.setItems(new String[] {"none", "light", "scroll", "wand", "staff", "weapon", "treasure", "armor", "potion", "clothing", "furniture", "trash", "container", "drink_con", "key", "food", "money", "boat", "corpse_npc", "corpse_pc", "fountain", "pill", "protect", "map", "portal", "warp_stone", "room_key", "gem", "jewelry", "jukebox", "tattoo"});
-		objStatus_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		objType = new Combo(composite_17_2_1, SWT.READ_ONLY);
+		objType.setItems(new String[] {"none", "light", "scroll", "wand", "staff", "weapon", "treasure", "armor", "potion", "clothing", "furniture", "trash", "container", "drink_con", "key", "food", "money", "boat", "corpse_npc", "corpse_pc", "fountain", "pill", "protect", "map", "portal", "warp_stone", "room_key", "gem", "jewelry", "jukebox", "tattoo"});
+		objType.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		grpTypeProperties = new Group(grpGeneralProperties, SWT.NONE);
 		grpTypeProperties.setLayout(new GridLayout(1, false));
@@ -4226,6 +5624,7 @@ public class VisualEditor {
 		
 		armorTypeComp = new Composite(grpTypeProperties, SWT.NONE);
 		armorTypeComp.setLayout(new GridLayout(6, false));
+		//gd_armorTypeComp.exclude = true;
 		armorTypeComp.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
 		Label lblBash_2 = new Label(armorTypeComp, SWT.NONE);
@@ -5276,7 +6675,7 @@ public class VisualEditor {
 		new Label(grpSpecials, SWT.NONE);
 		sashForm_2.setWeights(new int[] {1, 1, 1});
 		scrolledComposite_2.setContent(composite_14);
-		scrolledComposite_2.setMinSize(new Point(1200, 661));
+		scrolledComposite_2.setMinSize(new Point(1200, 800));
 		
 		TabItem tbtmAreaOverview = new TabItem(tabFolder, SWT.NONE);
 		tbtmAreaOverview.setText("Area Overview");
@@ -5334,6 +6733,22 @@ public class VisualEditor {
 		    			}
 		    		}
 		    		mobItem.setText("Mobile " + k + " - " + mob.shortDescription);
+		    		for (MobileReset r: v) {
+			    		if (r.equipResets != null) {	
+		    				if (!r.equipResets.isEmpty()) {
+			    				for (EquipReset er: r.equipResets) {
+			    					com.amve.area.Object obj  = new com.amve.area.Object();
+			    					TreeItem objItem = new TreeItem(mobItem,0);
+			    					for (com.amve.area.Object o: parser.getArea().getObjects()) {
+			    		    			if (o.vNum.equals(er.objectVNum)) {
+			    		    				obj = o;
+			    		    			}
+			    		    		}
+			    					objItem.setText("Object " + k + " - " + obj.shortDescription);
+			    				}
+			    			}
+			    		}
+		    		}
 		    	});
 		    	value.getObjectResets().forEach((k, v) -> {
 		    		TreeItem objItem = new TreeItem(roomItem,0);
@@ -7205,6 +8620,9 @@ public class VisualEditor {
 	}
 	public Text getMoveModif() {
 		return moveModif;
+	}
+	public Combo getObjType() {
+		return objType;
 	}
 }
 
