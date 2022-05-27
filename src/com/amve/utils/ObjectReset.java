@@ -35,7 +35,8 @@ public class ObjectReset {
 	
 	public String putResetToString() {
 		StringBuilder sb = new StringBuilder();
-		this.listContains.forEach(pr -> sb.append(pr.toString()));
+		if(this.listContains != null)
+			this.listContains.forEach(pr -> sb.append(pr.toString()));
 		return sb.toString();
 	}
 }

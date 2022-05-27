@@ -139,6 +139,7 @@ public class Room {
 		sb.append(this.description + "~\n");
 		sb.append("0 ");
 		String s = "";
+//		if (roomFlags) CONTINUE
 		for (RoomFlag flag : this.roomFlags)
 			s = s + GlobalVariables.LETTER_TRANSLATIONS_REVERSE.get(flag.num);
 		sb.append(s + " " + this.roomSector.num + "\n");
