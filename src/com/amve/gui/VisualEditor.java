@@ -38,12 +38,16 @@ import com.amve.globals.GlobalVariables.RoomFlag;
 import com.amve.globals.GlobalVariables.RoomSector;
 import com.amve.parser.AreaFileParser;
 import com.amve.utils.Armor;
+import com.amve.utils.Container;
+import com.amve.utils.Drink;
 import com.amve.utils.EquipReset;
 import com.amve.utils.Exit;
 import com.amve.utils.ExtraDescription;
+import com.amve.utils.Food;
 import com.amve.utils.Item;
 import com.amve.utils.Light;
 import com.amve.utils.MobileReset;
+import com.amve.utils.Money;
 import com.amve.utils.ObjectReset;
 import com.amve.utils.Potion;
 import com.amve.utils.Scroll;
@@ -69,6 +73,7 @@ import java.lang.reflect.Array;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.awt.BorderLayout;
@@ -1847,7 +1852,8 @@ public class VisualEditor {
 		getObjType().select(0);
 		//getMoneyTypeComp().exclude = true;
 		GridData gd1 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		//gd1.exclude = true;
+		gd1.exclude = true;
+		/*
 		getMoneyTypeComp().setLayoutData(gd1);
 		getLightTypeComp().setLayoutData(gd1);
 		getFoodTypeComp().setLayoutData(gd1);
@@ -1857,8 +1863,18 @@ public class VisualEditor {
 		getDrinkTypeComp().setLayoutData(gd1);
 		getArmorTypeComp().setLayoutData(gd1);
 		getWandStaffTypeComp().setLayoutData(gd1);
+		*/
+		getMoneyTypeComp().getParent().layout(true, true);
+		getLightTypeComp().getParent().layout(true, true);
+		getFoodTypeComp().getParent().layout(true, true);
+		getMagicItemTypeComp().getParent().layout(true, true);
+		getContainerTypeComp().getParent().layout(true, true);
+		getWeaponTypeComp().getParent().layout(true, true);
+		getDrinkTypeComp().getParent().layout(true, true);
+		getArmorTypeComp().getParent().layout(true, true);
+		getWandStaffTypeComp().getParent().layout(true, true);
 		GridData gd2 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		//gd2.exclude = false;
+		gd2.exclude = false;
 		switch (obj.item.itemType.name) {
 		case "light":
 			Item i = obj.item;
@@ -1948,6 +1964,41 @@ public class VisualEditor {
 			if (p.spellList.size() >= 4) {
 				getMagicItemSpell4().setText(p.spellList.get(3));
 			}
+			break;
+		case "money":
+			Item i_ = obj.item;
+			Money mn = (Money) i_;
+			getObjType().setText("money");
+			getMoneyTypeComp().setLayoutData(gd2);
+			getMoneyGoldVal().setSelection(mn.goldValue);
+			getMoneySilverVal().setSelection(mn.silverValue);
+			break;
+		case "food":
+			Item ii_ = obj.item;
+			Food fd = (Food) ii_;
+			getObjType().setText("food");
+			getFoodTypeComp().setLayoutData(gd2);
+			getFoodFull().setSelection(fd.hoursFull);
+			getFoodNormal().setSelection(fd.hoursNormal);
+			getFoodPoisoned().setSelection(fd.isPoisoned);
+			break;
+		case "drink":
+			Item iii_ = obj.item;
+			Drink dk = (Drink) iii_;
+			getObjType().setText("drink");
+			getDrinkTypeComp().setLayoutData(gd2);
+			getDrinkContainerSize().setSelection(dk.containerSize);
+			getDrinkCurrentAmount().setSelection(dk.currentAmount);
+			getDrinkPoisoned().setSelection(dk.isPoisoned);
+			break;
+		case "container":
+			Item i__ = obj.item;
+			Container ct = (Container) i__;
+			getObjType().setText("container");
+			getContainerTypeComp().setLayoutData(gd2);
+			getContainerMaxItemWeight().setSelection(ct.maxItemWeight);
+			getContainerMaxTotalWeight().setSelection(ct.maxTotalWeight);
+			getContainerWeightMult().setSelection(ct.weightMultiplier);
 			break;
 		default: 
 			getObjType().setText(obj.item.itemType.name);
@@ -2124,677 +2175,922 @@ public class VisualEditor {
 		parser.getArea().getRooms().get(key).healingAdjust = Integer.toString(getRoomHPSpinner().getSelection());
 		parser.getArea().getRooms().get(key).manaAdjust = Integer.toString(getRoomMPSpinner().getSelection());
 		
+		Map<ExitDirection, Exit> exits2 = new HashMap<>();
 		for (Map.Entry<ExitDirection, Exit> ex : parser.getArea().getRooms().get(key).exits.entrySet()) {
 			int i = ex.getKey().num;
-			switch (i) {
-			case 0:
-				if (getNorthDoorCheckbox().getSelection()) {
-					ex.getValue().exitDescription = getNorthDescText().getText();
-					ex.getValue().keyWords.clear();
-					ex.getValue().keyWords.add(getNorthDoorKeywordText().getText());
-					ex.getValue().doorState = DoorState.valueOfNum(getNorthDoorStateCombo().getSelectionIndex());
-					ex.getValue().keyVNum = getNorthDoorKeyCombo().getSelectionText();
-					
-					if (getNorthDoorFlagACheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+			if (ex.getValue().doorFlags != null) {
+				switch (i) {
+				case 0:
+					if (getNorthDoorCheckbox().getSelection()) {
+						ex.getValue().exitDescription = getNorthDescText().getText();
+						ex.getValue().keyWords.clear();
+						ex.getValue().keyWords.add(getNorthDoorKeywordText().getText());
+						ex.getValue().doorState = DoorState.valueOfNum(getNorthDoorStateCombo().getSelectionIndex());
+						ex.getValue().keyVNum = getNorthDoorKeyCombo().getSelectionText();
+
+						if (getNorthDoorFlagACheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (getNorthDoorFlagBCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (getNorthDoorFlagCCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (getNorthDoorFlagFCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (getNorthDoorFlagGCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (getNorthDoorFlagHCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (getNorthDoorFlagICheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (getNorthDoorFlagJCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (getNorthDoorFlagKCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (getNorthDoorFlagLCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
+						}
+
+						if (!getNorthDoorFlagACheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (!getNorthDoorFlagBCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (!getNorthDoorFlagCCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (!getNorthDoorFlagFCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (!getNorthDoorFlagGCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (!getNorthDoorFlagHCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (!getNorthDoorFlagICheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (!getNorthDoorFlagJCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (!getNorthDoorFlagKCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (!getNorthDoorFlagLCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
 						}
 					}
-					if (getNorthDoorFlagBCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+					break;
+				case 1:
+					if (getEastDoorCheckbox().getSelection()) {
+						ex.getValue().exitDescription = getEastDescText().getText();
+						ex.getValue().keyWords.clear();
+						ex.getValue().keyWords.add(getEastDoorKeywordText().getText());
+						ex.getValue().doorState = DoorState.valueOfNum(getEastDoorStateCombo().getSelectionIndex());
+						ex.getValue().keyVNum = getEastDoorKeyCombo().getSelectionText();
+
+						if (getEastDoorFlagACheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (getEastDoorFlagBCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (getEastDoorFlagCCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (getEastDoorFlagFCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (getEastDoorFlagGCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (getEastDoorFlagHCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (getEastDoorFlagICheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (getEastDoorFlagJCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (getEastDoorFlagKCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (getEastDoorFlagLCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
+						}
+
+						if (!getEastDoorFlagACheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (!getEastDoorFlagBCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (!getEastDoorFlagCCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (!getEastDoorFlagFCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (!getEastDoorFlagGCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (!getEastDoorFlagHCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (!getEastDoorFlagICheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (!getEastDoorFlagJCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (!getEastDoorFlagKCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (!getEastDoorFlagLCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
 						}
 					}
-					if (getNorthDoorFlagCCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+					break;
+				case 2:
+					if (getSouthDoorCheckbox().getSelection()) {
+						ex.getValue().exitDescription = getSouthDescText().getText();
+						ex.getValue().keyWords.clear();
+						ex.getValue().keyWords.add(getSouthDoorKeywordText().getText());
+						ex.getValue().doorState = DoorState.valueOfNum(getSouthDoorStateCombo().getSelectionIndex());
+						ex.getValue().keyVNum = getSouthDoorKeyCombo().getSelectionText();
+
+						if (getSouthDoorFlagACheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (getSouthDoorFlagBCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (getSouthDoorFlagCCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (getSouthDoorFlagFCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (getSouthDoorFlagGCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (getSouthDoorFlagHCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (getSouthDoorFlagICheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (getSouthDoorFlagJCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (getSouthDoorFlagKCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (getSouthDoorFlagLCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
+						}
+
+						if (!getSouthDoorFlagACheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (!getSouthDoorFlagBCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (!getSouthDoorFlagCCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (!getSouthDoorFlagFCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (!getSouthDoorFlagGCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (!getSouthDoorFlagHCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (!getSouthDoorFlagICheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (!getSouthDoorFlagJCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (!getSouthDoorFlagKCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (!getSouthDoorFlagLCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
 						}
 					}
-					if (getNorthDoorFlagFCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+					break;
+				case 3:
+					if (getWestDoorCheckbox().getSelection()) {
+						ex.getValue().exitDescription = getWestDescText().getText();
+						ex.getValue().keyWords.clear();
+						ex.getValue().keyWords.add(getWestDoorKeywordText().getText());
+						ex.getValue().doorState = DoorState.valueOfNum(getWestDoorStateCombo().getSelectionIndex());
+						ex.getValue().keyVNum = getWestDoorKeyCombo().getSelectionText();
+
+						if (getWestDoorFlagACheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (getWestDoorFlagBCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (getWestDoorFlagCCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (getWestDoorFlagFCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (getWestDoorFlagGCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (getWestDoorFlagHCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (getWestDoorFlagICheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (getWestDoorFlagJCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (getWestDoorFlagKCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (getWestDoorFlagLCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
+						}
+
+						if (!getWestDoorFlagACheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (!getWestDoorFlagBCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (!getWestDoorFlagCCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (!getWestDoorFlagFCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (!getWestDoorFlagGCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (!getWestDoorFlagHCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (!getWestDoorFlagICheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (!getWestDoorFlagJCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (!getWestDoorFlagKCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (!getWestDoorFlagLCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
 						}
 					}
-					if (getNorthDoorFlagGCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+					break;
+				case 4:
+					if (getUpDoorCheckbox().getSelection()) {
+						ex.getValue().exitDescription = getUpDescText().getText();
+						ex.getValue().keyWords.clear();
+						ex.getValue().keyWords.add(getUpDoorKeywordText().getText());
+						ex.getValue().doorState = DoorState.valueOfNum(getUpDoorStateCombo().getSelectionIndex());
+						ex.getValue().keyVNum = getUpDoorKeyCombo().getSelectionText();
+
+						if (getUpDoorFlagACheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (getUpDoorFlagBCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (getUpDoorFlagCCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (getUpDoorFlagFCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (getUpDoorFlagGCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (getUpDoorFlagHCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (getUpDoorFlagICheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (getUpDoorFlagJCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (getUpDoorFlagKCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (getUpDoorFlagLCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
+						}
+
+						if (!getUpDoorFlagACheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (!getUpDoorFlagBCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (!getUpDoorFlagCCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (!getUpDoorFlagFCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (!getUpDoorFlagGCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (!getUpDoorFlagHCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (!getUpDoorFlagICheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (!getUpDoorFlagJCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (!getUpDoorFlagKCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (!getUpDoorFlagLCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
 						}
 					}
-					if (getNorthDoorFlagHCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+					break;
+				case 5:
+					if (getDownDoorCheckbox().getSelection()) {
+						ex.getValue().exitDescription = getDownDescText().getText();
+						ex.getValue().keyWords.clear();
+						ex.getValue().keyWords.add(getDownDoorKeywordText().getText());
+						ex.getValue().doorState = DoorState.valueOfNum(getDownDoorStateCombo().getSelectionIndex());
+						ex.getValue().keyVNum = getDownDoorKeyCombo().getSelectionText();
+
+						if (getDownDoorFlagACheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (getDownDoorFlagBCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (getDownDoorFlagCCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (getDownDoorFlagFCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (getDownDoorFlagGCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (getDownDoorFlagHCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (getDownDoorFlagICheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (getDownDoorFlagJCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (getDownDoorFlagKCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (getDownDoorFlagLCheck().getSelection()) {
+							if (!ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
+						}
+
+						if (!getDownDoorFlagACheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
+							}
+						}
+						if (!getDownDoorFlagBCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
+							}
+						}
+						if (!getDownDoorFlagCCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
+							}
+						}
+						if (!getDownDoorFlagFCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
+							}
+						}
+						if (!getDownDoorFlagGCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
+							}
+						}
+						if (!getDownDoorFlagHCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
+							}
+						}
+						if (!getDownDoorFlagICheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
+							}
+						}
+						if (!getDownDoorFlagJCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
+							}
+						}
+						if (!getDownDoorFlagKCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
+							}
+						}
+						if (!getDownDoorFlagLCheck().getSelection()) {
+							if (ex.getValue().doorFlags
+									.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
+								ex.getValue().doorFlags
+										.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
+							}
 						}
 					}
-					if (getNorthDoorFlagICheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (getNorthDoorFlagJCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (getNorthDoorFlagKCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (getNorthDoorFlagLCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-					
-					if (!getNorthDoorFlagACheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (!getNorthDoorFlagBCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (!getNorthDoorFlagCCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (!getNorthDoorFlagFCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (!getNorthDoorFlagGCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (!getNorthDoorFlagHCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (!getNorthDoorFlagICheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (!getNorthDoorFlagJCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (!getNorthDoorFlagKCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (!getNorthDoorFlagLCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
+					break;
 				}
-				break;
-			case 1:
-				if (getEastDoorCheckbox().getSelection()) {
-					ex.getValue().exitDescription = getEastDescText().getText();
-					ex.getValue().keyWords.clear();
-					ex.getValue().keyWords.add(getEastDoorKeywordText().getText());
-					ex.getValue().doorState = DoorState.valueOfNum(getEastDoorStateCombo().getSelectionIndex());
-					ex.getValue().keyVNum = getEastDoorKeyCombo().getSelectionText();
-					
-					if (getEastDoorFlagACheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (getEastDoorFlagBCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (getEastDoorFlagCCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (getEastDoorFlagFCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (getEastDoorFlagGCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (getEastDoorFlagHCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (getEastDoorFlagICheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (getEastDoorFlagJCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (getEastDoorFlagKCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (getEastDoorFlagLCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-					
-					if (!getEastDoorFlagACheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (!getEastDoorFlagBCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (!getEastDoorFlagCCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (!getEastDoorFlagFCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (!getEastDoorFlagGCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (!getEastDoorFlagHCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (!getEastDoorFlagICheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (!getEastDoorFlagJCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (!getEastDoorFlagKCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (!getEastDoorFlagLCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-				}
-				break;
-			case 2:
-				if (getSouthDoorCheckbox().getSelection()) {
-					ex.getValue().exitDescription = getSouthDescText().getText();
-					ex.getValue().keyWords.clear();
-					ex.getValue().keyWords.add(getSouthDoorKeywordText().getText());
-					ex.getValue().doorState = DoorState.valueOfNum(getSouthDoorStateCombo().getSelectionIndex());
-					ex.getValue().keyVNum = getSouthDoorKeyCombo().getSelectionText();
-					
-					if (getSouthDoorFlagACheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (getSouthDoorFlagBCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (getSouthDoorFlagCCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (getSouthDoorFlagFCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (getSouthDoorFlagGCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (getSouthDoorFlagHCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (getSouthDoorFlagICheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (getSouthDoorFlagJCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (getSouthDoorFlagKCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (getSouthDoorFlagLCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-					
-					if (!getSouthDoorFlagACheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (!getSouthDoorFlagBCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (!getSouthDoorFlagCCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (!getSouthDoorFlagFCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (!getSouthDoorFlagGCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (!getSouthDoorFlagHCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (!getSouthDoorFlagICheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (!getSouthDoorFlagJCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (!getSouthDoorFlagKCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (!getSouthDoorFlagLCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-				}
-				break;
-			case 3:
-				if (getWestDoorCheckbox().getSelection()) {
-					ex.getValue().exitDescription = getWestDescText().getText();
-					ex.getValue().keyWords.clear();
-					ex.getValue().keyWords.add(getWestDoorKeywordText().getText());
-					ex.getValue().doorState = DoorState.valueOfNum(getWestDoorStateCombo().getSelectionIndex());
-					ex.getValue().keyVNum = getWestDoorKeyCombo().getSelectionText();
-					
-					if (getWestDoorFlagACheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (getWestDoorFlagBCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (getWestDoorFlagCCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (getWestDoorFlagFCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (getWestDoorFlagGCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (getWestDoorFlagHCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (getWestDoorFlagICheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (getWestDoorFlagJCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (getWestDoorFlagKCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (getWestDoorFlagLCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-					
-					if (!getWestDoorFlagACheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (!getWestDoorFlagBCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (!getWestDoorFlagCCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (!getWestDoorFlagFCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (!getWestDoorFlagGCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (!getWestDoorFlagHCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (!getWestDoorFlagICheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (!getWestDoorFlagJCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (!getWestDoorFlagKCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (!getWestDoorFlagLCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-				}
-				break;
-			case 4:
-				if (getUpDoorCheckbox().getSelection()) {
-					ex.getValue().exitDescription = getUpDescText().getText();
-					ex.getValue().keyWords.clear();
-					ex.getValue().keyWords.add(getUpDoorKeywordText().getText());
-					ex.getValue().doorState = DoorState.valueOfNum(getUpDoorStateCombo().getSelectionIndex());
-					ex.getValue().keyVNum = getUpDoorKeyCombo().getSelectionText();
-					
-					if (getUpDoorFlagACheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (getUpDoorFlagBCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (getUpDoorFlagCCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (getUpDoorFlagFCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (getUpDoorFlagGCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (getUpDoorFlagHCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (getUpDoorFlagICheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (getUpDoorFlagJCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (getUpDoorFlagKCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (getUpDoorFlagLCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-					
-					if (!getUpDoorFlagACheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (!getUpDoorFlagBCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (!getUpDoorFlagCCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (!getUpDoorFlagFCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (!getUpDoorFlagGCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (!getUpDoorFlagHCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (!getUpDoorFlagICheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (!getUpDoorFlagJCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (!getUpDoorFlagKCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (!getUpDoorFlagLCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-				}
-				break;
-			case 5:
-				if (getDownDoorCheckbox().getSelection()) {
-					ex.getValue().exitDescription = getDownDescText().getText();
-					ex.getValue().keyWords.clear();
-					ex.getValue().keyWords.add(getDownDoorKeywordText().getText());
-					ex.getValue().doorState = DoorState.valueOfNum(getDownDoorStateCombo().getSelectionIndex());
-					ex.getValue().keyVNum = getDownDoorKeyCombo().getSelectionText();
-					
-					if (getDownDoorFlagACheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (getDownDoorFlagBCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (getDownDoorFlagCCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (getDownDoorFlagFCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (getDownDoorFlagGCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (getDownDoorFlagHCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (getDownDoorFlagICheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (getDownDoorFlagJCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (getDownDoorFlagKCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (getDownDoorFlagLCheck().getSelection()) {
-						if (!ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.add(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-					
-					if (!getDownDoorFlagACheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("A")));
-						}
-					}
-					if (!getDownDoorFlagBCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("B")));
-						}
-					}
-					if (!getDownDoorFlagCCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("C")));
-						}
-					}
-					if (!getDownDoorFlagFCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("F")));
-						}
-					}
-					if (!getDownDoorFlagGCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("G")));
-						}
-					}
-					if (!getDownDoorFlagHCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("H")));
-						}
-					}
-					if (!getDownDoorFlagICheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("I")));
-						}
-					}
-					if (!getDownDoorFlagJCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("J")));
-						}
-					}
-					if (!getDownDoorFlagKCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("K")));
-						}
-					}
-					if (!getDownDoorFlagLCheck().getSelection()) {
-						if (ex.getValue().doorFlags.contains(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")))) {
-							ex.getValue().doorFlags.remove(DoorFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get("L")));
-						}
-					}
-				}
-				break;
 			}
+			exits2.put(ex.getKey(), ex.getValue());
 		}
+		parser.getArea().getRooms().get(key).exits = exits2;
 	}
 	
 	private void saveMob(String key) {
@@ -2808,7 +3104,7 @@ public class VisualEditor {
 				m.lookDescription = getMobLookDescText().getText();
 				
 				m.race.setRaceNumber(getMobRaceCombo().getSelectionIndex());
-				m.size = GlobalVariables.Size.valueOfName(getMobSizeCombo().getText());
+				m.size = GlobalVariables.Size.valueOfNum(getMobSizeCombo().getSelectionIndex());
 				m.material = getMobMaterialText().getText();
 				m.startPos = GlobalVariables.Position.valueOfNum(getMobStartPosCombo().getSelectionIndex());
 				m.defaultPos = GlobalVariables.Position.valueOfNum(getMobDefaultPosCombo().getSelectionIndex());
@@ -2834,80 +3130,6 @@ public class VisualEditor {
 				m.affect = getAffFlagsText().getText();
 				m.offensive = getOffFlagsText().getText();
 
-				
-				/*
-				 * for (String s: imms) {
-			switch (s) {
-			case "A": //summon
-				getSummonImm().setSelection(true);
-				break;
-			case "B": //charm
-				getCharmImm().setSelection(true);
-				break;
-			case "C": //magic
-				getMagicImm().setSelection(true);
-				break;
-			case "D": //weapons
-				getWeaponsImm().setSelection(true);
-				break;
-			case "E": //bash
-				getBashImm().setSelection(true);
-				break;
-			case "F": //pierce
-				getPierceImm().setSelection(true);
-				break;
-			case "G": //slash
-				getSlashImm().setSelection(true);
-				break;
-			case "H": //fire
-				getFireImm().setSelection(true);
-				break;
-			case "I": //cold
-				getColdImm().setSelection(true);
-				break;
-			case "J": //lightning
-				getLightningImm().setSelection(true);
-				break;
-			case "K": //acid
-				getAcidImm().setSelection(true);
-				break;
-			case "L": //poison
-				getPoisonImm().setSelection(true);
-				break;
-			case "M": //negative
-				getNegativeImm().setSelection(true);
-				break;
-			case "N": //holy
-				getHolyImm().setSelection(true);
-				break;
-			case "O": //energy
-				getEnergyImm().setSelection(true);
-				break;
-			case "P": //mental
-				getMentalImm().setSelection(true);
-				break;
-			case "Q": //disease
-				getDiseaseImm().setSelection(true);
-				break;
-			case "R": //drowning
-				getDrowningImm().setSelection(true);
-				break;
-			case "S": //light
-				getLightImm().setSelection(true);
-				break;
-			case "T": //sound
-				getSoundImm().setSelection(true);
-				break;
-			case "X": //wood
-				getWoodImm().setSelection(true);
-				break;
-			case "Y": //silver
-				getSilverImm().setSelection(true);
-				break;
-			case "Z": //iron"
-				getIronImm().setSelection(true);
-				break;
-				 */
 				String imm = "";
 				String res = "";
 				String vul = "";
@@ -3187,8 +3409,122 @@ public class VisualEditor {
 						if (getIronVuln().getSelection()) {
 						vul += "Z";
 						}
+				m.immunity = imm;
+				m.vulnerability =vul;
+				m.resistance = res;
 			}
 		}
+	}
+
+	private void saveObj(String key) {
+		for (com.amve.area.Object o: parser.getArea().getObjects()) {
+			if (o.vNum.equals(key)) {
+				o.nameList.clear();
+				o.nameList.add(getObjName().getText());
+				o.shortDescription = getObjShortDesc().getText();
+				o.longDescription = getObjLongDesc().getText();
+				o.material = getObjMaterial().getText();
+				o.item.level = Integer.toString(getObjLevel().getSelection());
+				o.item.weight = Integer.toString(getObjWeight().getSelection());
+				o.item.cost = Integer.toString(getObjCost().getSelection());
+				switch (getObjType().getText()) {
+				case "light":
+					Item i = o.item;
+					Light l = (Light) i;
+					l.level = Integer.toString(getLightLevel().getSelection());
+					l.lightDuration = getLightDuration().getSelection();
+					o.item = l;
+					break;
+				case "scroll":
+					Item ii = o.item;
+					Scroll s = (Scroll) ii;
+					s.spellLevel = getMagicItemLevel().getSelection();
+					s.spellList.clear();
+					if (getMagicItemSpellCount().getSelectionIndex() != 0) {
+						if (getMagicItemSpellCount().getSelectionIndex() >= 1) {
+							s.spellList.add(getMagicItemSpell1().getText());
+						}
+						if (getMagicItemSpellCount().getSelectionIndex() >= 2) {
+							s.spellList.add(getMagicItemSpell2().getText());
+						}
+						if (getMagicItemSpellCount().getSelectionIndex() >= 3) {
+							s.spellList.add(getMagicItemSpell3().getText());
+						}
+						if (getMagicItemSpellCount().getSelectionIndex() >= 4) {
+							s.spellList.add(getMagicItemSpell4().getText());
+						}
+					}
+					o.item = s;
+					break;
+				case "wand":
+					Item iw = o.item;
+					Wand w = (Wand) iw;
+					w.spellName = getWandStaffSpell().getText();
+					w.spellLevel = getWandStaffSpellLevel().getSelection();
+					w.maxCharges = getWandStaffMaxCharge().getSelection();
+					w.curCharges = getWandStaffCurrCharge().getSelection();
+					o.item = w;
+					break;
+				case "staff":
+					Item is = o.item;
+					Staff st = (Staff) is;
+					st.spellName = getWandStaffSpell().getText();
+					st.spellLevel = getWandStaffSpellLevel().getSelection();
+					st.maxCharges = getWandStaffMaxCharge().getSelection();
+					st.curCharges = getWandStaffCurrCharge().getSelection();
+					o.item = st;
+					break;
+				case "weapon":
+					Item iww = o.item;
+					Weapon ww = (Weapon) iww;
+					ww.weaponClass = GlobalVariables.WeaponClass.valueOfName(getWeaponClass().getText());
+					ww.damageMessage = getWeaponDmgType().getText();
+					ww.dice.diceNo = getWeaponDiceNo().getSelection();
+					ww.dice.diceFaces = getWeaponDiceFaces().getSelection();
+					o.item = ww;
+					break;
+				case "armor":
+					Item ia = o.item;
+					Armor aa = (Armor) ia;
+					aa.pierce = getArmorPierce().getText();
+					aa.bash = getArmorBash().getText();
+					aa.slash = getArmorSlash().getText();
+					aa.bulk = getArmorBulk().getText();
+					o.item = aa;
+					break;
+				case "potion":
+					Item iii = o.item;
+					Potion p = (Potion) iii;
+					p.spellLevel = getMagicItemLevel().getSelection();
+					p.spellList.clear();
+					if (getMagicItemSpellCount().getSelectionIndex() != 0) {
+						if (getMagicItemSpellCount().getSelectionIndex() >= 1) {
+							p.spellList.add(getMagicItemSpell1().getText());
+						}
+						if (getMagicItemSpellCount().getSelectionIndex() >= 2) {
+							p.spellList.add(getMagicItemSpell2().getText());
+						}
+						if (getMagicItemSpellCount().getSelectionIndex() >= 3) {
+							p.spellList.add(getMagicItemSpell3().getText());
+						}
+						if (getMagicItemSpellCount().getSelectionIndex() >= 4) {
+							p.spellList.add(getMagicItemSpell4().getText());
+						}
+					}
+					o.item = p;
+					break;
+				}
+			}
+		}
+		getMoneyTypeComp().getParent().layout(true, true);
+		getLightTypeComp().getParent().layout(true, true);
+		getFoodTypeComp().getParent().layout(true, true);
+		getMagicItemTypeComp().getParent().layout(true, true);
+		getContainerTypeComp().getParent().layout(true, true);
+		getWeaponTypeComp().getParent().layout(true, true);
+		getDrinkTypeComp().getParent().layout(true, true);
+		getArmorTypeComp().getParent().layout(true, true);
+		getWandStaffTypeComp().getParent().layout(true, true);
 	}
 	/**
 	 * Create contents of the window.
@@ -3251,6 +3587,27 @@ public class VisualEditor {
 		composite_18.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		Button btnSave = new Button(composite_18, SWT.NONE);
+		btnSave.addListener(SWT.Selection,  new Listener() {
+			@Override
+			public void handleEvent(Event e) {
+				String tmp = tree.getSelection()[0].getText();
+				if (getTabFolder1().getSelectionIndex() == 0) {
+					tmp = tmp.replace("Room ", "");
+					tmp = tmp.replaceAll("\\s.*", "");
+					saveRoom(tmp);
+				}
+				else if (getTabFolder1().getSelectionIndex() == 1) {
+					tmp = tmp.replace("Mobile ", "");
+					tmp = tmp.replaceAll("\\s.*", "");
+					saveMob(tmp);
+				}
+				else if (getTabFolder1().getSelectionIndex() == 2) {
+					tmp = tmp.replace("Object ", "");
+					tmp = tmp.replaceAll("\\s.*", "");
+					saveObj(tmp);
+				}
+			}
+		});
 		btnSave.setText("Save");
 		
 		Button btnReload = new Button(composite_18, SWT.NONE);
@@ -3278,7 +3635,7 @@ public class VisualEditor {
 		    		    				obj = o;
 		    		    			}
 		    		    		}
-		    					objItem.setText("Object " + k + " - " + obj.shortDescription);
+		    					objItem.setText("Object " + obj.vNum + " - " + obj.shortDescription);
 		    				}
 		    			}
 		    		}
@@ -8003,8 +8360,11 @@ public class VisualEditor {
 	public Combo getMobShopItemType4() {
 		return mobShopItemType4;
 	}
+	IConverter alignmentSpinnerToSlider = IConverter.create(Integer.class, Integer.class, (o1) -> ((Integer) o1+1000));
+	IConverter alignmentSliderToSpinner = IConverter.create(Integer.class, Integer.class, (o1) -> ((Integer) o1-1000));
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
+		
 		//
 		IObservableValue observeSelectionRoomHPScaleObserveWidget = WidgetProperties.selection().observe(roomHPScale);
 		IObservableValue observeSelectionRoomHPSpinnerObserveWidget = WidgetProperties.selection().observe(roomHPSpinner);
@@ -8352,7 +8712,7 @@ public class VisualEditor {
 		//
 		IObservableValue observeSelectionScale_2ObserveWidget = WidgetProperties.selection().observe(scale_2);
 		IObservableValue observeSelectionSpinner_2ObserveWidget = WidgetProperties.selection().observe(spinner_2);
-		bindingContext.bindValue(observeSelectionScale_2ObserveWidget, observeSelectionSpinner_2ObserveWidget, null, null);
+		bindingContext.bindValue(observeSelectionScale_2ObserveWidget, observeSelectionSpinner_2ObserveWidget, UpdateValueStrategy.create(alignmentSliderToSpinner), UpdateValueStrategy.create(alignmentSpinnerToSlider));
 		//
 		IObservableValue observeEnabledMobShopOpenHourObserveWidget = WidgetProperties.enabled().observe(mobShopOpenHour);
 		IObservableValue observeSelectionMobShopEnableObserveWidget = WidgetProperties.selection().observe(mobShopEnable);
