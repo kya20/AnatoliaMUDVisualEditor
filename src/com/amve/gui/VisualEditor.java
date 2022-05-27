@@ -3617,7 +3617,39 @@ public class VisualEditor {
 					}
 					o.item = p;
 					break;
+				case "money":
+					Item i_ = o.item;
+					Money mn = (Money) i_;
+					mn.goldValue = getMoneyGoldVal().getSelection();
+					mn.silverValue = getMoneySilverVal().getSelection();
+					o.item = mn;
+					break;
+				case "food":
+					Item ii_ = o.item;
+					Food fd = (Food) ii_;
+					fd.hoursFull = getFoodFull().getSelection();
+					fd.hoursNormal= getFoodNormal().getSelection();
+					fd.isPoisoned= getFoodPoisoned().getSelection();
+					o.item = fd;
+					break;
+				case "drink":
+					Item iii_ = o.item;
+					Drink dk = (Drink) iii_;
+					dk.containerSize = getDrinkContainerSize().getSelection();
+					dk.currentAmount = getDrinkCurrentAmount().getSelection();
+					dk.isPoisoned = getDrinkPoisoned().getSelection();
+					o.item = dk;
+					break;
+				case "container":
+					Item i__ = o.item;
+					Container ct = (Container) i__;
+					ct.maxItemWeight = getContainerMaxItemWeight().getSelection();
+					ct.maxTotalWeight = getContainerMaxTotalWeight().getSelection();
+					ct.weightMultiplier = getContainerWeightMult().getSelection();
+					o.item = ct;
+					break;
 				}
+				
 			}
 		}
 		getMoneyTypeComp().getParent().layout(true, true);
