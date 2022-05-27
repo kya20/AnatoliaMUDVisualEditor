@@ -34,6 +34,7 @@ import com.amve.globals.GlobalVariables;
 import com.amve.globals.GlobalVariables.DoorFlag;
 import com.amve.globals.GlobalVariables.DoorState;
 import com.amve.globals.GlobalVariables.ExitDirection;
+import com.amve.globals.GlobalVariables.ItemExtra;
 import com.amve.globals.GlobalVariables.RoomFlag;
 import com.amve.globals.GlobalVariables.RoomSector;
 import com.amve.parser.AreaFileParser;
@@ -1452,6 +1453,33 @@ public class VisualEditor {
 		getMobTreasure().setSelection(mob.treasure);
 		getMobGroup().setSelection(mob.mobileGroup);
 		
+		java.util.List<String> forms = new ArrayList<String>(Arrays.asList(mob.form.split("")));
+		java.util.List<String> parts = new ArrayList<String>(Arrays.asList(mob.part.split("")));
+		
+		for (String s: forms) {
+			getBtnAnimal().setSelection("G".equals(s));
+			getBtnSentient().setSelection("H".equals(s));
+			getBtnUndead().setSelection("I".equals(s));
+			getBtnConstruct().setSelection("J".equals(s));
+			getBtnMist().setSelection("K".equals(s));
+			getBtnIntangible().setSelection("L".equals(s));
+			getBtnBiped().setSelection("M".equals(s));
+			getBtnCentaur().setSelection("N".equals(s));
+			getBtnInsect().setSelection("O".equals(s));
+			getBtnSpider().setSelection("P".equals(s));
+			getBtnCrustacean().setSelection("Q".equals(s));
+			getBtnWorm().setSelection("R".equals(s));
+			getBtnBlob().setSelection("S".equals(s));
+			getBtnMammal().setSelection("V".equals(s));
+			getBtnBird().setSelection("W".equals(s));
+			getBtnReptile().setSelection("X".equals(s));
+			getBtnSnake().setSelection("Y".equals(s));
+			getBtnDragon().setSelection("Z".equals(s));
+			getBtnAmphibian().setSelection("a".equals(s));
+			getBtnFish().setSelection("b".equals(s));
+			getBtnColdBlood().setSelection("c".equals(s));
+		}
+		
 		getMobPierceAC().setSelection(mob.armorClasses.get("pierce"));
 		getMobBashAC().setSelection(mob.armorClasses.get("bash"));
 		getMobSlashAC().setSelection(mob.armorClasses.get("slash"));
@@ -2002,6 +2030,82 @@ public class VisualEditor {
 			break;
 		default: 
 			getObjType().setText(obj.item.itemType.name);
+		}
+		getBtnDark().setSelection(false);
+		getBtnGlowing().setSelection(false);
+		getBtnHumming().setSelection(false);
+		getBtnLock().setSelection(false);
+		getBtnEvil().setSelection(false);
+		getBtnInvisible().setSelection(false);
+		getBtnMagic().setSelection(false);
+		getBtnNoDrop().setSelection(false);
+		getBtnBless().setSelection(false);
+		getBtnAntigood().setSelection(false);
+		getBtnAntievil().setSelection(false);
+		getBtnAntineutral().setSelection(false);
+		getBtnNoRemove().setSelection(false);
+		getBtnInventory().setSelection(false);
+		getBtnNoPurge().setSelection(false);
+		getBtnRotDeath().setSelection(false);
+		getBtnVisDeeath().setSelection(false);
+		getBtnNoSacrifice().setSelection(false);
+		for (ItemExtra e: obj.item.extraFlags) {
+			switch (e.name) {
+			case "dark":
+				getBtnDark().setSelection(true);
+				break;
+			case "glowing":
+				getBtnGlowing().setSelection(true);
+				break;
+			case "humming":
+				getBtnHumming().setSelection(true);
+				break;
+			case "lock":
+				getBtnLock().setSelection(true);
+				break;
+			case "evil":
+				getBtnEvil().setSelection(true);
+				break;
+			case "invisible":
+				getBtnInvisible().setSelection(true);
+				break;
+			case "magic":
+				getBtnMagic().setSelection(true);
+				break;
+			case "no drop":
+				getBtnNoDrop().setSelection(true);
+				break;
+			case "bless":
+				getBtnBless().setSelection(true);
+				break;
+			case "anti-good":
+				getBtnAntigood().setSelection(true);
+				break;
+			case "anti-evil":
+				getBtnAntievil().setSelection(true);
+				break;
+			case "anti-neutral":
+				getBtnAntineutral().setSelection(true);
+				break;
+			case "no remove":
+				getBtnNoRemove().setSelection(true);
+				break;
+			case "inventory":
+				getBtnInventory().setSelection(true);
+				break;
+			case "no purge":
+				getBtnNoPurge().setSelection(true);
+				break;
+			case "rot death":
+				getBtnRotDeath().setSelection(true);
+				break;
+			case "vis death":
+				getBtnVisDeeath().setSelection(true);
+				break;
+			case "no sacrifice":
+				getBtnNoSacrifice().setSelection(true);
+				break;
+			}
 		}
 	}
 	
@@ -4615,7 +4719,9 @@ public class VisualEditor {
 		combo_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		
 		grpFlags = new Group(grpVisual, SWT.NONE);
-		grpFlags.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		GridData gd_grpFlags = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		gd_grpFlags.exclude = true;
+		grpFlags.setLayoutData(gd_grpFlags);
 		grpFlags.setLayout(new GridLayout(1, false));
 		grpFlags.setText("Flags");
 		
@@ -5738,6 +5844,7 @@ public class VisualEditor {
 		rl_grpPracticer.pack = false;
 		grpPracticer.setLayout(rl_grpPracticer);
 		GridData gd_grpPracticer = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_grpPracticer.exclude = true;
 		gd_grpPracticer.widthHint = 1;
 		grpPracticer.setLayoutData(gd_grpPracticer);
 		grpPracticer.setText("Practicer");
