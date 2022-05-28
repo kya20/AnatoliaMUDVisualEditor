@@ -13,10 +13,12 @@ public class Main {
 	 */
 	public static void main(String args[]) {
 		
-		String areaFilePath = "under2.are";
+//		String areaFilePath = "under2.are";
+//		
+//		AreaFileParser parser = new AreaFileParser(areaFilePath);
+//		System.out.println(parser.toString());
 		
-		AreaFileParser parser = new AreaFileParser(areaFilePath);
-		System.out.println(parser.toString());
+		VisualEditor.main(args);
 		
 //		try {
 //			VisualEditor window = new VisualEditor();

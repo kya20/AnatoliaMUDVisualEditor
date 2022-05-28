@@ -129,7 +129,7 @@ public class VisualEditor {
 	protected Display display;
 	protected Shell shell;
 	private String filePath;
-	private AreaFileParser parser = new AreaFileParser("under2.are");
+	private AreaFileParser parser = new AreaFileParser("/resources/are/under2.are");
 	private String deneme;
 	private Text text;
 	private Text roomNameText;

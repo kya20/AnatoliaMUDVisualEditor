@@ -62,18 +62,24 @@ public class AreaFileParser {
 	
 	public AreaFileParser(String areaFilePath) {
 		String rawFile = null;
-		try {
-			Path path = Paths.get(areaFilePath);
-
-		    rawFile = Files.readString(path);
-		    
-		    } catch (IOException e) {
-		      System.err.println("Error: Area file not found.");
-		      e.printStackTrace();
-		      System.exit(-1);
-		    }
 		
-		// int charPos = 0;
+		InputStream inputStream = getClass().getResourceAsStream(areaFilePath);
+		if (inputStream == null) {
+			Path path = Paths.get(areaFilePath);
+		    try {
+				rawFile = Files.readString(path);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			rawFile = new BufferedReader(
+        	      new InputStreamReader(inputStream))
+        	        .lines()
+        	        .collect(Collectors.joining("\n"));
+			rawFile = rawFile + "\n";
+		}
+        
 		StringBuilder sbFile = new StringBuilder(rawFile);
 		while(true) {
 			if(sbFile.charAt(0) != '#')
