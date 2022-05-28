@@ -1,30 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-15">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.osgi_3.17.0.v20210823-1805.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.osgi_3.17.0.v20210823-1805.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.commands_3.10.100.v20210722-1426.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.commands_3.10.100.v20210722-1426.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.equinox.common_3.15.0.v20210518-0604.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.equinox.common_3.15.0.v20210518-0604.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.equinox.registry_3.11.0.v20210723-1953.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.equinox.registry_3.11.0.v20210723-1953.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.runtime_3.23.0.v20210730-2035.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.core.runtime_3.23.0.v20210730-2035.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.text_3.12.0.v20210512-1644.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.text_3.12.0.v20210512-1644.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.swt.win32.win32.x86_64_3.117.0.v20210906-0842.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.swt.win32.win32.x86_64_3.117.0.v20210906-0842.jar">
+	<classpathentry kind="lib" path="lib/org.eclipse.swt.win32.win32.x86_64_3.118.0.v20211123-0851.jar" sourcepath="lib/org.eclipse.swt.win32.win32.x86_64_3.117.0.v20210906-0842.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.jface_3.23.0.v20210723-1324.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.jface_3.23.0.v20210723-1324.jar">
+	<classpathentry kind="lib" path="lib/org.eclipse.jface_3.24.0.v20211110-1517.jar" sourcepath="lib/org.eclipse.jface_3.23.0.v20210723-1324.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.jface.text_3.18.100.v20210820-1651.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.jface.text_3.18.100.v20210820-1651.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.ui.workbench_3.123.0.v20210817-0704.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.ui.workbench_3.123.0.v20210817-0704.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/com.ibm.icu_67.1.0.v20200706-1749.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/com.ibm.icu_67.1.0.v20200706-1749.jar"/>
-	<classpathentry kind="lib" path="C:/Users/catullus/.p2/pool/plugins/org.eclipse.ui.forms_3.11.200.v20210622-0925.jar" sourcepath="C:/Users/catullus/.p2/pool/plugins/org.eclipse.ui.forms_3.11.200.v20210622-0925.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.jface.text_3.19.0.v20211026-2100.jar" sourcepath="lib/org.eclipse.jface.text_3.18.100.v20210820-1651.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit_4.13.2.v20211018-1956.jar" sourcepath="lib/org.junit_4.13.2.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.jupiter.api_5.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.jupiter.api_5.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.platform.commons_1.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.platform.commons_1.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.platform.engine_1.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.platform.engine_1.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.platform.launcher_1.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.platform.launcher_1.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.opentest4j_1.2.0.v20211018-1956.jar" sourcepath="lib/org.opentest4j_1.2.0.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.platform.runner_1.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.platform.runner_1.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.platform.suite.api_1.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.platform.suite.api_1.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.platform.suite.commons_1.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.platform.suite.commons_1.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.platform.suite.engine_1.8.1.v20211028-1957.jar" sourcepath="lib/org.junit.platform.suite.engine_1.8.1.v20211028-1957.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.jupiter.engine_5.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.jupiter.engine_5.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.jupiter.migrationsupport_5.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.jupiter.migrationsupport_5.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.jupiter.params_5.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.jupiter.params_5.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.junit.vintage.engine_5.8.1.v20211018-1956.jar" sourcepath="lib/org.junit.vintage.engine_5.8.1.v20211018-1956.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.resources_3.16.0.v20211001-2032.jar" sourcepath="lib/org.eclipse.core.resources_3.16.0.v20211001-2032.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.databinding_1.11.0.v20220118-1028.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.databinding.observable_1.11.0.v20210722-1426.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.jface.databinding_1.13.0.v20210619-1146.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.databinding.beans_1.8.0.v20210619-1111.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.databinding.property_1.9.0.v20210619-1129.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/com.ibm.icu_67.1.0.v20200706-1749.jar" sourcepath="lib/com.ibm.icu_67.1.0.v20200706-1749.jar"/>
+	<classpathentry kind="lib" path="lib/org.apiguardian_1.1.2.v20211018-1956.jar" sourcepath="lib/org.apiguardian_1.1.2.v20211018-1956.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.commands_3.10.100.v20210722-1426.jar" sourcepath="lib/org.eclipse.core.commands_3.10.100.v20210722-1426.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.runtime_3.24.0.v20210910-0750.jar" sourcepath="lib/org.eclipse.core.runtime_3.23.0.v20210730-2035.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.equinox.common_3.15.100.v20211021-1418.jar" sourcepath="lib/org.eclipse.equinox.common_3.15.0.v20210518-0604.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.equinox.registry_3.11.100.v20211021-1418.jar" sourcepath="lib/org.eclipse.equinox.registry_3.11.0.v20210723-1953.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.osgi_3.17.100.v20211104-1730.jar" sourcepath="lib/org.eclipse.osgi_3.17.0.v20210823-1805.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.text_3.12.0.v20210512-1644.jar" sourcepath="lib/org.eclipse.text_3.12.0.v20210512-1644.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.ui.forms_3.11.300.v20211022-1451.jar" sourcepath="lib/org.eclipse.ui.forms_3.11.200.v20210622-0925.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.ui.workbench_3.124.0.v20211116-0651.jar" sourcepath="lib/org.eclipse.ui.workbench_3.123.0.v20210817-0704.jar"/>
+	<classpathentry kind="lib" path="lib/org.hamcrest.core_1.3.0.v20180420-1519.jar" sourcepath="lib/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
+	<classpathentry kind="lib" path="lib/swing2swt.jar" sourcepath="lib/swing2swt.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

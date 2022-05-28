@@ -1,33 +1,38 @@
 package com.amve.area;
 
 import java.util.*;
-import com.amve.globals.GlobalVariables;
 
-public class Room extends Area {
+import com.amve.globals.GlobalVariables;
+import com.amve.globals.GlobalVariables.DoorState;
+import com.amve.globals.GlobalVariables.ExitDirection;
+import com.amve.globals.GlobalVariables.RoomFlag;
+import com.amve.globals.GlobalVariables.RoomSector;
+import com.amve.utils.Exit;
+import com.amve.utils.ExtraDescription;
+import com.amve.utils.MobileReset;
+import com.amve.utils.ObjectReset;
+
+public class Room {
 	
-	public String vNum = null;
-	public String header = null;
-	public String description = null;
-	public HashMap<String, String> flags = new HashMap<>();
+	private String vNum = "";
+	public String header = "";
+	public String description = "";
+	public List<RoomFlag> roomFlags = new ArrayList<>(); 
+	public RoomSector roomSector;
+	public Map<ExitDirection, Exit> exits = new HashMap<>();
+	public List<ExtraDescription> extras = new ArrayList<>();
+	public String manaAdjust = "100";
+	public String healingAdjust = "100";
+	public String clan = null;
+	
+	// Holds RESET info
+	
+	private Map<String, List<MobileReset>> mobileResets = new HashMap<>();
+	private Map<String, List<ObjectReset>> objectResets = new HashMap<>();
 		
 	//public ResetMessage resetMessage = null;
 	
-	public ArrayList<HashMap<String, String>> exits = new ArrayList<>();
-	public ArrayList<HashMap<String, String>> extras = new ArrayList<>();
-	
-	public HashMap<String, Integer> exitDirs = new HashMap<String, Integer>();	
-	
-	public Room() {
-		exitDirs.put("hasNorthExit",0);
-		exitDirs.put("hasEastExit", 0);
-		exitDirs.put("hasSouthExit",0);
-		exitDirs.put("hasWestExit", 0);
-		exitDirs.put("hasUpExit", 0);
-		exitDirs.put("hasDownExit", 0);	
-		flags.put("first", "0");
-		flags.put("flag", "");
-		flags.put("sector", "");
-	}
+	public Room() {}
 	
 	public boolean isEmpty() {
 		return (vNum == null);
@@ -41,10 +46,6 @@ public class Room extends Area {
 		return (!extras.isEmpty());
 	}
 	
-	public void setVNum(String vNum) {
-		this.vNum = vNum;
-	}
-	
 	public void setHeader(String header) {
 		this.header = header;
 	}
@@ -53,69 +54,126 @@ public class Room extends Area {
 		this.description = description;
 	}
 	
+	public void setRoomSector(String str) {
+		this.roomSector = RoomSector.valueOfNum(Integer.parseInt(str));
+	}
+	
 	//for reading from file
-	public void setFlags(String flagLine) {
-		String[] splitted = flagLine.split("\\s+");
-		flags.put("first", splitted[0]);
-		flags.put("flag", splitted[1]);
-		flags.put("sector", splitted[2]);
-	}
 	
-	public void changeFlag(String flag) {
-		flags.put("flag", flag);
-	}
-	
-	public void changeSector(String sector) {
-		flags.put("sector", sector);
-	}
-	
-	public void addExit(Integer direction, String description, String keyword, Integer state, String connectedVNum, String keyVNum) {
-		HashMap<String, String> exit = new HashMap<>();
-		exit.put("direction", "D" + direction);
-		exit.put("description", description);
-		exit.put("keyword", keyword);
-		exit.put("state", state.toString());
-		exit.put("connectedVNum", connectedVNum);
-		exit.put("keyVNum", keyVNum);
-		exits.add(exit);
+	public void addFlags(String flags) {
+		// Both "ABC" Letter Translations and "1|2|4" can be used.
 		
-		try {
-			if (Objects.equals(direction, GlobalVariables.NORTH_DIR)) {
-				this.exitDirs.put("hasNorthExit", 1);
+		if(flags.matches("[A-Z]+")) {
+			for (int i = 0; i < flags.length() ; i++) {
+				this.roomFlags.add(RoomFlag.valueOfNum(GlobalVariables.LETTER_TRANSLATIONS.get(flags.substring(i, i+1))));
 			}
-			if (Objects.equals(direction, GlobalVariables.EAST_DIR)) {
-				this.exitDirs.put("hasEastExit", 1);
-			}
-			if (Objects.equals(direction, GlobalVariables.SOUTH_DIR)) {
-				this.exitDirs.put("hasSouthExit", 1);
-			}
-			if (Objects.equals(direction, GlobalVariables.WEST_DIR)) {
-				this.exitDirs.put("hasWestExit", 1);
-			}
-			if (Objects.equals(direction, GlobalVariables.UP_DIR)) {
-				this.exitDirs.put("hasUpExit", 1);
-			}
-			if (Objects.equals(direction, GlobalVariables.DOWN_DIR)) {
-				this.exitDirs.put("hasDownExit", 1);
-			}
-			
 		}
-		catch (Exception e1) {
-			e1.printStackTrace();
+		
+		else if(flags.matches("\\d+(\\|\\d+)*")) {
+			List<String> splitted = List.of(flags.split("\\|"));
+			splitted.forEach(f -> {
+				this.roomFlags.add(RoomFlag.valueOfNum(Integer.parseInt(f)));
+			});
 		}
+		
+		
+	}
+	
+	public void addExit(Integer direction, String description, String keyword, 
+			Integer doorState, String connectedVNum, String keyVNum) {
+		List<String> keyWords = List.of(keyword.split(" "));
+		Exit exit = new Exit(ExitDirection.valueOfNum(direction), description, 
+				keyWords, DoorState.valueOfNum(doorState), connectedVNum, keyVNum);
+		exits.put(exit.exitDirection, exit);
+	}
+	
+	public Exit getExit(Integer direction) {
+		return this.exits.get(ExitDirection.valueOfNum(direction));
 	}
 	
 	public void addExtra (String keyword, String description) {
-		HashMap<String, String> extra = new HashMap<>();
-		extra.put("keyword", keyword);
-		extra.put("description", description);
+		List<String> keywords = List.of(keyword.split(" "));
+		ExtraDescription extra = new ExtraDescription(keywords, description);
 		extras.add(extra);
 	}
 	
-	//function that returns a string output in normal area file format for the room
-	public String toString() {
-		//TODO: implement the goddamn function
-		return("");
+	public Map<String, List<MobileReset>> getMobileResets() {
+		return mobileResets;
 	}
 	
+	public void addMobileReset(MobileReset mobileReset) {
+		List<MobileReset> list = this.mobileResets.get(mobileReset.mobileVNum);
+		if (list == null) 
+			list = new ArrayList<MobileReset>();
+		list.add(mobileReset);
+		this.mobileResets.put(mobileReset.mobileVNum, list);
+	}
+	
+	public Map<String, List<ObjectReset>> getObjectResets() {
+		return objectResets;
+	}
+	
+	public void addObjectReset(ObjectReset objectReset) {
+		List<ObjectReset> list = this.objectResets.get(objectReset.objectVNum);
+		if (list == null)
+			list = new ArrayList<ObjectReset>();
+		list.add(objectReset);
+		this.objectResets.put(objectReset.objectVNum, list);
+	}
+
+	public String getHeader() {
+		return header;
+	}
+
+	public String getvNum() {
+		return vNum;
+	}
+
+	public void setvNum(String vNum) {
+		this.vNum = vNum;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("#" + this.getvNum() + "\n");
+		sb.append(this.header + "~\n");
+		sb.append(this.description + "~\n");
+		sb.append("0 ");
+		String s = "";
+//		if (roomFlags) CONTINUE
+		for (RoomFlag flag : this.roomFlags)
+			s = s + GlobalVariables.LETTER_TRANSLATIONS_REVERSE.get(flag.num);
+		sb.append(s + " " + this.roomSector.num + "\n");
+		this.exits.keySet().stream().sorted().forEach(key -> sb.append(this.exits.get(key).toString()));
+//		this.exits.forEach((direction, exit) -> sb.append(exit.toString()));
+		this.extras.forEach(ed -> sb.append(ed.toString()));
+		sb.append("M " + this.manaAdjust + " H " + this.healingAdjust + "\n");
+		if(this.clan != null)
+			sb.append("clan " + this.clan + "~\n");
+		sb.append("S\n");
+		
+		return sb.toString();
+	}
+	
+	public String mobileResetToString() {
+		StringBuilder sb = new StringBuilder();
+		for(List<MobileReset> listMobileReset : this.mobileResets.values())
+			for( MobileReset mobRes : listMobileReset)
+				sb.append(mobRes.toString());
+		return sb.toString();
+	}
+	
+	public String objectResetToString() {
+		StringBuilder sb = new StringBuilder();
+		for(List<ObjectReset> listObjectReset : this.objectResets.values())
+			for( ObjectReset objRes : listObjectReset)
+				sb.append(objRes.toString());
+		return sb.toString();
+	}
+	
+	public String doorResetToString() {
+		StringBuilder sb = new StringBuilder();
+		this.exits.forEach((key, exit) -> sb.append(exit.doorResetToString(this.vNum)));
+		return sb.toString();
+	}
 }

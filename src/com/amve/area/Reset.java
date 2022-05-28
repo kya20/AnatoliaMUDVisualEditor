@@ -3,7 +3,7 @@ package com.amve.area;
 import java.util.*;
 //import com.amve.globals.*;
 
-public class Reset extends Area {
+public class Reset {
 	public HashMap<String, String> mobReset = new HashMap<>();
 	public HashMap<String, String> objReset = new HashMap<>();
 	public HashMap<String, String> putReset = new HashMap<>();
